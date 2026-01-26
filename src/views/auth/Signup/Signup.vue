@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h2 class="container-header">Авторизация</h2>
+    <h2 class="container-header">Регистрация</h2>
 
     <n-form
       ref="formRef"
@@ -37,13 +37,13 @@
           attr-type="submit"
           block
         >
-          {{ loading ? "Вход..." : "Войти" }}
+          {{ loading ? "Регистрация..." : "Зарегестрироваться" }}
         </n-button>
       </n-form-item>
     </n-form>
 
     <div class="hint">
-      У вас нет аккаунта? <router-link to="/auth/signup">Зарегистрируйтесь</router-link>
+      Уже есть аккаунт? <router-link to="/auth/signin">Авторизуйтерь</router-link>
     </div>
   </div>
 </template>
@@ -71,6 +71,7 @@ const rules = {
   ],
   password: [
     { required: true, message: 'Пожалуйста, введите пароль', trigger: ['blur', 'input'] },
+    { min: 8, message: "Пароль не должен быть кароче 8 символов", trigger: ['input'] }
   ]
 }
 
