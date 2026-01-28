@@ -52,6 +52,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
+import api from '@/src/utils/api'
 
 const router = useRouter()
 const message = useMessage()
@@ -81,7 +82,14 @@ const handleLogin = () => {
     loading.value = true
 
     try {
-      await new Promise(r => setTimeout(r, 1000))
+      const response = await api.post('/v1/auth/signin', {
+        email: form.email,
+        password: form.password
+      })
+
+      const data = response.data
+
+      localStorage.setItem('access_token', data.token);
 
       message.success('Успешный вход!')
       router.push('/dashboard')
@@ -108,7 +116,6 @@ const handleLogin = () => {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .container-header {

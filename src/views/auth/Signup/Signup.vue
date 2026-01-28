@@ -19,6 +19,15 @@
         />
       </n-form-item>
 
+      <n-form-item path="name">
+        <n-input
+          v-model:value="form.name"
+          placeholder="Имя"
+          type="text"
+          :style="{ textAlign: 'left' }"
+        />
+      </n-form-item>
+
       <n-form-item path="password">
         <n-input
           v-model:value="form.password"
@@ -52,6 +61,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
+import api from '@/src/utils/api'
 
 const router = useRouter()
 const message = useMessage()
@@ -61,7 +71,8 @@ const loading = ref(false)
 
 const form = reactive({
   email: '',
-  password: ''
+  password: '',
+  name: ''
 })
 
 const rules = {
@@ -72,7 +83,11 @@ const rules = {
   password: [
     { required: true, message: 'Пожалуйста, введите пароль', trigger: ['blur', 'input'] },
     { min: 8, message: "Пароль не должен быть кароче 8 символов", trigger: ['input'] }
-  ]
+  ],
+  name: [
+    { required: true, message: 'Пожалуйста, введите имя', trigger: ['blur', 'input'] },
+    { min: 5, message: "Имя должно состоять не мении чем из 5 символов", trigger: ['input'] }
+  ],
 }
 
 const handleLogin = () => {
@@ -82,7 +97,13 @@ const handleLogin = () => {
     loading.value = true
 
     try {
-      await new Promise(r => setTimeout(r, 1000))
+      const response = await api.post('/v1/auth/singup', {
+        ...form
+      })
+
+      const data = response.data
+
+      localStorage.setItem('access_token', data.token)
 
       message.success('Успешный вход!')
       router.push('/dashboard')
@@ -109,7 +130,6 @@ const handleLogin = () => {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .container-header {
