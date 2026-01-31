@@ -1,16 +1,16 @@
 <template>
-  <div id="app">
-    <n-message-provider>
-      <router-view />
-    </n-message-provider>
-  </div>
+  <n-message-provider>
+    <router-view />
+  </n-message-provider>
 </template>
 
-<script setup>
+<script>
+import './style.css'
 </script>
 
-<style>
+<style lang="css">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  height: 100%;
+  width: 100%;
 }
 </style>
