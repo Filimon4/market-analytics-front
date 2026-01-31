@@ -1,31 +1,56 @@
 <template>
-  <div
-    class="panel-container"
-    :style="{width: panelOpened ? '200px' : '50px'}"
-  >
-    <div 
-      class="panel-item"
-      :class="panelOpened ? 'panel-arrow-close' : ''"
-      @click="panelOpened = !panelOpened"
-    >
-      <img src="/public/icons/leftToRightArrow.png" width="30" height="30" />
-    </div>
+  <div class="panels-wrapper">
     <div
-      class="panel-content"
-      :class="{ 'panel-content-opened': panelOpened }"
+      class="panel-container"
+      :style="{ width: panelOpened ? '200px' : '50px' }"
     >
       <div
-        v-for="block in panelBlocks"
-        :key="block.key"
-        class="panel-content-block"
+        class="panel-item"
+        :class="panelOpened ? 'panel-arrow-close' : ''"
+        @click="panelOpened = !panelOpened"
+      >
+        <img src="/public/icons/leftToRightArrow.png" width="30" height="30" />
+      </div>
+      <div
+        class="panel-content"
+        :class="{ 'panel-content-opened': panelOpened }"
       >
         <div
-          v-for="item in block.items"
-          :key="item.id"
-          class="panel-item"
+          v-for="block in panelBlocks"
+          :key="block.key"
+          class="panel-content-block"
         >
-          <img :src="item.icon" width="30" height="30" alt="" />
-          <span v-if="panelOpened">{{ item.name }}</span>
+          <PanelItem
+            v-for="item in block.items"
+            :key="item.id"
+            :item="item"
+            :is-hover="hoverId === item.id"
+            :label-visible="panelOpened"
+            @click="onItemClick(item)"
+            @mouseenter="hoverId = item.id"
+            @mouseleave="hoverId = null"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      v-if="subPanelItem"
+      class="panel-container"
+      :style="{ width:  '200px' }"
+    >
+      <div
+        class="panel-content panel-content-opened"
+      >
+        <div class="panel-content-block">
+          <PanelItem
+            v-for="sub in subPanelItem.children"
+            :key="sub.id"
+            :item="sub"
+            :is-hover="subHoverId === sub.id"
+            @click="onItemClick(sub)"
+            @mouseenter="subHoverId = sub.id"
+            @mouseleave="subHoverId = null"
+          />
         </div>
       </div>
     </div>
@@ -33,21 +58,35 @@
 </template>
 
 <script setup>
+import PanelItem from './PanelItem.vue'
 import marketingIcon from '/icons/marketing.png'
 import projectIcon from '/icons/project.png'
 import accountIcon from '/icons/account.png'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-const activeItem = ref(1)
+const router = useRouter()
+const route = useRoute()
 const panelOpened = ref(false)
+const subPanelItem = ref(null)
+const hoverId = ref(null)
+const subHoverId = ref(null)
 
 const panelItems = ref({
   first: [
-    { id: 1, name: 'Маркетинг', icon: marketingIcon },
-    { id: 2, name: 'Проект', icon: projectIcon },
+    { id: 1, name: 'Маркетинг', icon: marketingIcon, path: '/dashboard2' },
+    {
+      id: 2,
+      name: 'Проект',
+      icon: projectIcon,
+      children: [
+        { id: 21, name: 'Подпроект 1', path: '/dashboard' },
+        { id: 22, name: 'Подпроект 2', path: '/dashboard' },
+      ],
+    },
   ],
   second: [
-    { id: 3, name: 'Аккаунт', icon: accountIcon },
+    { id: 3, name: 'Аккаунт', icon: accountIcon, path: '/dashboard' },
   ],
 })
 
@@ -56,15 +95,28 @@ const panelBlocks = computed(() => [
   { key: 'second', items: panelItems.value.second },
 ])
 
+
+function onItemClick(item) {
+  if (item.path) {
+    router.push(item.path)
+    subPanelItem.value = null
+  } else if (item?.children?.length) {
+    subPanelItem.value = subPanelItem.value?.id === item.id ? null : item
+  }
+}
+
+watch(panelOpened, (open) => { if (!open) subPanelItem.value = null })
 </script>
 
 <style lang="css">
+.panels-wrapper {
+  display: flex;
+  height: 100%;
+}
 .panel-container {
   display: flex;
   flex-direction: column;
-  
   height: 100%;
-  
   background-color: gray;
 }
 
@@ -87,25 +139,18 @@ const panelBlocks = computed(() => [
   width: 100%;
 }
 
+.panel-content-opened {
+  align-items: start;
+}
+
 .panel-item {
   display: flex;
   justify-content: center;
   align-items: center;
-  
   width: 100%;
   height: 40px;
-}
-
-.panel-content-opened {
-  align-items: start;
-  padding-left: 10px;
-
-  .panel-item {
-    justify-content: start;
-    gap: 10px;
-    color: white;
-    font-size: 20px;
-  }
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
 .panel-arrow-close {

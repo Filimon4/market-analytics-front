@@ -2,7 +2,6 @@
   <div class="dashboard-container">
     <Panel />
     <div class="dashboard-content">
-
     </div>
   </div>
 </template>
@@ -22,6 +21,6 @@ const feature = ref();
 .dashboard-container {
   height: 100%;
   width: 100%;
-  display: block;
+  display: flex;
 }
 </style>

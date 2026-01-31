@@ -17,6 +17,9 @@ declare module 'vue' {
     NInput: typeof import('naive-ui')['NInput']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     Panel: typeof import('./src/components/dashboard/panel/Panel.vue')['default']
+    PanelFull: typeof import('./src/components/dashboard/panel/PanelFull.vue')['default']
+    PanelItem: typeof import('./src/components/dashboard/panel/PanelItem.vue')['default']
+    PanelMini: typeof import('./src/components/dashboard/panel/PanelMini.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
