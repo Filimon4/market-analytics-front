@@ -99,6 +99,8 @@ const handleLogin = () => {
     try {
       const response = await api.post('/v1/auth/singup', {
         ...form
+      }, {
+        withCredentials: true
       })
 
       const data = response.data
@@ -106,7 +108,7 @@ const handleLogin = () => {
       localStorage.setItem('access_token', data.token)
 
       message.success('Успешный вход!')
-      router.push('/dashboard')
+      router.push('/')
     } catch (err) {
       message.error('Ошибка входа. Проверьте данные.')
     } finally {

@@ -2,7 +2,7 @@
   <div class="panels-wrapper">
     <div
       class="panel-container"
-      :style="{ width: panelOpened ? '200px' : '50px' }"
+      :style="{ width: panelOpened ? '220px' : '50px' }"
     >
       <div
         class="panel-item"
@@ -36,7 +36,7 @@
     <div
       v-if="subPanelItem"
       class="panel-container"
-      :style="{ width:  '200px' }"
+      :style="{ width:  '220px' }"
     >
       <div
         class="panel-content panel-content-opened"
@@ -74,14 +74,19 @@ const subHoverId = ref(null)
 
 const panelItems = ref({
   first: [
-    { id: 1, name: 'Маркетинг', icon: marketingIcon, path: '/' },
+    { id: 1, name: 'Маркетинг', icon: marketingIcon, children: [
+      { id: 11, name: 'Стратегии', path: '/'},
+      { id: 12, name: 'Каналы трафика', path: '/'},
+      { id: 13, name: 'Результаты трафика', path: '/'},
+    ] },
     {
       id: 2,
       name: 'Проект',
       icon: projectIcon,
       children: [
-        { id: 21, name: 'Подпроект 1', path: '/' },
-        { id: 22, name: 'Подпроект 2', path: '/' },
+        { id: 21, name: 'Разработчику', path: '/' },
+        { id: 22, name: 'Апи ключи', path: '/' },
+        { id: 23, name: 'Пользователи', path: '/' },
       ],
     },
   ],
