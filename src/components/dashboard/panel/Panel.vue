@@ -74,19 +74,19 @@ const subHoverId = ref(null)
 
 const panelItems = ref({
   first: [
-    { id: 1, name: 'Маркетинг', icon: marketingIcon, path: '/dashboard2' },
+    { id: 1, name: 'Маркетинг', icon: marketingIcon, path: '/' },
     {
       id: 2,
       name: 'Проект',
       icon: projectIcon,
       children: [
-        { id: 21, name: 'Подпроект 1', path: '/dashboard' },
-        { id: 22, name: 'Подпроект 2', path: '/dashboard' },
+        { id: 21, name: 'Подпроект 1', path: '/' },
+        { id: 22, name: 'Подпроект 2', path: '/' },
       ],
     },
   ],
   second: [
-    { id: 3, name: 'Аккаунт', icon: accountIcon, path: '/dashboard' },
+    { id: 3, name: 'Аккаунт', icon: accountIcon, path: '/account' },
   ],
 })
 
