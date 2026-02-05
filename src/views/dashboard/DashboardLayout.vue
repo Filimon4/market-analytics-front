@@ -17,4 +17,9 @@ import Panel from '@/src/components/dashboard/panel/Panel.vue';
   width: 100%;
   display: flex;
 }
+
+.dashboard-content {
+  width: 100%;
+  height: 100%;
+}
 </style>
