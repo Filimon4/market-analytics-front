@@ -61,17 +61,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import api from '@/src/utils/api'
+import type { ICurrentUser } from '@/src/utils/api/models/user'
+import userApi from '@/src/utils/api/user'
 
-interface CurrentUser {
-  email: string
-  name: string
-  createdAt: string
-  role: string
-  status: string
-}
-
-const user = ref<CurrentUser | null>(null)
+const user = ref<ICurrentUser | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
 
@@ -84,8 +77,7 @@ async function fetchCurrentUser() {
   loading.value = true
   error.value = null
   try {
-    const { data } = await api.get<CurrentUser>('/v1/user/current')
-    user.value = data
+    user.value = await userApi.getCurrent()
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Не удалось загрузить данные'
   } finally {
