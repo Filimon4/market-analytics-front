@@ -6,6 +6,7 @@ import DashboardLayout from '../views/dashboard/DashboardLayout.vue'
 import Dashboard from '../views/dashboard/Dashboard.vue'
 import NotFound from '../views/notFound/NotFound.vue'
 import Account from '../views/account/Account.vue'
+import { useUserStore } from '../store/user'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -38,8 +39,16 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  
+router.beforeEach((to) => {
+  const user = useUserStore()
+
+  if (!user.)
+
+  console.log('beforeEach')
+})
+
+router.beforeResolve((to) => {
+  console.log('beforeResolve')
 })
 
 export default router

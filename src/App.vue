@@ -5,14 +5,7 @@
 </template>
 
 <script>
-import { useUserStore } from './store/user';
 import './style.css'
-import userApi from './utils/api/user';
-
-const user = useUserStore()
-
-user.setProjectId()
-
 </script>
 
 <style lang="css">

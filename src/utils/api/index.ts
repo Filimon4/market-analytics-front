@@ -21,10 +21,17 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('access_token')
-      window.location.href = '/auth/signin'
+      const { data } = await axios.post<{token: string}>('/v1/auth/refresh', {}, {
+        baseURL: import.meta.env.VITE_API_BASE_URL
+      }).catch((error) => {
+        localStorage.removeItem('access_token')
+        window.location.href = '/auth/signin'
+        throw error
+      })
+
+      localStorage.setItem('access_token', data.token)
     }
     return Promise.reject(error)
   }

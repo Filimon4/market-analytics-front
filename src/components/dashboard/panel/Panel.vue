@@ -9,7 +9,7 @@
         :class="panelOpened ? 'panel-arrow-close' : ''"
         @click="panelOpened = !panelOpened"
       >
-        <img src="/public/icons/leftToRightArrow.png" width="30" height="30" />
+        <img src="/icons/leftToRightArrow.png" width="30" height="30" />
       </div>
       <div
         class="panel-content"

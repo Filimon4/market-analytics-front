@@ -13,7 +13,6 @@ interface IUserStore {
   getUser: () => IUser
   setUser: (userData: IUser) => void
   getToken: () => string
-  setToken: (value: string) => void
   getProjectId: () => string
   setProjectId: (value: string) => void
 }
@@ -21,7 +20,6 @@ interface IUserStore {
 export const useUserStore = defineStore('useUserStore', (): IUserStore => {
   const isAuth: IUserStore['isAuth'] = computed(() => true)
   const user = ref<IUser>()
-  const token = ref<string>('')
   const projectId = ref<string>('')
 
   const setUser: IUserStore['setUser'] = (userDaa: IUser) => {
@@ -35,10 +33,7 @@ export const useUserStore = defineStore('useUserStore', (): IUserStore => {
   }
 
   const getToken: IUserStore['getToken'] = () => {
-    return token.value
-  }
-  const setToken: IUserStore['setToken'] = (value: string) => {
-    token.value = value
+    return localStorage.getItem('access_token') || ''
   }
 
   const getProjectId: IUserStore['getProjectId'] = (): string => {
@@ -53,7 +48,6 @@ export const useUserStore = defineStore('useUserStore', (): IUserStore => {
     setUser,
     getUser,
     getToken,
-    setToken,
     getProjectId,
     setProjectId
   }

@@ -1,9 +1,6 @@
 <template>
   <div
     class="panel-item-container panel-item-container--opened"
-    :class="{
-      'panel-item-container--active': isActive,
-    }"
   >
     <div
       class="panel-item"
