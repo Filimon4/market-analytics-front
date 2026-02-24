@@ -7,6 +7,7 @@ import Dashboard from '../views/dashboard/Dashboard.vue'
 import NotFound from '../views/notFound/NotFound.vue'
 import Account from '../views/account/Account.vue'
 import { useUserStore } from '../store/user'
+import userApi from '../utils/api/user'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -26,7 +27,16 @@ const routes: RouteRecordRaw[] = [
         path: 'account',
         component: Account,
       },
-    ]
+    ],
+    beforeEnter: (to, from, next) => {
+      const userStore = useUserStore()
+
+      if (!userStore.getToken()) {
+        next('/auth/signin')
+      }
+
+      next()
+    },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -37,18 +47,6 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
-
-router.beforeEach((to) => {
-  const user = useUserStore()
-
-  if (!user.)
-
-  console.log('beforeEach')
-})
-
-router.beforeResolve((to) => {
-  console.log('beforeResolve')
 })
 
 export default router

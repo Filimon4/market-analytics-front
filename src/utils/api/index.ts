@@ -27,7 +27,7 @@ api.interceptors.response.use(
         baseURL: import.meta.env.VITE_API_BASE_URL
       }).catch((error) => {
         localStorage.removeItem('access_token')
-        window.location.href = '/auth/signin'
+        // window.location.href = '/auth/signin'
         throw error
       })
 
