@@ -1,30 +1,40 @@
+import api from "@/src/utils/api";
 import { defineStore } from "pinia";
 import { computed, type Ref, ref } from "vue";
+import useProject from "../project";
+
+interface IUserPermission {
+  id: number,
+  code: string,
+  granted: boolean,
+  parentId: null,
+  childrens: IUserPermission[]
+}
 
 interface IUser {
   id: string;
   projectId: string;
   role: string;
   roleId: string;
+  permissions: IUserPermission[]
 }
 
 interface IUserStore {
   isAuth: Ref<boolean>
-  isInitialized: Ref<boolean>
   getUser: () => IUser
   setUser: (userData: IUser) => void
   getToken: () => string
   setToken: (value: string) => void
-  getProjectId: () => string
-  setProjectId: (value: string) => void
-  setInitialized: (value: boolean) => void
+  getTenantId: () => string
+  setTenantId: (value: string) => void
+  fetchPermissions: () => Promise<void>
+  getPermissions: () => IUserPermission[]
 }
 
 export const useUserStore = defineStore('useUserStore', (): IUserStore => {
-  const isAuth: IUserStore['isAuth'] = computed(() => true)
-  const isInitialized: IUserStore['isInitialized'] = computed(() => false)
+  const isAuth: IUserStore['isAuth'] = computed(() => false)
   const user = ref<IUser>()
-  const projectId = ref<string>('')
+  const permissions = ref<IUserPermission[]>([])
 
   const setUser: IUserStore['setUser'] = (userDaa: IUser) => {
     user.value = userDaa
@@ -32,7 +42,6 @@ export const useUserStore = defineStore('useUserStore', (): IUserStore => {
 
   const getUser = (): IUser => {
     if (!user.value) throw new Error("User has not beed setted")
-
     return user.value
   }
 
@@ -43,27 +52,43 @@ export const useUserStore = defineStore('useUserStore', (): IUserStore => {
     localStorage.setItem('access_token', value)
   } 
 
-  const getProjectId: IUserStore['getProjectId'] = (): string => {
-    return projectId.value;
+  const getTenantId: IUserStore['getTenantId'] = (): string => {
+    return localStorage.getItem('tenantid') || ''
   }
-  const setProjectId: IUserStore['setProjectId'] = (value: string) => {
-    projectId.value = value
+  const setTenantId: IUserStore['setTenantId'] = (value: string) => {
+    localStorage.setItem('tenantid', value)
   }
-  
-  const setInitialized: IUserStore['setInitialized'] = (value: boolean) => {
-    isInitialized.value = value
+
+  const fetchPermissions = async () => {
+    const project = useProject()
+
+    if (!project.isSelected) {
+      throw new Error("There is no project selected")
+    }
+
+    const response = await api.get<{result: IUserPermission[]}>('/v1/project/role/permissions', {
+      params: {
+        'x-tenant-id': project.getId()
+      }
+    })
+
+    permissions.value = response.data.result
+  }
+
+  const getPermissions = () => {
+    return permissions.value
   }
 
   return {
-    isInitialized,
     isAuth,
     setUser,
     getUser,
     getToken,
     setToken,
-    getProjectId,
-    setProjectId,
-    setInitialized
+    getTenantId,
+    setTenantId,
+    fetchPermissions,
+    getPermissions
   }
 })
 

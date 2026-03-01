@@ -12,17 +12,21 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     NButton: typeof import('naive-ui')['NButton']
+    NDialogProvider: typeof import('naive-ui')['NDialogProvider']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
     NGrid: typeof import('naive-ui')['NGrid']
     NGridItem: typeof import('naive-ui')['NGridItem']
     NInput: typeof import('naive-ui')['NInput']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
+    NModalProvider: typeof import('naive-ui')['NModalProvider']
     NSpin: typeof import('naive-ui')['NSpin']
-    Panel: typeof import('./src/components/dashboard/panel/Panel.vue')['default']
+    Panel: typeof import('./src/components/common/dashboard/panel/Panel.vue')['default']
     PanelFull: typeof import('./src/components/dashboard/panel/PanelFull.vue')['default']
-    PanelItem: typeof import('./src/components/dashboard/panel/PanelItem.vue')['default']
+    PanelItem: typeof import('./src/components/common/dashboard/panel/PanelItem.vue')['default']
     PanelMini: typeof import('./src/components/dashboard/panel/PanelMini.vue')['default']
+    ProjectModal: typeof import('./src/components/ui/projectModal/projectModal.vue')['default']
+    ProjectModel: typeof import('./src/components/ui/projectModel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

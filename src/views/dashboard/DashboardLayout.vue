@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import Panel from '@/src/components/dashboard/panel/Panel.vue';
+import Panel from '@/src/components/common/dashboard/panel/Panel.vue';
 </script>
 
 <style lang="css" scoped>

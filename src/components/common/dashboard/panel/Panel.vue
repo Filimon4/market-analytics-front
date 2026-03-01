@@ -64,6 +64,7 @@ import projectIcon from '/icons/project.png'
 import accountIcon from '/icons/account.png'
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import useProject from '@/src/store/project'
 
 const router = useRouter()
 const route = useRoute()
@@ -72,13 +73,20 @@ const subPanelItem = ref(null)
 const hoverId = ref(null)
 const subHoverId = ref(null)
 
+const project = useProject()
+
 const panelItems = ref({
   first: [
-    { id: 1, name: 'Маркетинг', icon: marketingIcon, children: [
-      { id: 11, name: 'Стратегии', path: '/'},
-      { id: 12, name: 'Каналы трафика', path: '/'},
-      { id: 13, name: 'Результаты трафика', path: '/'},
-    ] },
+    { 
+      id: 1,
+      name: 'Маркетинг',
+      icon: marketingIcon,
+      children: [
+        { id: 11, name: 'Стратегии', path: '/'},
+        { id: 12, name: 'Каналы трафика', path: '/'},
+        { id: 13, name: 'Результаты трафика', path: '/'},
+      ]
+    },
     {
       id: 2,
       name: 'Проект',
@@ -95,10 +103,12 @@ const panelItems = ref({
   ],
 })
 
-const panelBlocks = computed(() => [
-  { key: 'first', items: panelItems.value.first },
-  { key: 'second', items: panelItems.value.second },
-])
+const panelBlocks = computed(() => {  
+  return [
+    { key: 'first', items: project.isSelected ? panelItems.value.first : [] },
+    { key: 'second', items: panelItems.value.second },
+  ]
+})
 
 
 function onItemClick(item) {

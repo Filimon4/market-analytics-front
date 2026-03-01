@@ -4,7 +4,6 @@
             <div class="info-label">
                 Пользователь
             </div>
-            <div v-if="error" class="error-message">{{ error }}</div>
             <n-spin :show="loading">
                 <n-grid :cols="1" class="info-content" :y-gap='10'>
                     <n-grid-item class="content-block">
@@ -17,7 +16,7 @@
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Дата регистрации</div>
-                        <div class="block-content">{{ formattedCreatedAt }}</div>
+                        <div class="block-content">{{ formatedCreatedAt(user?.createdAt!) }}</div>
                     </n-grid-item>
                 </n-grid>
             </n-spin>
@@ -26,7 +25,6 @@
             <div class="info-label">
                 Проект
             </div>
-            <div v-if="error" class="error-message">{{ error }}</div>
             <n-spin :show="loading">
                 <n-grid :cols="1" class="info-content" :y-gap='10'>
                     <n-grid-item class="content-block">
@@ -39,7 +37,7 @@
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Дата входа</div>
-                        <div class="block-content">{{ formattedCreatedAt }}</div>
+                        <div class="block-content">{{ formatedCreatedAt('') }}</div>
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Статус</div>
@@ -48,30 +46,71 @@
                 </n-grid>
             </n-spin>
             <div class="container-actions">
-                <div class="action">
+                <div class="action" @click="onOpenPorjctPicker">
                     Поменять проект
                 </div>
                 <div class="action">
                     Добавить проект
                 </div>
             </div>
+            <project-modal
+                v-model:show="showProjectPicker"
+                :items="[]"
+                :initial-selected-id="selectedProject?.id || null"
+                :title="'Проекты'"
+                :placeholder="'Поиск проекта...'"
+                :load-items="loadProjects"
+                @confirm="onProjectConfirm"
+            />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { ICurrentUser } from '@/src/utils/api/models/user'
 import userApi from '@/src/utils/api/user'
+import ProjectModal from '@/src/components/ui/projectModal/projectModal.vue'
+import projectApi from '@/src/utils/api/project'
+import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
+import { useUserStore } from '@/src/store/user'
 
 const user = ref<ICurrentUser | null>(null)
+const userStroe = useUserStore()
 const loading = ref(false)
 const error = ref<string | null>(null)
 
-const formattedCreatedAt = computed(() => {
-  if (!user.value?.createdAt) return '—'
-  return new Date(user.value.createdAt).toLocaleString('ru-RU')
-})
+// #region: project modal
+
+const showProjectPicker = ref(false)
+const selectedProject = ref<IProjectModalItem | null>(null)
+
+const onProjectConfirm = async (item: IProjectModalItem) => {
+    const project = await projectApi.getProject(item.id)
+    selectedProject.value = item
+    userStroe.setTenantId(project.id.toString())
+    showProjectPicker.value = false
+}
+
+const onOpenPorjctPicker = () => {
+    showProjectPicker.value = true
+}
+
+const loadProjects = async (): Promise<IProjectModalItem[]> => {
+    const connectecProjects = await projectApi.getConnectedProjects()
+    return connectecProjects.map(conn => ({
+        id: conn.id,
+        name: conn.project.name,
+        description: conn.project.description
+    }))
+}
+
+// #endregion
+
+const formatedCreatedAt = (date: string) => {
+  if (!date) return '—'
+  return new Date(date).toLocaleString('ru-RU')
+}
 
 async function fetchCurrentUser() {
   loading.value = true
@@ -143,8 +182,4 @@ onMounted(fetchCurrentUser)
     min-width: 200px;
 }
 
-.error-message {
-    color: var(--n-error-color);
-    margin-top: 8px;
-}
 </style>

@@ -7,7 +7,6 @@ import Dashboard from '../views/dashboard/Dashboard.vue'
 import NotFound from '../views/notFound/NotFound.vue'
 import Account from '../views/account/Account.vue'
 import { useUserStore } from '../store/user'
-import userApi from '../utils/api/user'
 
 const routes: RouteRecordRaw[] = [
   {

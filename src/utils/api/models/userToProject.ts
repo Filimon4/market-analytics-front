@@ -1,5 +1,11 @@
 export interface IUserToProject {
-  projectId: string;
-  roleId: number;
-  blocked: boolean;
+  id: string,
+  blocked: boolean,
+  projectId: string,
+  roleId: string,
+  project: {
+    id: string,
+    name: string,
+    description: string
+  }
 }
