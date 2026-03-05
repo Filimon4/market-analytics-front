@@ -64,7 +64,7 @@ import projectIcon from '/icons/project.png'
 import accountIcon from '/icons/account.png'
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import useProject from '@/src/store/project'
+import {useProjectStore} from '@/src/store/project'
 
 const router = useRouter()
 const route = useRoute()
@@ -73,7 +73,7 @@ const subPanelItem = ref(null)
 const hoverId = ref(null)
 const subHoverId = ref(null)
 
-const project = useProject()
+const project = useProjectStore()
 
 const panelItems = ref({
   first: [

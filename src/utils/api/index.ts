@@ -14,6 +14,10 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    const tenantid = localStorage.getItem('tenantid')
+    if (tenantid) {
+      config.headers['x-tenant-id'] = tenantid
+    }
     return config
   },
   (error) => Promise.reject(error)

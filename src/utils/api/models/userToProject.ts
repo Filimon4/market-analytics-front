@@ -3,9 +3,8 @@ export interface IUserToProject {
   blocked: boolean,
   projectId: string,
   roleId: string,
-  project: {
-    id: string,
-    name: string,
-    description: string
-  }
+  createdAt: string
 }
+
+export type IUserToProjectPick<T extends keyof IUserToProject> = Pick<IUserToProject, T> 
+export type IUserToProjectEclude<T extends keyof IUserToProject> = Omit<IUserToProject, T>

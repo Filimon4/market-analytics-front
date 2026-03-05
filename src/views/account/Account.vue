@@ -29,7 +29,7 @@
                 <n-grid :cols="1" class="info-content" :y-gap='10'>
                     <n-grid-item class="content-block">
                         <div class="block-label">Текущий проект</div>
-                        <div class="block-content">{{ '—' }}</div>
+                        <div class="block-content">{{ projectStore.project?.name || '—' }}</div>
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Роль в проекте</div>
@@ -37,11 +37,11 @@
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Дата входа</div>
-                        <div class="block-content">{{ formatedCreatedAt('') }}</div>
+                        <div class="block-content">{{ formatedCreatedAt(projectStore.connectedProject?.createdAt || '') }}</div>
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Статус</div>
-                        <div class="block-content">{{ user?.status ?? '—' }}</div>
+                        <div class="block-content">{{ !projectStore.connectedProject?.blocked ? "Активен" : "Заблокирован" }}</div>
                     </n-grid-item>
                 </n-grid>
             </n-spin>
@@ -74,9 +74,12 @@ import ProjectModal from '@/src/components/ui/projectModal/projectModal.vue'
 import projectApi from '@/src/utils/api/project'
 import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
 import { useUserStore } from '@/src/store/user'
+import { useProjectStore } from '@/src/store/project'
+import { DateTime } from 'luxon'
 
 const user = ref<ICurrentUser | null>(null)
-const userStroe = useUserStore()
+const userStore = useUserStore()
+const projectStore = useProjectStore()
 const loading = ref(false)
 const error = ref<string | null>(null)
 
@@ -88,8 +91,9 @@ const selectedProject = ref<IProjectModalItem | null>(null)
 const onProjectConfirm = async (item: IProjectModalItem) => {
     const project = await projectApi.getProject(item.id)
     selectedProject.value = item
-    userStroe.setTenantId(project.id.toString())
+    userStore.setTenantId(project.id.toString())
     showProjectPicker.value = false
+    projectStore.updateUserProjectInfo()
 }
 
 const onOpenPorjctPicker = () => {
@@ -109,7 +113,9 @@ const loadProjects = async (): Promise<IProjectModalItem[]> => {
 
 const formatedCreatedAt = (date: string) => {
   if (!date) return '—'
-  return new Date(date).toLocaleString('ru-RU')
+  return DateTime.fromISO(date)
+    .setLocale('ru')
+    .toLocaleString(DateTime.DATETIME_HUGE);
 }
 
 async function fetchCurrentUser() {

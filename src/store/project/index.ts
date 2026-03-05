@@ -1,29 +1,30 @@
+import type { IProject } from "@/src/utils/api/models/project"
+import type { IUserToProject } from "@/src/utils/api/models/userToProject"
+import projectApi from "@/src/utils/api/project"
 import { defineStore } from "pinia"
 import { ref, type Ref } from "vue"
 
-interface IProject {
-  isSelected: Ref<boolean>
-  getId: () => number
-  setId: (id: number) => void 
+interface IProjectStore {
+  project: Ref<IProject | null>
+  connectedProject: Ref<IUserToProject | null>
+  
+  updateUserProjectInfo: () => Promise<void>
 }
 
-const useProject = defineStore('useProject', (): IProject => {
-  const isSelected = ref<boolean>(false)
-  const id = ref<number>(NaN)
+export const useProjectStore = defineStore("useProjectStore",(): IProjectStore => {
+  const project: IProjectStore['project'] = ref(null)
+  const connectedProject: IProjectStore['connectedProject'] = ref(null)
 
-  const getId = () => {
-    return id.value
-  }
-
-  const setId = (newId: number) => {
-    id.value = newId
+  const updateUserProjectInfo = async () => {
+    const data = await projectApi.getCurrent()
+    connectedProject.value = data.userToProject
+    project.value = data.project
+    console.log(data)
   }
 
   return {
-    isSelected,
-    getId,
-    setId,
+    project,
+    connectedProject,
+    updateUserProjectInfo
   }
 })
-
-export default useProject

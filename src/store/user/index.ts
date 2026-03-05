@@ -1,7 +1,7 @@
 import api from "@/src/utils/api";
+import type { IProject } from "@/src/utils/api/models/project";
 import { defineStore } from "pinia";
 import { computed, type Ref, ref } from "vue";
-import useProject from "../project";
 
 interface IUserPermission {
   id: number,
@@ -60,17 +60,7 @@ export const useUserStore = defineStore('useUserStore', (): IUserStore => {
   }
 
   const fetchPermissions = async () => {
-    const project = useProject()
-
-    if (!project.isSelected) {
-      throw new Error("There is no project selected")
-    }
-
-    const response = await api.get<{result: IUserPermission[]}>('/v1/project/role/permissions', {
-      params: {
-        'x-tenant-id': project.getId()
-      }
-    })
+    const response = await api.get<{result: IUserPermission[]}>('/v1/project/role/permissions')
 
     permissions.value = response.data.result
   }
