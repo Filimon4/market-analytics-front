@@ -1,84 +1,42 @@
-import api from "@/src/utils/api";
-import type { IProject } from "@/src/utils/api/models/project";
 import { defineStore } from "pinia";
-import { computed, type Ref, ref } from "vue";
-
-interface IUserPermission {
-  id: number,
-  code: string,
-  granted: boolean,
-  parentId: null,
-  childrens: IUserPermission[]
-}
-
-interface IUser {
-  id: string;
-  projectId: string;
-  role: string;
-  roleId: string;
-  permissions: IUserPermission[]
-}
+import { computed, type Ref } from "vue";
+import { useStorage } from '@vueuse/core'
+import type { IUser } from "@/src/utils/api/models/user";
 
 interface IUserStore {
   isAuth: Ref<boolean>
-  getUser: () => IUser
-  setUser: (userData: IUser) => void
-  getToken: () => string
-  setToken: (value: string) => void
-  getTenantId: () => string
-  setTenantId: (value: string) => void
-  fetchPermissions: () => Promise<void>
-  getPermissions: () => IUserPermission[]
+  user: Ref<IUser | null>
+  tenantId: Ref<number>
+  accessToken: Ref<string | null>
 }
 
 export const useUserStore = defineStore('useUserStore', (): IUserStore => {
   const isAuth: IUserStore['isAuth'] = computed(() => false)
-  const user = ref<IUser>()
-  const permissions = ref<IUserPermission[]>([])
+  const user = useStorage<IUser | null>('user', null, localStorage, {
+    mergeDefaults: true,
+    serializer: {
+      write(value) {
+        return JSON.stringify(value)
+      },
+      read(raw) {
+        return JSON.parse(raw)
+      },
+    }
+  }) satisfies Ref<IUser | null>
 
-  const setUser: IUserStore['setUser'] = (userDaa: IUser) => {
-    user.value = userDaa
-  }
+  const tenantId = useStorage<number>('tenantId', null, localStorage, {
+    mergeDefaults: true
+  }) satisfies Ref<number>
 
-  const getUser = (): IUser => {
-    if (!user.value) throw new Error("User has not beed setted")
-    return user.value
-  }
-
-  const getToken: IUserStore['getToken'] = () => {
-    return localStorage.getItem('access_token') || ''
-  }
-  const setToken: IUserStore['setToken'] = (value: string) => {
-    localStorage.setItem('access_token', value)
-  } 
-
-  const getTenantId: IUserStore['getTenantId'] = (): string => {
-    return localStorage.getItem('tenantid') || ''
-  }
-  const setTenantId: IUserStore['setTenantId'] = (value: string) => {
-    localStorage.setItem('tenantid', value)
-  }
-
-  const fetchPermissions = async () => {
-    const response = await api.get<{result: IUserPermission[]}>('/v1/project/role/permissions')
-
-    permissions.value = response.data.result
-  }
-
-  const getPermissions = () => {
-    return permissions.value
-  }
+  const accessToken = useStorage<string>('accessToken', null, localStorage, {
+    mergeDefaults: true
+  }) satisfies Ref<string | null>   
 
   return {
     isAuth,
-    setUser,
-    getUser,
-    getToken,
-    setToken,
-    getTenantId,
-    setTenantId,
-    fetchPermissions,
-    getPermissions
+    user,
+    tenantId,
+    accessToken
   }
 })
 

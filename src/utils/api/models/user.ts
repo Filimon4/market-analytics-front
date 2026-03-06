@@ -1,4 +1,4 @@
-export interface ICurrentUser {
+export interface IUser {
   email: string
   name: string
   createdAt: string

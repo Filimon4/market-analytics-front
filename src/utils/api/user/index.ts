@@ -1,11 +1,11 @@
 import api from "..";
-import type { ICurrentUser } from "../models/user"
+import type { IUser } from "../models/user"
 import type { IUserToProject } from "../models/userToProject";
 
 class UserApi {
 
-  async getCurrent(): Promise<ICurrentUser> {
-    const { data } = await api.get<ICurrentUser>('/v1/user/current')
+  async getCurrent(): Promise<IUser> {
+    const { data } = await api.get<IUser>('/v1/user/current')
     return data
   }
 

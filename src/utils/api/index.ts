@@ -1,4 +1,6 @@
+import { useUserStore } from '@/src/store/user'
 import axios, { type AxiosInstance, type AxiosError } from 'axios'
+import authApi from './auth'
 
 export const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -10,13 +12,12 @@ export const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+    const userStore = useUserStore()
+    if (userStore.accessToken) {
+      config.headers.Authorization = `Bearer ${userStore.accessToken}`
     }
-    const tenantid = localStorage.getItem('tenantid')
-    if (tenantid) {
-      config.headers['x-tenant-id'] = tenantid
+    if (userStore.tenantId) {
+      config.headers['x-tenant-id'] = userStore.tenantId
     }
     return config
   },
@@ -26,29 +27,23 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
+    const userStore = useUserStore()
     const originalRequest: any = error.config
 
     if (error.response?.status === 401 && !originalRequest?._retry) {
       originalRequest._retry = true
 
       try {
-        const { data } = await axios.post<{ token: string }>(
-          '/v1/auth/refresh',
-          {},
-          {
-            baseURL: import.meta.env.VITE_API_BASE_URL,
-            withCredentials: true,
-          }
-        )
+        const token = await authApi.refresh()
 
-        localStorage.setItem('access_token', data.token)
+        userStore.accessToken = token
 
         originalRequest.headers = originalRequest.headers || {}
-        originalRequest.headers.Authorization = `Bearer ${data.token}`
+        originalRequest.headers.Authorization = `Bearer ${token}`
 
         return api(originalRequest)
       } catch (refreshError) {
-        localStorage.removeItem('access_token')
+        userStore.accessToken = null
         return Promise.reject(refreshError)
       }
     }

@@ -53,12 +53,17 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import api from '@/src/utils/api'
+import { useUserStore } from '@/src/store/user'
+import userApi from '@/src/utils/api/user'
+import authApi from '@/src/utils/api/auth'
 
 const router = useRouter()
 const message = useMessage()
 
 const formRef = ref(null)
 const loading = ref(false)
+
+const userStore = useUserStore()
 
 const form = reactive({
   email: '',
@@ -82,16 +87,9 @@ const handleLogin = () => {
     loading.value = true
 
     try {
-      const response = await api.post('/v1/auth/signin', {
-        email: form.email,
-        password: form.password
-      }, {
-        withCredentials: true
-      })
-
-      const data = response.data
-
-      localStorage.setItem('access_token', data.token);
+      const token = await authApi.signin(form.email, form.password)
+      userStore.accessToken = token
+      userStore.user = await userApi.getCurrent()
 
       message.success('Успешный вход!')
       router.push('/')

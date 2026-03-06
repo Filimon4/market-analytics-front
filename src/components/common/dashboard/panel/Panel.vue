@@ -75,48 +75,21 @@ const subHoverId = ref(null)
 
 const project = useProjectStore()
 
-const panelItems = ref({
-  first: [
-    { 
-      id: 1,
-      name: 'Маркетинг',
-      icon: marketingIcon,
-      children: [
-        { id: 11, name: 'Стратегии', path: '/'},
-        { id: 12, name: 'Каналы трафика', path: '/'},
-        { id: 13, name: 'Результаты трафика', path: '/'},
-      ]
-    },
-    {
-      id: 2,
-      name: 'Проект',
-      icon: projectIcon,
-      children: [
-        { id: 21, name: 'Разработчику', path: '/' },
-        { id: 22, name: 'Апи ключи', path: '/' },
-        { id: 23, name: 'Пользователи', path: '/' },
-      ],
-    },
-  ],
-  second: [
-    { id: 3, name: 'Аккаунт', icon: accountIcon, path: '/account' },
-  ],
-})
-
 const panelBlocks = computed(() => {  
   return [
-    { key: 'first', items: project.isSelected ? panelItems.value.first : [] },
-    { key: 'second', items: panelItems.value.second },
+    { key: 'first', items: project.panel },
+    { key: 'second', items: [
+      { id: 3, name: 'Аккаунт', icon: accountIcon, url: '/account' },
+    ]},
   ]
 })
 
-
 function onItemClick(item) {
-  if (item.path) {
-    router.push(item.path)
+  if (item.url) {
+    router.push(item.url)
     subPanelItem.value = null
   } else if (item?.children?.length) {
-    subPanelItem.value = subPanelItem.value?.id === item.id ? null : item
+    subPanelItem.value = item
   }
 }
 

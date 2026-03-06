@@ -7,6 +7,7 @@ import Dashboard from '../views/dashboard/Dashboard.vue'
 import NotFound from '../views/notFound/NotFound.vue'
 import Account from '../views/account/Account.vue'
 import { useUserStore } from '../store/user'
+import { useProjectStore } from '../store/project'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -15,7 +16,16 @@ const routes: RouteRecordRaw[] = [
     children: [
       {path: 'signin', component: SignIn},
       {path: 'signup', component: Signup}
-    ]
+    ],
+    beforeEnter: (to, from, next) => {
+      const userStore = useUserStore()
+
+      if (userStore.accessToken) {
+        next('/')
+      }
+
+      next()
+    }
   },
   {
     path: '/',
@@ -30,7 +40,7 @@ const routes: RouteRecordRaw[] = [
     beforeEnter: (to, from, next) => {
       const userStore = useUserStore()
 
-      if (!userStore.getToken()) {
+      if (!userStore.accessToken) {
         next('/auth/signin')
       }
 

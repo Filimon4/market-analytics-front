@@ -8,15 +8,15 @@
                 <n-grid :cols="1" class="info-content" :y-gap='10'>
                     <n-grid-item class="content-block">
                         <div class="block-label">Имя</div>
-                        <div class="block-content">{{ user?.name ?? '—' }}</div>
+                        <div class="block-content">{{ userStore.user?.name ?? '—' }}</div>
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Почта</div>
-                        <div class="block-content">{{ user?.email ?? '—' }}</div>
+                        <div class="block-content">{{ userStore.user?.email ?? '—' }}</div>
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Дата регистрации</div>
-                        <div class="block-content">{{ formatedCreatedAt(user?.createdAt!) }}</div>
+                        <div class="block-content">{{ formatedCreatedAt(userStore.user?.createdAt!) }}</div>
                     </n-grid-item>
                 </n-grid>
             </n-spin>
@@ -33,7 +33,7 @@
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Роль в проекте</div>
-                        <div class="block-content">{{ user?.role ?? '—' }}</div>
+                        <div class="block-content">{{ projectStore?.role?.code ?? '—' }}</div>
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Дата входа</div>
@@ -41,7 +41,8 @@
                     </n-grid-item>
                     <n-grid-item class="content-block">
                         <div class="block-label">Статус</div>
-                        <div class="block-content">{{ !projectStore.connectedProject?.blocked ? "Активен" : "Заблокирован" }}</div>
+                        <div v-if="projectStore?.connectedProject?.blocked !== undefined" class="block-content">{{ !projectStore?.connectedProject?.blocked ? "Активен" : "Заблокирован" }}</div>
+                        <div v-else class="block-content">{{ '—' }}</div>
                     </n-grid-item>
                 </n-grid>
             </n-spin>
@@ -67,9 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import type { ICurrentUser } from '@/src/utils/api/models/user'
-import userApi from '@/src/utils/api/user'
+import { ref } from 'vue'
 import ProjectModal from '@/src/components/ui/projectModal/projectModal.vue'
 import projectApi from '@/src/utils/api/project'
 import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
@@ -77,11 +76,9 @@ import { useUserStore } from '@/src/store/user'
 import { useProjectStore } from '@/src/store/project'
 import { DateTime } from 'luxon'
 
-const user = ref<ICurrentUser | null>(null)
 const userStore = useUserStore()
 const projectStore = useProjectStore()
 const loading = ref(false)
-const error = ref<string | null>(null)
 
 // #region: project modal
 
@@ -91,7 +88,7 @@ const selectedProject = ref<IProjectModalItem | null>(null)
 const onProjectConfirm = async (item: IProjectModalItem) => {
     const project = await projectApi.getProject(item.id)
     selectedProject.value = item
-    userStore.setTenantId(project.id.toString())
+    userStore.tenantId = Number(project.id)
     showProjectPicker.value = false
     projectStore.updateUserProjectInfo()
 }
@@ -117,20 +114,6 @@ const formatedCreatedAt = (date: string) => {
     .setLocale('ru')
     .toLocaleString(DateTime.DATETIME_HUGE);
 }
-
-async function fetchCurrentUser() {
-  loading.value = true
-  error.value = null
-  try {
-    user.value = await userApi.getCurrent()
-  } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Не удалось загрузить данные'
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(fetchCurrentUser)
 </script>
 
 <style>
