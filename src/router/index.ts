@@ -7,7 +7,13 @@ import Dashboard from '../views/dashboard/Dashboard.vue'
 import NotFound from '../views/notFound/NotFound.vue'
 import Account from '../views/account/Account.vue'
 import { useUserStore } from '../store/user'
-import { useProjectStore } from '../store/project'
+import Strategy from '../views/marketing/strategy/Strategy.vue'
+import Channels from '../views/marketing/channels/Channels.vue'
+import Performance from '../views/marketing/performance/Performance.vue'
+import Developer from '../views/projects/developer/Developer.vue'
+import Apikeys from '../views/projects/apikeys/Apikeys.vue'
+import Users from '../views/projects/users/Users.vue'
+import Roles from '../views/projects/roles/Roles.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -35,6 +41,25 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'account',
         component: Account,
+      },
+      {
+        path: 'marketing',
+        children: [
+          {path: 'strategy', component: Strategy },
+          {path: 'channels', children: [
+            {path: '', component: Channels },
+            {path: 'performance', component: Performance },
+          ]},
+        ]
+      },
+      {
+        path: 'projects',
+        children: [
+          {path: 'developer', component: Developer },
+          {path: 'apikeys', component: Apikeys },
+          {path: 'users', component: Users },
+          {path: 'roles', component: Roles },
+        ]
       },
     ],
     beforeEnter: (to, from, next) => {
