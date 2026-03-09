@@ -1,5 +1,6 @@
-import axios from "axios"
+import axios, { type AxiosRequestConfig } from "axios"
 import api from ".."
+import { useUserStore } from "@/src/store/user"
 
 
 export class AuthApi {
@@ -27,13 +28,20 @@ export class AuthApi {
   }
 
   async refresh() {
+    const config: AxiosRequestConfig = {}
+
+    config.baseURL = import.meta.env.VITE_API_BASE_URL_API
+    config.withCredentials = true
+
+    const userStore = useUserStore()
+    if (userStore.accessToken) {
+      config.headers!.Authorization = `Bearer ${userStore.accessToken}`
+    }
+
     const { data: { token } } = await axios.post<{ token: string }>(
       '/v1/auth/refresh',
       {},
-      {
-        baseURL: import.meta.env.VITE_API_BASE_URL,
-        withCredentials: true,
-      }
+      config
     )
 
 

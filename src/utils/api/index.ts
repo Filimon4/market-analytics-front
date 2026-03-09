@@ -3,7 +3,7 @@ import axios, { type AxiosInstance, type AxiosError } from 'axios'
 import authApi from './auth'
 
 export const api: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL_API,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

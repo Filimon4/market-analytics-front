@@ -23,15 +23,6 @@ const routes: RouteRecordRaw[] = [
       {path: 'signin', component: SignIn},
       {path: 'signup', component: Signup}
     ],
-    beforeEnter: (to, from, next) => {
-      const userStore = useUserStore()
-
-      if (userStore.accessToken) {
-        next('/')
-      }
-
-      next()
-    }
   },
   {
     path: '/',
@@ -62,15 +53,6 @@ const routes: RouteRecordRaw[] = [
         ]
       },
     ],
-    beforeEnter: (to, from, next) => {
-      const userStore = useUserStore()
-
-      if (!userStore.accessToken) {
-        next('/auth/signin')
-      }
-
-      next()
-    },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -81,6 +63,26 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, _from, next) => {
+  const userStore = useUserStore()
+
+  if (to.path.startsWith('/auth')) {
+    if (userStore.accessToken) {
+      next('/')
+      return;
+    }
+  }
+
+  if (to.path.startsWith('/') && !to.path.split('/').includes('auth')) {
+    if (!userStore.accessToken) {
+      next('/auth/signin')
+      return;
+    }
+  }
+
+  next()
 })
 
 export default router
