@@ -1,31 +1,33 @@
 <template>
   <div class="data-table-wrapper">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th v-for="col in columns as any[]" :key="col.key">
-            <slot
-              name="header"
-              :column="col"
-              :value="filters[col.key]"
-              :update-value="(v: any) => updateFilter(col.key, v)"
-            >
-              <div class="default-header">
-                <div class="title">{{ col.title || col.key }}</div>
-              </div>
-            </slot>
-          </th>
-        </tr>
-      </thead>
+    <div class="data-body-wrapper">
+      <table class="data-body">
+        <thead>
+          <tr>
+            <th v-for="col in columns as any[]" :key="col.code" >
+              <slot
+                name="header"
+                :column="col"
+                :value="filters[col.code]"
+                :update-value="(v: any) => updateFilter(col.code, v)"
+              >
+                <div class="default-header">
+                  <div class="title">{{ col.name }}</div>
+                </div>
+              </slot>
+            </th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr v-for="row in data as any[]" :key="row.id || JSON.stringify(row)">
-          <td v-for="col in columns as any[]" :key="col.key">
-            {{ getCellValue(row, col) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <tbody>
+          <tr v-for="row in data as any[]" :key="row.id || JSON.stringify(row)">
+            <td v-for="col in columns as any[]" :key="col.key" @click="emit('click:entity', row)">
+              {{ getCellValue(row, col) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="data-table-pagination">
       <n-pagination
@@ -33,6 +35,7 @@
         v-model:page-size="localPageSize"
         :page-count="maxPage"
         :page-sizes="[10,20]"
+        :show-size-picker="true"
         size="large"
         @update:page="onPageChange"
         @update:page-size="onPageSizeChange"
@@ -76,17 +79,18 @@
     'update:page',
     'update:pageSize',
     'update:filters',
-    'click'
+    'click:entity',
+    'change',
   ])
 
   const filters = ref<Record<string, string>>({}) // or accept as prop if parent controls it fully
 
   const localPage = ref(props.page)
-  const localPageSize = ref(props.maxPage)
+  const localPageSize = ref(props.pageSize)
 
   function getCellValue(row: any, col: any) {
     if (col.render) return col.render(row)
-    return row[col.key] ?? '—'
+    return row[col.code] ?? '—'
   }
 
   function updateFilter(key: any, value: any) {
@@ -94,18 +98,21 @@
     emit('update:filters', { ...filters.value })
     localPage.value = 1
     emit('update:page', 1)
+    emit('change')
   }
 
   function onPageChange(newPage: any) {
     localPage.value = newPage
     emit('update:page', newPage)
+    emit('change')
   }
 
   function onPageSizeChange(newSize: any) {
     localPageSize.value = newSize
-    localPage.value = 1 // reset page when size changes
+    localPage.value = 1
     emit('update:pageSize', newSize)
     emit('update:page', 1)
+    emit('change')
   }
 
   watch(() => props.page, (val) => { localPage.value = val })
@@ -115,10 +122,14 @@
 <style scoped>
   .data-table-wrapper {
     padding: 10px;
-    overflow-x: auto;
+    overflow: auto;
   }
   
-  .data-table {
+  .data-body-wrapper {
+    overflow: auto;
+  }
+
+  .data-body {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
@@ -131,19 +142,18 @@
     padding-top: 10px;
   }
 
-  .data-table th,
-  .data-table td {
+  .data-body th,
+  .data-body td {
     padding: 10px 12px;
-    border: 1px solid #e8e8e8;
     text-align: left;
   }
 
-  .data-table th {
+  .data-body th {
     background: #fafafa;
     font-weight: 600;
   }
 
-  .data-table tbody tr:hover {
+  .data-body tbody tr:hover {
     background: #f5f5f5;
   }
 

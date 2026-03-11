@@ -2,18 +2,17 @@ import api from ".."
 
 class RoleApi {
 
-  getTableList(page: number, size: number, filter: Record<string, string | number>) {
-    return api.get('/v1/project/role/table/list', {
-      params: {
-        page,
-        size,
-        filter: JSON.stringify(filter)
-      }
+  async getTableList(page: number, size: number, filter: Record<string, string | number>) {
+    const data = await api.post('/v1/project/role/table/list', {
+      page,
+      size,
+      filter
     })
+
+    return data.data.result
   }
 
-  getTableById(roleId: number) {
-    return api.get(`/v1/project/role/table/${roleId}`)
+  async getTableById(roleId: number) {
   }
 
 }
