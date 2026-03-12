@@ -1,5 +1,5 @@
 <template>
-    <div class="layout-container">
+    <!-- <div class="layout-container">
         <div class="info-container">
             <div class="info-label">
                 Пользователь
@@ -64,56 +64,59 @@
                 @confirm="onProjectConfirm"
             />
         </div>
-    </div>
+    </div> -->
+    <InfoDataEntity
+        :fetch-data-req="userApi.getTable"
+    />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import ProjectModal from '@/src/components/ui/projectModal/projectModal.vue'
-import projectApi from '@/src/utils/api/project'
-import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
-import { useUserStore } from '@/src/store/user'
-import { useProjectStore } from '@/src/store/project'
-import { DateTime } from 'luxon'
+// import { ref } from 'vue'
+// import projectApi from '@/src/utils/api/project'
+// import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
+// import { useUserStore } from '@/src/store/user'
+// import { useProjectStore } from '@/src/store/project'
+// import { DateTime } from 'luxon'
+import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue'
+import userApi from '@/src/utils/api/user'
 
-const userStore = useUserStore()
-const projectStore = useProjectStore()
-const loading = ref(false)
+// const userStore = useUserStore()
+// const projectStore = useProjectStore()
 
 // #region: project modal
 
-const showProjectPicker = ref(false)
-const selectedProject = ref<IProjectModalItem | null>(null)
+// const showProjectPicker = ref(false)
+// const selectedProject = ref<IProjectModalItem | null>(null)
 
-const onProjectConfirm = async (item: IProjectModalItem) => {
-    const project = await projectApi.getProject(item.id)
-    selectedProject.value = item
-    userStore.tenantId = Number(project.id)
-    showProjectPicker.value = false
-    projectStore.updateUserProjectInfo()
-}
+// const onProjectConfirm = async (item: IProjectModalItem) => {
+//     const project = await projectApi.getProject(item.id)
+//     selectedProject.value = item
+//     userStore.tenantId = Number(project.id)
+//     showProjectPicker.value = false
+//     projectStore.updateUserProjectInfo()
+// }
 
-const onOpenPorjctPicker = () => {
-    showProjectPicker.value = true
-}
+// const onOpenPorjctPicker = () => {
+//     showProjectPicker.value = true
+// }
 
-const loadProjects = async (): Promise<IProjectModalItem[]> => {
-    const connectecProjects = await projectApi.getConnectedProjects()
-    return connectecProjects.map(conn => ({
-        id: conn.id,
-        name: conn.project.name,
-        description: conn.project.description
-    }))
-}
+// const loadProjects = async (): Promise<IProjectModalItem[]> => {
+//     const connectecProjects = await projectApi.getConnectedProjects()
+//     return connectecProjects.map(conn => ({
+//         id: conn.id,
+//         name: conn.project.name,
+//         description: conn.project.description
+//     }))
+// }
 
 // #endregion
 
-const formatedCreatedAt = (date: string) => {
-  if (!date) return '—'
-  return DateTime.fromISO(date)
-    .setLocale('ru')
-    .toLocaleString(DateTime.DATETIME_HUGE);
-}
+// const formatedCreatedAt = (date: string) => {
+//   if (!date) return '—'
+//   return DateTime.fromISO(date)
+//     .setLocale('ru')
+//     .toLocaleString(DateTime.DATETIME_HUGE);
+// }
 </script>
 
 <style>

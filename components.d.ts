@@ -11,7 +11,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CustomDataEntity: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.vue')['default']
     CustomDataTable: typeof import('./src/components/layout/CustomDataTable/CustomDataTable.vue')['default']
+    InfoDataEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity.vue')['default']
     InfoDataTable: typeof import('./src/components/layout/InfoDataTable/InfoDataTable.vue')['default']
     InfoTable: typeof import('./src/components/layout/ProjectDataTable/InfoTable.vue')['default']
     NButton: typeof import('naive-ui')['NButton']

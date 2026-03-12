@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, type PropType } from 'vue'
+import { onMounted, ref, type PropType } from 'vue'
 import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
 import { useRouter } from 'vue-router'
 

@@ -43,7 +43,6 @@ api.interceptors.response.use(
 
         return api(originalRequest)
       } catch (refreshError) {
-        userStore.accessToken = null
         return Promise.reject(refreshError)
       }
     }

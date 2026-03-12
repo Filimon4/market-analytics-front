@@ -1,7 +1,5 @@
 import axios, { type AxiosRequestConfig } from "axios"
 import api from ".."
-import { useUserStore } from "@/src/store/user"
-
 
 export class AuthApi {
 

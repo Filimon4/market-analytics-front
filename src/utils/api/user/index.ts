@@ -1,6 +1,6 @@
 import api from "..";
 import type { IUser } from "../models/user"
-import type { IUserToProject } from "../models/userToProject";
+import type { IUserToProject, IUserToProjectTableCurrent } from "../models/userToProject";
 
 class UserApi {
 
@@ -12,6 +12,11 @@ class UserApi {
   async getAllProjects(): Promise<IUserToProject[]> {
     const { data } = await api.get<IUserToProject[]>('/v1/project/all')
     return data
+  }
+
+  async getTable(): Promise<IUserToProjectTableCurrent> {
+    const { data: { result } } = await api.get<{result: IUserToProjectTableCurrent}>('/v1/user/table/current')
+    return result
   }
 }
 
