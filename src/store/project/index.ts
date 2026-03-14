@@ -1,17 +1,17 @@
 import type { IPanelElement } from "@/src/utils/api/models/panelElement"
 import type { IPermission } from "@/src/utils/api/models/permission"
-import type { IProject } from "@/src/utils/api/models/project"
+// import type { IProject } from "@/src/utils/api/models/project"
 import type { IRole } from "@/src/utils/api/models/role"
 import type { IRolePermission } from "@/src/utils/api/models/rolePermission"
-import type { IUserToProject } from "@/src/utils/api/models/userToProject"
+// import type { IUserToProject } from "@/src/utils/api/models/userToProject"
 import projectApi from "@/src/utils/api/project"
 import { useStorage } from "@vueuse/core"
 import { defineStore } from "pinia"
 import { type Ref } from "vue"
 
 interface IProjectStore {
-  project: Ref<IProject | null>
-  connectedProject: Ref<IUserToProject | null>
+  // project: Ref<IProject | null>
+  // connectedProject: Ref<IUserToProject | null>
   role: Ref<IRole | null>
   permissions: Ref<(IPermission & IRolePermission)[] | null>
   panel: Ref<IPanelElement[] | null>
@@ -20,29 +20,29 @@ interface IProjectStore {
 }
 
 export const useProjectStore = defineStore("useProjectStore",(): IProjectStore => {
-  const project: IProjectStore['project'] = useStorage('project', null, localStorage, {
-    mergeDefaults: true,
-    serializer: {
-      write(value) {
-        return JSON.stringify(value)
-      },
-      read(raw) {
-        return JSON.parse(raw)
-      },
-    }
-  }) satisfies Ref<IProject | null>
+  // const project: IProjectStore['project'] = useStorage('project', null, localStorage, {
+  //   mergeDefaults: true,
+  //   serializer: {
+  //     write(value) {
+  //       return JSON.stringify(value)
+  //     },
+  //     read(raw) {
+  //       return JSON.parse(raw)
+  //     },
+  //   }
+  // }) satisfies Ref<IProject | null>
 
-  const connectedProject: IProjectStore['connectedProject'] = useStorage('connectedProject', null, localStorage, {
-    mergeDefaults: true,
-    serializer: {
-      write(value) {
-        return JSON.stringify(value)
-      },
-      read(raw) {
-        return JSON.parse(raw)
-      },
-    }
-  }) satisfies Ref<IUserToProject | null>
+  // const connectedProject: IProjectStore['connectedProject'] = useStorage('connectedProject', null, localStorage, {
+  //   mergeDefaults: true,
+  //   serializer: {
+  //     write(value) {
+  //       return JSON.stringify(value)
+  //     },
+  //     read(raw) {
+  //       return JSON.parse(raw)
+  //     },
+  //   }
+  // }) satisfies Ref<IUserToProject | null>
 
   const role: IProjectStore['role'] = useStorage('role', null, localStorage, {
     mergeDefaults: true,
@@ -81,9 +81,9 @@ export const useProjectStore = defineStore("useProjectStore",(): IProjectStore =
   }) satisfies Ref<IPanelElement[] | null>
 
   const updateUserProjectInfo = async () => {
-    const dataProject = await projectApi.getCurrent()
-    connectedProject.value = dataProject.userToProject
-    project.value = dataProject.project
+    // const dataProject = await projectApi.getCurrent()
+    // connectedProject.value = dataProject.userToProject
+    // project.value = dataProject.project
     const dataRole = await projectApi.gerCurrentRole()
     role.value = dataRole.role
     permissions.value = dataRole.permissions
@@ -92,8 +92,8 @@ export const useProjectStore = defineStore("useProjectStore",(): IProjectStore =
   }
 
   return {
-    project,
-    connectedProject,
+    // project,
+    // connectedProject,
     role,
     permissions,
     panel,

@@ -48,31 +48,31 @@
   import { ref, watch } from 'vue'
   import { NPagination } from 'naive-ui' // or use auto-import if configured
 
-  const props = defineProps({
-    columns: {
-      type: Array,
-      required: true
-    },
-    data: {
-      type: Array,
-      default: () => []
-    },
-    page: {
-      type: Number,
-      default: 1
-    },
-    pageSize: {
-      type: Number,
-      default: 20
-    },
-    total: {
-      type: Number,
-      default: 0
-    },
-    maxPage: {
-      type: Number,
-      default: 0
-    }
+  interface ColumnDefinition {
+    key: string
+    label: string
+    sortable?: boolean
+  }
+
+  interface RowData {
+    [key: string]: unknown
+  }
+
+  interface Props {
+    columns:       ColumnDefinition[]
+    data?:         RowData[]
+    page?:         number
+    pageSize?:     number
+    total?:        number
+    maxPage?:      number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    data:     () => [],
+    page:     1,
+    pageSize: 20,
+    total:    0,
+    maxPage:  0
   })
 
   const emit = defineEmits([

@@ -11,7 +11,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    copy: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity copy.vue')['default']
     CustomDataEntity: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.vue')['default']
+    'CustomDataEntity,types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity
+    'CustomDataEntity.types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.types.vue')['default']
     CustomDataTable: typeof import('./src/components/layout/CustomDataTable/CustomDataTable.vue')['default']
     InfoDataEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity.vue')['default']
     InfoDataTable: typeof import('./src/components/layout/InfoDataTable/InfoDataTable.vue')['default']

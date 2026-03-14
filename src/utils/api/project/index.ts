@@ -22,7 +22,9 @@ class ProjectApi {
   }
 
   async gerCurrentRole() {
-    const { data: {result} } = await api.get<{result: IRole & {rolePermission: (IRolePermission & {persmission: IPermission})[]}}>('/v1/project/role')
+    const { data: {result} } = await api.get<
+      {result: IRole & {rolePermission: (IRolePermission & {persmission: IPermission})[]}}
+    >('/v1/project/role')
     return {
       role: {
         id: result.id,

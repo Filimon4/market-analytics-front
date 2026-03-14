@@ -3,14 +3,9 @@
     :blocks="apiResult.blocks"
     :block-details="apiResult.blockDetails"
     :data="apiResult.data"
+    :actions="actions"
+    @click:action="(...args: any[]) => emit('click:action', ...args)"
   >
-    <!-- <template #field="{ value, field }"> -->
-      <!-- <span v-if="field.path === 'blocked'" :class="value ? 'text-red' : 'text-green'">
-        {{ value ? 'Заблокирован' : 'Активен' }}
-      </span> -->
-      <!-- {{ value }} -->
-    <!-- </template> -->
-
     <template
       #field="{field, value}"      
     >
@@ -20,16 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, type PropType } from 'vue';
+import { onMounted, ref, watch, type PropType } from 'vue';
 import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue';
 import { DateTime } from 'luxon';
-
-const props = defineProps({
-  fetchDataReq: {
-    required: true,
-    type: Function as PropType<() => Promise<any>>,
-  },
-})
+import type { Action } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.types';
 
 const apiResult = ref({
   blocks: [],
@@ -37,11 +26,27 @@ const apiResult = ref({
   data: []
 })
 
+const triggerTableUpdate = defineModel<boolean>({required: false, default: false})
+const props = defineProps({
+  fetchDataReq: {
+    required: true,
+    type: Function as PropType<() => Promise<any>>,
+  },
+  actions: {
+    required: false,
+    type: Array as PropType<Action[]>,
+  }
+})
+const emit = defineEmits([
+  'click:action'
+])
+
 async function fetchData() {
   apiResult.value = await props.fetchDataReq()
 }
 
 function formatFieldValue(field: any, value: any) {
+  if (value === null || value === undefined) return ''
   const { type } = field
 
   if (type === 'datetime') {
@@ -62,5 +67,11 @@ function formatFieldValue(field: any, value: any) {
 
 onMounted(() => {
   fetchData()
+})
+
+watch(triggerTableUpdate, (value: boolean) => {
+  if (!value) return;
+  fetchData()
+  triggerTableUpdate.value = false
 })
 </script>

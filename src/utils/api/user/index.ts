@@ -15,7 +15,7 @@ class UserApi {
   }
 
   async getTable(): Promise<IUserToProjectTableCurrent> {
-    const { data: { result } } = await api.get<{result: IUserToProjectTableCurrent}>('/v1/user/table/current')
+    const { data: { result } } = await api.post<{result: IUserToProjectTableCurrent}>('/v1/user/table/current')
     return result
   }
 }

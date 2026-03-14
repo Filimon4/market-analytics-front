@@ -38,31 +38,41 @@
           </div>
         </div>
       </div>
+
+      <div class="block-actions" v-if="actions.filter(a => a.blockCode === block.code).length > 0">
+        <button
+          v-for="action in actions.filter(a => a.blockCode === block.code)"
+          :key="action.code"
+          class="action-btn"
+          :class="`size-${action.size}`"
+          @click="clickAction(action.code)"
+        >
+          {{ action.title }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { Action, Block, BlockDetail, Row } from './CustomDataEntity.types';
 
-const props = defineProps<{
-  blocks: Array<{
-    name: string
-    code: string
-    columnCapacity: number
-    maxColumns: number
-  }>
-  blockDetails: Array<{
-    fields: Array<{
-      title: string
-      path: string
-      editable: boolean
-      type: string
-      editPath?: string
-    }>
-    blockCode: string
-  }>
-  data: Array<Record<string, any> & { blockCode: string }>
-}>()
+const props = withDefaults(defineProps<{
+  blocks: Block[]
+  blockDetails: BlockDetail[]
+  data: Row[]
+  actions?: Action[]
+}>(), {
+  actions: () => []
+})
+
+const emit = defineEmits([
+  'click:action'
+])
+
+const clickAction = (code: string) => {
+  emit('click:action', code)
+}
 
 const getBlockDetails = (blockCode: string) => {
   return (
@@ -72,7 +82,6 @@ const getBlockDetails = (blockCode: string) => {
 
 const getValueForField = (field: any) => {
   const fieldData = field.path.split('.').reduce((obj: any, key: string) => {
-    console.log(key)
     return obj?.[key]
   }, props.data)
 
@@ -195,6 +204,34 @@ const getColumnsForBlock = (block: { code: string; columnCapacity: number; maxCo
 .detail-value {
   color: #222;
 }
+
+/* Action buttons area */
+.block-actions {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: #f8fafc;
+}
+
+.action-btn {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  background: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.12s;
+}
+
+.action-btn:hover {
+  background: #f1f5f9;
+}
+
+/* Size variants */
+.size-small  { padding: 0.35rem 0.75rem; font-size: 0.875rem; }
+.size-medium { padding: 0.5rem 1rem;    font-size: 0.95rem;  }
+.size-large  { padding: 0.65rem 1.35rem; font-size: 1.05rem; }
 
 @media (max-width: 900px) {
   .block-content {
