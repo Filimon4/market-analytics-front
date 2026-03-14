@@ -12,7 +12,7 @@
                 :update-value="(v: any) => updateFilter(col.code, v)"
               >
                 <div class="default-header">
-                  <div class="title">{{ col.name }}</div>
+                  <p class="title">{{ col.name }}</p>
                 </div>
               </slot>
             </th>
@@ -22,7 +22,13 @@
         <tbody>
           <tr v-for="row in data as any[]" :key="row.id || JSON.stringify(row)">
             <td v-for="col in columns as any[]" :key="col.key" @click="emit('click:entity', row)">
-              {{ getCellValue(row, col) }}
+              <slot
+                name="row"
+                :row="row"
+                :col="col"
+              >
+                {{ row[col.code] ?? '—' }}
+              </slot>
             </td>
           </tr>
         </tbody>
@@ -47,25 +53,7 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue'
   import { NPagination } from 'naive-ui' // or use auto-import if configured
-
-  interface ColumnDefinition {
-    key: string
-    label: string
-    sortable?: boolean
-  }
-
-  interface RowData {
-    [key: string]: unknown
-  }
-
-  interface Props {
-    columns:       ColumnDefinition[]
-    data?:         RowData[]
-    page?:         number
-    pageSize?:     number
-    total?:        number
-    maxPage?:      number
-  }
+  import type { Props } from './CustomDataTable.type';
 
   const props = withDefaults(defineProps<Props>(), {
     data:     () => [],
@@ -87,12 +75,7 @@
 
   const localPage = ref(props.page)
   const localPageSize = ref(props.pageSize)
-
-  function getCellValue(row: any, col: any) {
-    if (col.render) return col.render(row)
-    return row[col.code] ?? '—'
-  }
-
+  
   function updateFilter(key: any, value: any) {
     filters.value[key] = value
     emit('update:filters', { ...filters.value })
@@ -121,11 +104,13 @@
 
 <style scoped>
   .data-table-wrapper {
-    padding: 10px;
+    width: 100%;
+    padding: 24px;
     overflow: auto;
   }
   
   .data-body-wrapper {
+    border-radius: 8px;
     overflow: auto;
   }
 
@@ -133,7 +118,8 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
-    box-shadow: 0px 0px 10px gray;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
   }
 
   .data-table-pagination {
@@ -146,11 +132,13 @@
   .data-body td {
     padding: 10px 12px;
     text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1.15em;
+    color: #1a1a1a;
   }
 
   .data-body th {
-    background: #fafafa;
-    font-weight: 600;
+    background: #f8f9fa;
   }
 
   .data-body tbody tr:hover {
@@ -164,6 +152,7 @@
   }
 
   .title {
-    font-weight: 600;
+    font-size: 1.15em;
+    color: #1a1a1a;
   }
 </style>

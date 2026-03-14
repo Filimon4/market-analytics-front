@@ -59,6 +59,10 @@
         </template>
       </div>
     </template>
+
+    <template #row="{row, col}">
+      {{ renderRow(row, col) }}
+    </template>
   </CustomDataTable>
 </template>
 
@@ -66,6 +70,7 @@
 import { onMounted, ref, type PropType } from 'vue'
 import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
 import { useRouter } from 'vue-router'
+import type { ColumnDefinition } from '../CustomDataTable/CustomDataTable.type'
 
 const router = useRouter()
 
@@ -87,7 +92,7 @@ const props = defineProps({
 
 // Data table
 const tableItems = ref([])
-const tableColumns = ref([])
+const tableColumns = ref<ColumnDefinition[]>([])
 const tableFilters = ref<any>({})
 
 // Date page
@@ -96,17 +101,26 @@ const pageSize = ref<number>(props.defaultPageSize)
 const pageMax = ref<number>(0)
 const itemsTotal = ref<number>(0)
 
-function handleClickEntity(entity: any) {
+const handleClickEntity = (entity: any) => {
   router.push(`${props.redirectEntityUrl}/${entity.id}`)
 }
 
-async function fetchData() {
+const fetchData = async () => {
   const allData = await props.fetchDataReq(pageCurrent.value, pageSize.value, tableFilters.value)
   tableItems.value = allData.data
   tableColumns.value = allData.columns
 
   pageMax.value = allData.data.maxPage
   itemsTotal.value = allData.data.total
+}
+
+const renderRow = (row: any, col: any) => {
+
+  if (col.type === 'boolean') {
+    return row[col.code] ? "Да" : "Нет"
+  }
+
+  return row[col.code]
 }
 
 onMounted(() => {
@@ -119,6 +133,6 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    min-width: 140px;
+    min-width: 100px;
   }
 </style>
