@@ -11,6 +11,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BlockTableContent: typeof import('./src/components/layout/CustomDataEntity/DataContentType/BlockTableContent.vue')['default']
+    BlockTreeContent: typeof import('./src/components/layout/CustomDataEntity/DataContentType/BlockTreeContent.vue')['default']
     copy: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity copy.vue')['default']
     CustomDataEntity: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.vue')['default']
     'CustomDataEntity,types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity
