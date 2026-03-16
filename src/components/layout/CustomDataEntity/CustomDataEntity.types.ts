@@ -19,6 +19,11 @@ export interface BlockDetail {
   blockCode: string
 }
 
+export interface BlockTreeDetail {
+  treePath: string
+  blockCode: string
+}
+
 export interface Action {
   title: string
   code: string
@@ -26,7 +31,6 @@ export interface Action {
   blockCode: string
 }
 
-export interface Row {
-  blockCode: string
+export interface Data {
   [key: string]: unknown
 }

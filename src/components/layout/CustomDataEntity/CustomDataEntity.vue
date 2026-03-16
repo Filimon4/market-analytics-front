@@ -12,41 +12,13 @@
         </div>
       </slot>
 
-      <!-- TODO: Добавить вид контента - дерево -->
-      <!-- <div class="block-content">
-        <div
-          v-for="(column, colIndex) in getColumnsForBlock(block)"
-          :key="colIndex"
-          class="column"
-          :class="`column-${getColumnsForBlock(block).length}`"
-        >
-          <div
-            v-for="entity in column"
-            :key="entity.path"
-            class="detail-row"
-          >
-            <div class="detail-label">{{ entity.title }}</div>
-            <div class="detail-value">
-              <slot
-                name="field"
-                :field="entity"
-                :value="getValueForField(entity)"
-                :block="block"
-              >
-                {{ getValueForField(entity) }}
-              </slot>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
       <div 
         class="block-content" 
         :class="{ 'tree-view': block.blockType === 'tree' }"
       >
         <BlockTableContent
           v-if="!block.blockType || block.blockType === 'table'"
-          :fields="getBlockDetails(block.code)"
+          :fields="getBlockDetails(block.code).fields"
           :data="data"
           :block="block"
         >
@@ -62,14 +34,13 @@
 
         <BlockTreeContent
           v-else-if="block.blockType === 'tree'"
-          :fields="getBlockDetails(block.code)"
-          :data="data"
+          :treeData="getValueForField(getBlockTreeDetails(block.code).treePath)"
         />
       </div>
 
-      <div class="block-actions" v-if="actions.filter(a => a.blockCode === block.code).length > 0">
+      <div class="block-actions" v-if="getBlockActions(block.code)">
         <button
-          v-for="action in actions.filter(a => a.blockCode === block.code)"
+          v-for="action in getBlockActions(block.code)"
           :key="action.code"
           class="action-btn"
           :class="`size-${action.size}`"
@@ -83,12 +54,14 @@
 </template>
 
 <script setup lang="ts">
-  import type { Action, Block, BlockDetail, Row } from './CustomDataEntity.types';
+  import type { Action, Block, BlockDetail, BlockTreeDetail, Data } from './CustomDataEntity.types';
+import BlockTableContent from './DataContentType/BlockTableContent.vue';
+import BlockTreeContent from './DataContentType/BlockTreeContent.vue';
 
   const props = withDefaults(defineProps<{
     blocks: Block[]
-    blockDetails: BlockDetail[]
-    data: Row[]
+    blockDetails: (BlockDetail | BlockTreeDetail)[]
+    data: Data
     actions?: Action[]
   }>(), {
     actions: () => []
@@ -102,44 +75,26 @@
     emit('click:action', code)
   }
 
-  const getBlockDetails = (blockCode: string) => {
+  const getBlockActions = (blockCode: string): Action[] | null => {
+    const blockActions = props.actions.filter(b => b.blockCode === blockCode)
+    return blockActions.length ? blockActions : null
+  }
+
+  const getBlockDetails = (blockCode: string): BlockDetail => {
     return (
-      props.blockDetails.find(b => b.blockCode === blockCode)?.fields || []
+      props.blockDetails.find(b => b.blockCode === blockCode) as BlockDetail
     )
   }
 
-  // const getValueForField = (field: any) => {
-  //   const fieldData = field.path.split('.').reduce((obj: any, key: string) => {
-  //     return obj?.[key]
-  //   }, props.data)
-
-  //   return fieldData
-  // }
-
-  // const getColumnsForBlock = (block: { code: string; columnCapacity: number; maxColumns: number }) => {
-  //   const fields = getBlockDetails(block.code)
-  //   if (!fields.length) return []
-
-  //   const columns: Array<typeof fields> = []
-  //   let currentColumn: typeof fields = []
-
-  //   for (const field of fields) {
-  //     if (currentColumn.length >= block.columnCapacity) {
-  //       if (columns.length + 1 >= block.maxColumns) {
-  //         break
-  //       }
-  //       columns.push(currentColumn)
-  //       currentColumn = []
-  //     }
-  //     currentColumn.push(field)
-  //   }
-
-  //   if (currentColumn.length > 0) {
-  //     columns.push(currentColumn)
-  //   }
-
-  //   return columns
-  // }
+  const getBlockTreeDetails = (blockCode: string): BlockTreeDetail => {
+    return (
+      props.blockDetails.find(b => b.blockCode === blockCode) as BlockTreeDetail
+    )
+  }
+  
+  const getValueForField = (field: any) => {
+    return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
+  }
 </script>
 
 <style scoped>

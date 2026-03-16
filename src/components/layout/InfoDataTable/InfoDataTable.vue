@@ -2,6 +2,7 @@
   <CustomDataTable
     :columns="tableColumns"
     :data="tableItems"
+    :actions="actions"
     v-model:page="pageCurrent"
     v-model:pageSize="pageSize"
     v-model:filters="tableFilters"
@@ -9,6 +10,7 @@
     :total="itemsTotal"
     @change="fetchData"
     @click:entity="handleClickEntity"
+    @click:action="handleClickAction"
   >
     <template #header="{ column, value, updateValue }">
       <div class="custom-header">
@@ -16,7 +18,7 @@
         <template v-if="column.filtrable !== false">
           <n-input
             v-if="column.type === 'string'"
-            v-model:value="tableFilters[column.key]"
+            v-model:value="tableFilters[column.code]"
             placeholder=""
             size="small"
             :bordered="false"
@@ -25,7 +27,7 @@
   
           <n-select
             v-else-if="column.type === 'select'"
-            v-model:value="tableFilters[column.key]"
+            v-model:value="tableFilters[column.code]"
             :options="column.options"
             placeholder=""
             size="small"
@@ -36,7 +38,7 @@
   
           <n-input-number
             v-else-if="column.type === 'number'"
-            v-model:value="tableFilters[column.key]"
+            v-model:value="tableFilters[column.code]"
             placeholder=""
             size="small"
             :bordered="false"
@@ -45,7 +47,7 @@
 
           <n-select
             v-if="column.type === 'boolean'"
-            v-model:value="tableFilters[column.key]"
+            v-model:value="tableFilters[column.code]"
             :options="[
               { label: 'Все', value: '' },
               { label: 'Да', value: 'true' },
@@ -70,7 +72,7 @@
 import { onMounted, ref, type PropType } from 'vue'
 import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
 import { useRouter } from 'vue-router'
-import type { ColumnDefinition } from '../CustomDataTable/CustomDataTable.type'
+import type { Action, ColumnDefinition } from '../CustomDataTable/CustomDataTable.type'
 
 const router = useRouter()
 
@@ -87,6 +89,10 @@ const props = defineProps({
     type: Number,
     default: 10,
     required: true
+  },
+  actions: {
+    required: false,
+    type: Array as PropType<Action[]>,
   }
 })
 
@@ -103,6 +109,10 @@ const itemsTotal = ref<number>(0)
 
 const handleClickEntity = (entity: any) => {
   router.push(`${props.redirectEntityUrl}/${entity.id}`)
+}
+
+const handleClickAction = (code: string) => {
+  console.log(code)
 }
 
 const fetchData = async () => {

@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: add loader and sort filters -->
   <CustomDataEntity
     :blocks="apiResult.blocks"
     :block-details="apiResult.blockDetails"
@@ -20,7 +21,11 @@ import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue';
 import { DateTime } from 'luxon';
 import type { Action } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.types';
 
-const apiResult = ref({
+const apiResult = ref<{
+  blocks: any[]
+  blockDetails: any[]
+  data: any
+}>({
   blocks: [],
   blockDetails: [],
   data: []

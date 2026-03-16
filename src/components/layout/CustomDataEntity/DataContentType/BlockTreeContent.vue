@@ -1,72 +1,60 @@
 <template>
   <n-tree
-    :data="treeData"
+    :data="props.treeData.nodes"
     key-field="key"
     label-field="label"
+    :checkable="props.treeData.checkable ?? false"
+    :draggable="props.treeData.draggable ?? false"
+    :checked-keys="internalCheckedKeys"
+    @update:checked-keys="handleCheckedUpdate"
     style="width: 100%"
   />
 </template>
 
 <script setup lang="ts">
-  import { NTree } from 'naive-ui'
-  import { computed } from 'vue'
+import { NTree } from 'naive-ui'
+import type { TreeOptions } from 'naive-ui/es/tree/src/interface';
+import { ref } from 'vue'
 
-  const props = defineProps<{
-    fields: any[]
-    data: any
-  }>()
+export interface Tree {
+  nodes: TreeOptions
+  defaultCheckedKeys?: string[]
+  checkable?: boolean;
+  draggable?: boolean;
+}
 
-  const treeData = computed(() => {
-    const fields = props.fields
-    if (!fields.length) return []
+const props = defineProps<{
+  treeData: Tree
+}>()
 
-    const rootChildren: any[] = []
-    const nodeMap = new Map<string, any>()
+const emit = defineEmits<{
+  (e: 'update:checked-keys', keys: string[]): void
+}>()
 
-    const getValue = (path: string) =>
-      path.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
+// Внутреннее состояние (инициализируем значениями по умолчанию с бэка)
+const internalCheckedKeys = ref<string[]>(
+  props.treeData.defaultCheckedKeys ?? []
+)
 
-    for (const field of fields) {
-      const parts = field.path.split('.')
-      let currentLevel = rootChildren
-      let currentPath = ''
-
-      for (let i = 0; i < parts.length; i++) {
-        const part = parts[i]
-        currentPath = currentPath ? `${currentPath}.${part}` : part
-        const isLeaf = i === parts.length - 1
-
-        let node = nodeMap.get(currentPath)
-        if (!node) {
-          node = {
-            key: currentPath,
-            label: isLeaf ? `${field.title}: ${getValue(field.path) ?? '—'}` : part,
-            children: isLeaf ? undefined : []
-          }
-          if (isLeaf) node.isLeaf = true
-          nodeMap.set(currentPath, node)
-          currentLevel.push(node)
-        }
-
-        if (!isLeaf) {
-          currentLevel = node.children!
-        } else {
-          node.label = `${field.title}: ${getValue(field.path) ?? '—'}`
-        }
-      }
-    }
-    return rootChildren
-  })
+const handleCheckedUpdate = (keys: string[]) => {
+  internalCheckedKeys.value = keys
+  emit('update:checked-keys', keys)
+}
 </script>
 
 <style scoped>
-  :deep(.n-tree) {
-    font-size: 0.95em;
-  }
+:deep(.n-tree) {
+  font-size: 0.95em;
+}
 
-  @media (max-width: 900px) {
-    .block-content.tree-view {
-      flex-direction: unset;
-    }
+:deep(.n-tree-node-wrapper) {
+  --n-node-wrapper-padding: 10px !important;
+}
+
+/* оставляем на случай, если родительский .block-content.tree-view используется */
+@media (max-width: 900px) {
+  .block-content.tree-view {
+    flex-direction: unset;
   }
+}
 </style>

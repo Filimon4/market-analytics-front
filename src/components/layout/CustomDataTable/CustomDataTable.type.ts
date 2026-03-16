@@ -9,6 +9,12 @@ export interface RowData {
   [key: string]: unknown
 }
 
+export interface Action {
+  title: string,
+  code: string,
+  size: 'small' | 'medium' | 'large'
+}
+
 export interface Props {
   columns:       ColumnDefinition[]
   data?:         RowData[]
@@ -16,4 +22,5 @@ export interface Props {
   pageSize?:     number
   total?:        number
   maxPage?:      number
+  actions?:      Action[]
 }

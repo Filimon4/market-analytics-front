@@ -14,6 +14,7 @@ import Developer from '../views/projects/developer/Developer.vue'
 import Apikeys from '../views/projects/apikeys/Apikeys.vue'
 import Users from '../views/projects/users/Users.vue'
 import Roles from '../views/projects/roles/Roles.vue'
+import Role from '../views/projects/roles/Role.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -50,6 +51,7 @@ const routes: RouteRecordRaw[] = [
           {path: 'apikeys', component: Apikeys },
           {path: 'users', component: Users },
           {path: 'roles', component: Roles },
+          {path: 'roles/:id', component: Role}
         ]
       },
     ],

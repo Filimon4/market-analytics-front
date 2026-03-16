@@ -13,6 +13,8 @@ class RoleApi {
   }
 
   async getTableById(roleId: number) {
+    const data = await api.get(`/v1/project/role/table/${roleId}`)
+    return data.data.result
   }
 
 }
