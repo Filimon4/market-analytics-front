@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Add "add role button" -->
   <InfoDataTable
     :redirect-entity-url="'roles'"
     :fetchDataReq="roleApi.getTableList"

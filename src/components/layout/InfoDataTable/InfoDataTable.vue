@@ -125,12 +125,17 @@ const fetchData = async () => {
 }
 
 const renderRow = (row: any, col: any) => {
+  const value = col?.path ? getValueForField(col.path, row) : row[col.code]
 
   if (col.type === 'boolean') {
-    return row[col.code] ? "Да" : "Нет"
+    return value ? "Да" : "Нет"
   }
 
-  return row[col.code]
+  return value
+}
+
+const getValueForField = (field: any, data: object) => {
+  return field.split('.').reduce((obj: any, key: string) => obj?.[key], data)
 }
 
 onMounted(() => {

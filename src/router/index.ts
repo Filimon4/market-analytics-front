@@ -12,7 +12,9 @@ import Channels from '../views/marketing/channels/Channels.vue'
 import Performance from '../views/marketing/performance/Performance.vue'
 import Developer from '../views/projects/developer/Developer.vue'
 import Apikeys from '../views/projects/apikeys/Apikeys.vue'
+import Apikey from '../views/projects/apikeys/Apikey.vue'
 import Users from '../views/projects/users/Users.vue'
+import User from '../views/projects/users/User.vue'
 import Roles from '../views/projects/roles/Roles.vue'
 import Role from '../views/projects/roles/Role.vue'
 
@@ -49,7 +51,9 @@ const routes: RouteRecordRaw[] = [
         children: [
           {path: 'developer', component: Developer },
           {path: 'apikeys', component: Apikeys },
+          {path: 'apikeys/:id', component: Apikey },
           {path: 'users', component: Users },
+          {path: 'users/:id', component: User },
           {path: 'roles', component: Roles },
           {path: 'roles/:id', component: Role}
         ]

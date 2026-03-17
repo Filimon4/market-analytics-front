@@ -21,7 +21,7 @@ import Panel from '@/src/components/common/dashboard/panel/Panel.vue';
 .dashboard-content {
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 </style>

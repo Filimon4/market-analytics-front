@@ -1,6 +1,6 @@
 <template>
   <div class="data-table-wrapper">
-    <div class="block-actions" v-if="actions">
+    <div class="block-actions" v-if="actions.length">
       <button
         v-for="action in actions"
         :key="action.code"
@@ -32,14 +32,14 @@
         </thead>
 
         <tbody>
-          <tr v-for="row in data as any[]" :key="row.id || JSON.stringify(row)">
+          <tr class="default-row" v-for="row in data as any[]" :key="row.id || JSON.stringify(row)">
             <td v-for="col in columns as any[]" :key="col.key" @click="emit('click:entity', row)">
               <slot
                 name="row"
                 :row="row"
                 :col="col"
               >
-                {{ row[col.code] ?? '—' }}
+                {{ col?.path ? getValueForField(col.path) : row[col.code] ?? '—' }}
               </slot>
             </td>
           </tr>
@@ -63,90 +63,101 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch, onUnmounted } from 'vue'
-  import { NPagination } from 'naive-ui' // or use auto-import if configured
-  import type { Props } from './CustomDataTable.type';
+import { ref, watch, onUnmounted } from 'vue'
+import { NPagination } from 'naive-ui' // or use auto-import if configured
+import type { Props } from './CustomDataTable.type';
 
-  const props = withDefaults(defineProps<Props>(), {
-    data:     () => [],
-    page:     1,
-    pageSize: 20,
-    total:    0,
-    maxPage:  0,
-    actions:  () => []
-  })
+const props = withDefaults(defineProps<Props>(), {
+  data:     () => [],
+  page:     1,
+  pageSize: 20,
+  total:    0,
+  maxPage:  0,
+  actions:  () => []
+})
 
-  const emit = defineEmits([
-    'update:page',
-    'update:pageSize',
-    'update:filters',
-    'click:entity',
-    'click:action',
-    'change',
-  ])
+const emit = defineEmits([
+  'update:page',
+  'update:pageSize',
+  'update:filters',
+  'click:entity',
+  'click:action',
+  'change',
+])
 
-  const filters = ref<Record<string, string>>({}) // or accept as prop if parent controls it fully
+const filters = ref<Record<string, string>>({}) // or accept as prop if parent controls it fully
 
-  const localPage = ref(props.page)
-  const localPageSize = ref(props.pageSize)
+const localPage = ref(props.page)
+const localPageSize = ref(props.pageSize)
 
-  let filterTimeout: number | undefined
+let filterTimeout: number | undefined
 
-  const applyFilters = () => {
-    emit('update:filters', { ...filters.value })
-    localPage.value = 1
-    emit('update:page', 1)
-    emit('change')
+const applyFilters = () => {
+  emit('update:filters', { ...filters.value })
+  localPage.value = 1
+  emit('update:page', 1)
+  emit('change')
+}
+
+const updateFilter = (key: any, value: any) => {
+  filters.value[key] = value
+
+  if (filterTimeout !== undefined) {
+    clearTimeout(filterTimeout)
   }
 
-  const updateFilter = (key: any, value: any) => {
-    filters.value[key] = value
+  filterTimeout = setTimeout(() => {
+    applyFilters()
+  }, 400)
+}
 
-    if (filterTimeout !== undefined) {
-      clearTimeout(filterTimeout)
-    }
+const onPageChange = (newPage: any) => {
+  localPage.value = newPage
+  emit('update:page', newPage)
+  emit('change')
+}
 
-    filterTimeout = setTimeout(() => {
-      applyFilters()
-    }, 400)
+const onPageSizeChange = (newSize: any) => {
+  localPageSize.value = newSize
+  localPage.value = 1
+  emit('update:pageSize', newSize)
+  emit('update:page', 1)
+  emit('change')
+}
+
+const clickAction = (code: string) => {
+  emit('click:action', code)
+}
+
+const getValueForField = (field: any) => {
+  return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
+}
+
+watch(() => props.page, (val) => { localPage.value = val })
+watch(() => props.pageSize, (val) => { localPageSize.value = val })
+
+onUnmounted(() => {
+  if (filterTimeout !== undefined) {
+    clearTimeout(filterTimeout)
   }
-
-  const onPageChange = (newPage: any) => {
-    localPage.value = newPage
-    emit('update:page', newPage)
-    emit('change')
-  }
-
-  const onPageSizeChange = (newSize: any) => {
-    localPageSize.value = newSize
-    localPage.value = 1
-    emit('update:pageSize', newSize)
-    emit('update:page', 1)
-    emit('change')
-  }
-
-  const clickAction = (code: string) => {
-    emit('click:action', code)
-  }
-
-  watch(() => props.page, (val) => { localPage.value = val })
-  watch(() => props.pageSize, (val) => { localPageSize.value = val })
-
-  onUnmounted(() => {
-    if (filterTimeout !== undefined) {
-      clearTimeout(filterTimeout)
-    }
-  })
+})
 </script>
 
 <style scoped>
   .data-table-wrapper {
+    display: flex;
+    flex-direction: column;
+    
+    height: 100%;
     width: 100%;
+    
     padding: 24px;
     overflow: auto;
   }
   
   .data-body-wrapper {
+    height: 100%;
+
     border-radius: 8px;
     overflow: auto;
   }
@@ -191,6 +202,11 @@
   .title {
     font-size: 1.15em;
     color: #1a1a1a;
+  }
+
+  .default-row td {
+    height: 30px;
+    cursor: pointer;
   }
 
   /* Action buttons area */
