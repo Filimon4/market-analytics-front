@@ -1,20 +1,12 @@
 <template>
-  <div
-    class="panel-item-container panel-item-container--opened"
-  >
+  <div class="panel-item-container panel-item-container--opened">
     <div
       class="panel-item"
       @click="$emit('click')"
       @mouseenter="$emit('mouseenter')"
       @mouseleave="$emit('mouseleave')"
     >
-      <img
-        v-if="item.icon"
-        :src="item.icon"
-        width="30"
-        height="30"
-        alt=""
-      >
+      <img v-if="item.icon" :src="item.icon" width="30" height="30" alt="" />
       <span>{{ item.name }}</span>
     </div>
   </div>
@@ -24,12 +16,11 @@
 defineProps({
   item: { type: Object, required: true },
   labelVisible: { type: Boolean, default: false },
-})
-defineEmits(['click', 'mouseenter', 'mouseleave'])
+});
+defineEmits(["click", "mouseenter", "mouseleave"]);
 </script>
 
 <style lang="css" scoped>
-
 .panel-item-container {
   width: 100%;
 }
@@ -61,5 +52,4 @@ defineEmits(['click', 'mouseenter', 'mouseleave'])
   cursor: pointer;
   transition: background 0.15s;
 }
-
 </style>

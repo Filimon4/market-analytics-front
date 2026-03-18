@@ -35,12 +35,11 @@
     </div>
     <div
       v-if="subPanelItem"
+      ref="subPanelRef"
       class="panel-container"
-      :style="{ width:  '220px' }"
+      :style="{ width: '220px' }"
     >
-      <div
-        class="panel-content panel-content-opened"
-      >
+      <div class="panel-content panel-content-opened">
         <div class="panel-content-block">
           <PanelItem
             v-for="sub in subPanelItem.children"
@@ -58,42 +57,51 @@
 </template>
 
 <script setup>
-import PanelItem from './PanelItem.vue'
-import marketingIcon from '/icons/marketing.png'
-import projectIcon from '/icons/project.png'
-import accountIcon from '/icons/account.png'
-import { ref, computed, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import {useProjectStore} from '@/src/store/project'
+import { onClickOutside } from "@vueuse/core";
+import PanelItem from "./PanelItem.vue";
+import marketingIcon from "/icons/marketing.png";
+import projectIcon from "/icons/project.png";
+import accountIcon from "/icons/account.png";
+import { ref, computed, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useProjectStore } from "@/src/store/project";
 
-const router = useRouter()
-const route = useRoute()
-const panelOpened = ref(false)
-const subPanelItem = ref(null)
-const hoverId = ref(null)
-const subHoverId = ref(null)
+const router = useRouter();
+const route = useRoute();
+const panelOpened = ref(false);
+const subPanelRef = ref(null);
+const subPanelItem = ref(null);
+const hoverId = ref(null);
+const subHoverId = ref(null);
 
-const project = useProjectStore()
+const project = useProjectStore();
 
-const panelBlocks = computed(() => {  
+const panelBlocks = computed(() => {
   return [
-    { key: 'first', items: project.panel },
-    { key: 'second', items: [
-      { id: 3, name: 'Аккаунт', icon: accountIcon, url: '/account' },
-    ]},
-  ]
-})
+    { key: "first", items: project.panel },
+    {
+      key: "second",
+      items: [{ id: 3, name: "Аккаунт", icon: accountIcon, url: "/account" }],
+    },
+  ];
+});
 
 function onItemClick(item) {
   if (item.url) {
-    router.push(item.url)
-    subPanelItem.value = null
+    router.push(item.url);
+    subPanelItem.value = null;
   } else if (item?.children?.length) {
-    subPanelItem.value = item
+    subPanelItem.value = item;
   }
 }
 
-watch(panelOpened, (open) => { if (!open) subPanelItem.value = null })
+watch(panelOpened, (open) => {
+  if (!open) subPanelItem.value = null;
+});
+
+onClickOutside(subPanelRef, () => {
+  subPanelItem.value = null;
+});
 </script>
 
 <style lang="css">
