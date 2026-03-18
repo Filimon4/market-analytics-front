@@ -10,7 +10,7 @@
     :total="itemsTotal"
     @change="fetchData"
     @click:entity="handleClickEntity"
-    @click:action="handleClickAction"
+    @click:action="code => emit('click:action', code)"
   >
     <template #header="{ column, updateValue }">
       <div class="custom-header">
@@ -74,6 +74,8 @@
   import { useRouter } from 'vue-router'
   import type { Action, ColumnDefinition } from '../CustomDataTable/CustomDataTable.type'
 
+  const emit = defineEmits(['click:action'])
+
   const router = useRouter()
 
   const props = defineProps({
@@ -111,10 +113,6 @@
 
   const handleClickEntity = (entity: any) => {
     router.push(`${props.redirectEntityUrl}/${entity.id}`)
-  }
-
-  const handleClickAction = (code: string) => {
-    console.log(code)
   }
 
   const fetchData = async () => {

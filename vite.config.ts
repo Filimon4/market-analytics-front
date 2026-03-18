@@ -9,28 +9,28 @@ export default defineConfig({
   plugins: [
     vue(),
     Components({
-      resolvers: [NaiveUiResolver()]
-    })
+      resolvers: [NaiveUiResolver()],
+    }),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '.')
-    }
+      '@': path.resolve(__dirname, '.'),
+    },
   },
   server: {
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'certs/localhost+2-key.pem')),
       cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost+2.pem')),
     },
-    host: 'localhost',
+    host: '127.0.0.1',
     port: 5173,
 
     proxy: {
       '/api': {
-        target: 'https://localhost:3501',   // or your NestJS port
+        target: 'https://127.0.0.1:3501', // or your NestJS port
         changeOrigin: true,
-        secure: false,                      // ← important: accept self-signed in dev proxy
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: false, // ← important: accept self-signed in dev proxy
+        rewrite: path => path.replace(/^\/api/, ''),
       },
     },
   },

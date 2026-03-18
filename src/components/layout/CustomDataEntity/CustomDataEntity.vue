@@ -41,14 +41,20 @@
 </template>
 
 <script setup lang="ts">
-  import type { Action, Block, BlockDetail, BlockTreeDetail, Data } from './CustomDataEntity.types'
+  import type {
+    Action,
+    IBlock,
+    IBlockDetail,
+    IBlockTreeDetail,
+    Data,
+  } from './CustomDataEntity.types'
   import BlockTableContent from './DataContentType/BlockTableContent.vue'
-  import BlockTreeContent, { type Tree } from './DataContentType/BlockTreeContent.vue'
+  import BlockTreeContent from './DataContentType/BlockTreeContent.vue'
 
   const props = withDefaults(
     defineProps<{
-      blocks: Block[]
-      blockDetails: (BlockDetail | BlockTreeDetail)[]
+      blocks: IBlock[]
+      blockDetails: (IBlockDetail | IBlockTreeDetail)[]
       data: Data
       actions?: Action[]
     }>(),
@@ -68,18 +74,17 @@
     return blockActions.length ? blockActions : null
   }
 
-  const getBlockDetails = (blockCode: string): BlockDetail => {
-    return props.blockDetails.find(b => b.blockCode === blockCode) as BlockDetail
+  const getBlockDetails = (blockCode: string): IBlockDetail => {
+    return props.blockDetails.find(b => b.blockCode === blockCode) as IBlockDetail
   }
 
-  const getBlockTreeDetails = (blockCode: string): BlockTreeDetail => {
-    return props.blockDetails.find(b => b.blockCode === blockCode) as BlockTreeDetail
+  const getBlockTreeDetails = (blockCode: string): IBlockTreeDetail => {
+    return props.blockDetails.find(b => b.blockCode === blockCode) as IBlockTreeDetail
   }
 
   const getValueForField = (field: string): unknown => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return field.split('.').reduce((obj, key: string) => obj?.[key], props.data)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
   }
 </script>
 

@@ -17,12 +17,12 @@
 </template>
 
 <script setup lang="ts">
-  import type { Block } from '../CustomDataEntity.types'
+  import type { Data, IBlock, IField } from '../CustomDataEntity.types'
 
   const props = defineProps<{
-    fields: any[]
-    data: any
-    block: Block
+    fields: IField[]
+    data: Data
+    block: IBlock
   }>()
 
   const getColumnsForBlock = (block: { columnCapacity: number; maxColumns: number }) => {
@@ -45,7 +45,8 @@
     return columns
   }
 
-  const getValueForField = (field: any) => {
+  const getValueForField = (field: IField) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return field.path.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
   }
 </script>
@@ -94,11 +95,14 @@
   }
 
   .detail-label {
+    align-self: center;
     font-weight: 500;
     color: #555;
+    padding: 5px;
   }
 
   .detail-value {
+    align-self: center;
     color: #222;
   }
 

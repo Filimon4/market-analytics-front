@@ -17,6 +17,7 @@ import Users from '../views/projects/users/Users.vue'
 import User from '../views/projects/users/User.vue'
 import Roles from '../views/projects/roles/Roles.vue'
 import Role from '../views/projects/roles/Role.vue'
+import CreateRole from '../views/projects/roles/CreateRole.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -58,6 +59,7 @@ const routes: RouteRecordRaw[] = [
           { path: 'users', component: Users },
           { path: 'users/:id', component: User },
           { path: 'roles', component: Roles },
+          { path: 'roles/create', component: CreateRole },
           { path: 'roles/:id', component: Role },
         ],
       },

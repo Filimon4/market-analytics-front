@@ -17,23 +17,23 @@
   import { onMounted, ref, watch, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import { DateTime } from 'luxon'
-  import type { Action } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.types'
+  import type {
+    Action,
+    IEntity,
+    IField,
+  } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.types'
 
-  const apiResult = ref<{
-    blocks: any[]
-    blockDetails: any[]
-    data: any
-  }>({
+  const apiResult = ref<IEntity>({
     blocks: [],
     blockDetails: [],
-    data: [],
+    data: {},
   })
 
   const triggerTableUpdate = defineModel<boolean>({ required: false, default: false })
   const props = defineProps({
     fetchDataReq: {
       required: true,
-      type: Function as PropType<() => Promise<any>>,
+      type: Function as PropType<() => Promise<IEntity>>,
     },
     actions: {
       required: false,
@@ -46,12 +46,12 @@
     apiResult.value = await props.fetchDataReq()
   }
 
-  function formatFieldValue(field: any, value: any) {
+  function formatFieldValue(field: IField, value: string | number | boolean) {
     if (value === null || value === undefined) return ''
     const { type } = field
 
     if (type === 'datetime') {
-      return DateTime.fromISO(value, {
+      return DateTime.fromISO(value as string, {
         zone: 'utc',
         locale: 'ru',
       })

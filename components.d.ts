@@ -13,11 +13,14 @@ declare module 'vue' {
   export interface GlobalComponents {
     BlockTableContent: typeof import('./src/components/layout/CustomDataEntity/DataContentType/BlockTableContent.vue')['default']
     BlockTreeContent: typeof import('./src/components/layout/CustomDataEntity/DataContentType/BlockTreeContent.vue')['default']
-    copy: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity copy.vue')['default']
+    copy: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity copy.vue')['default']
+    CustomDataCreateEntity: typeof import('./src/components/layout/CustomDataEntity/CustomDataCreateEntity.vue')['default']
     CustomDataEntity: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.vue')['default']
     'CustomDataEntity,types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity
     'CustomDataEntity.types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.types.vue')['default']
     CustomDataTable: typeof import('./src/components/layout/CustomDataTable/CustomDataTable.vue')['default']
+    FieldRenderer: typeof import('./src/components/layout/InfoDataEntity/FieldRenderer.vue')['default']
+    InfoDataCreateEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataCreateEntity.vue')['default']
     InfoDataEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity.vue')['default']
     InfoDataTable: typeof import('./src/components/layout/InfoDataTable/InfoDataTable.vue')['default']
     InfoTable: typeof import('./src/components/layout/ProjectDataTable/InfoTable.vue')['default']

@@ -15,6 +15,11 @@ class RoleApi {
     const data = await api.get(`/v1/project/role/table/${roleId}`)
     return data.data.result
   }
+
+  async getCreateTable() {
+    const data = await api.get(`/v1/project/role/table/create`)
+    return data.data.result
+  }
 }
 
 const roleApi = new RoleApi()
