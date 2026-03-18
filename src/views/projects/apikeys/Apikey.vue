@@ -1,16 +1,14 @@
 <template>
-  <InfoDataEntity
-    :fetch-data-req="async () => apiKeysApi.getTableById(apiKeyId)"
-  />
+  <InfoDataEntity :fetch-data-req="async () => apiKeysApi.getTableById(apiKeyId)" />
 </template>
 
-<script setup>
-import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue';
-import apiKeysApi from '@/src/utils/api/apikeys';
-import { computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+<script setup lang="ts">
+  import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue'
+  import apiKeysApi from '@/src/utils/api/apikeys'
+  import { computed } from 'vue'
+  import { useRoute } from 'vue-router'
 
-const route = useRoute()
+  const route = useRoute()
 
-const apiKeyId = computed(() => route.params.id)
+  const apiKeyId = computed(() => Number(route.params.id))
 </script>

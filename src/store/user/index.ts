@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
-import { computed, type Ref } from "vue";
+import { defineStore } from 'pinia'
+import { computed, type Ref } from 'vue'
 import { useStorage } from '@vueuse/core'
-import type { IUser } from "@/src/utils/api/models/user";
+import type { IUser } from '@/src/utils/api/models/user'
 
 interface IUserStore {
   isAuth: Ref<boolean>
@@ -21,22 +21,21 @@ export const useUserStore = defineStore('useUserStore', (): IUserStore => {
       read(raw) {
         return JSON.parse(raw)
       },
-    }
+    },
   }) satisfies Ref<IUser | null>
 
   const tenantId = useStorage<number>('tenantId', null, localStorage, {
-    mergeDefaults: true
+    mergeDefaults: true,
   }) satisfies Ref<number>
 
   const accessToken = useStorage<string>('accessToken', null, localStorage, {
-    mergeDefaults: true
-  }) satisfies Ref<string | null>   
+    mergeDefaults: true,
+  }) satisfies Ref<string | null>
 
   return {
     isAuth,
     user,
     tenantId,
-    accessToken
+    accessToken,
   }
 })
-

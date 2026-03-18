@@ -23,15 +23,15 @@ const routes: RouteRecordRaw[] = [
     path: '/auth',
     component: Auth,
     children: [
-      {path: 'signin', component: SignIn},
-      {path: 'signup', component: Signup}
+      { path: 'signin', component: SignIn },
+      { path: 'signup', component: Signup },
     ],
   },
   {
     path: '/',
     component: DashboardLayout,
     children: [
-      {path: '', component: Dashboard },
+      { path: '', component: Dashboard },
       {
         path: 'account',
         component: Account,
@@ -39,36 +39,39 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'marketing',
         children: [
-          {path: 'strategy', component: Strategy },
-          {path: 'channels', children: [
-            {path: '', component: Channels },
-            {path: 'performance', component: Performance },
-          ]},
-        ]
+          { path: 'strategy', component: Strategy },
+          {
+            path: 'channels',
+            children: [
+              { path: '', component: Channels },
+              { path: 'performance', component: Performance },
+            ],
+          },
+        ],
       },
       {
         path: 'projects',
         children: [
-          {path: 'developer', component: Developer },
-          {path: 'apikeys', component: Apikeys },
-          {path: 'apikeys/:id', component: Apikey },
-          {path: 'users', component: Users },
-          {path: 'users/:id', component: User },
-          {path: 'roles', component: Roles },
-          {path: 'roles/:id', component: Role}
-        ]
+          { path: 'developer', component: Developer },
+          { path: 'apikeys', component: Apikeys },
+          { path: 'apikeys/:id', component: Apikey },
+          { path: 'users', component: Users },
+          { path: 'users/:id', component: User },
+          { path: 'roles', component: Roles },
+          { path: 'roles/:id', component: Role },
+        ],
       },
     ],
   },
   {
     path: '/:pathMatch(.*)*',
-    component: NotFound
-  }
+    component: NotFound,
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
 router.beforeEach((to, _from, next) => {
@@ -77,14 +80,14 @@ router.beforeEach((to, _from, next) => {
   if (to.path.startsWith('/auth')) {
     if (userStore.accessToken) {
       next('/')
-      return;
+      return
     }
   }
 
   if (to.path.startsWith('/') && !to.path.split('/').includes('auth')) {
     if (!userStore.accessToken) {
       next('/auth/signin')
-      return;
+      return
     }
   }
 

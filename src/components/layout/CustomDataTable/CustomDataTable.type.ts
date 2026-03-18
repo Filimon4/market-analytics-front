@@ -1,7 +1,7 @@
 export interface ColumnDefinition {
   code: string
   filtrable: boolean
-  name: string,
+  name: string
   type: string
 }
 
@@ -10,17 +10,17 @@ export interface RowData {
 }
 
 export interface Action {
-  title: string,
-  code: string,
+  title: string
+  code: string
   size: 'small' | 'medium' | 'large'
 }
 
 export interface Props {
-  columns:       ColumnDefinition[]
-  data?:         RowData[]
-  page?:         number
-  pageSize?:     number
-  total?:        number
-  maxPage?:      number
-  actions?:      Action[]
+  columns: ColumnDefinition[]
+  data?: RowData[]
+  page?: number
+  pageSize?: number
+  total?: number
+  maxPage?: number
+  actions?: Action[]
 }

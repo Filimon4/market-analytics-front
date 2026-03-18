@@ -1,8 +1,5 @@
 <template>
-  <div>
-    Strategy
-  </div>
+  <div>Strategy</div>
 </template>
 
-<script setup>
-</script>
+<script setup lang="ts"></script>

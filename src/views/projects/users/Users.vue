@@ -13,7 +13,7 @@
   />
 </template>
 
-<script setup>
-import InfoDataTable from "@/src/components/layout/InfoDataTable/InfoDataTable.vue";
-import userApi from "@/src/utils/api/user";
+<script setup lang="ts">
+  import InfoDataTable from '@/src/components/layout/InfoDataTable/InfoDataTable.vue'
+  import userApi from '@/src/utils/api/user'
 </script>

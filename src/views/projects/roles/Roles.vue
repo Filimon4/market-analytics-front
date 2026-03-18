@@ -14,6 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import InfoDataTable from "@/src/components/layout/InfoDataTable/InfoDataTable.vue";
-import roleApi from "@/src/utils/api/role";
+  import InfoDataTable from '@/src/components/layout/InfoDataTable/InfoDataTable.vue'
+  import roleApi from '@/src/utils/api/role'
 </script>

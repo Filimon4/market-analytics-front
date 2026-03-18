@@ -1,137 +1,136 @@
 <template>
-    <InfoDataEntity
-        :fetch-data-req="userApi.getTable"
-        :actions="actions"
-        @click:action="handleAction"
-        v-model="triggerTableUpdate"
-    />
-    <project-modal
-        v-model:show="showProjectPicker"
-        :items="[]"
-        :initial-selected-id="selectedProject?.id || null"
-        :title="'Проекты'"
-        :placeholder="'Поиск проекта...'"
-        :load-items="loadProjects"
-        @confirm="onProjectConfirm"
-    />
+  <InfoDataEntity
+    :fetch-data-req="userApi.getTable"
+    :actions="actions"
+    @click:action="handleAction"
+    v-model="triggerTableUpdate"
+  />
+  <project-modal
+    v-model:show="showProjectPicker"
+    :items="[]"
+    :initial-selected-id="selectedProject?.id || null"
+    :title="'Проекты'"
+    :placeholder="'Поиск проекта...'"
+    :load-items="loadProjects"
+    @confirm="onProjectConfirm"
+  />
 </template>
 
 <script setup lang="ts">
-import projectApi from '@/src/utils/api/project'
-import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
-import { useUserStore } from '@/src/store/user'
-import { useProjectStore } from '@/src/store/project'
-import type { Action } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.types';
-import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue'
-import userApi from '@/src/utils/api/user'
-import { ref } from 'vue';
+  import projectApi from '@/src/utils/api/project'
+  import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
+  import { useUserStore } from '@/src/store/user'
+  import { useProjectStore } from '@/src/store/project'
+  import type { Action } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.types'
+  import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue'
+  import userApi from '@/src/utils/api/user'
+  import { ref } from 'vue'
 
-const actions = ref<Action[]>([
+  const actions = ref<Action[]>([
     {
-        title: 'Поменять проект',
-        code: 'changeProject',
-        size: 'medium' ,
-        blockCode: 'project'
+      title: 'Поменять проект',
+      code: 'changeProject',
+      size: 'medium',
+      blockCode: 'project',
     },
     {
-        title: 'Добавить новый',
-        code: 'addProject',
-        size: 'medium',
-        blockCode: 'project'
+      title: 'Добавить новый',
+      code: 'addProject',
+      size: 'medium',
+      blockCode: 'project',
     },
-])
+  ])
 
-const triggerTableUpdate = ref<boolean>(false)
-const userStore = useUserStore()
-const projectStore = useProjectStore()
+  const triggerTableUpdate = ref<boolean>(false)
+  const userStore = useUserStore()
+  const projectStore = useProjectStore()
 
-const showProjectPicker = ref(false)
-const selectedProject = ref<IProjectModalItem | null>(null)
+  const showProjectPicker = ref(false)
+  const selectedProject = ref<IProjectModalItem | null>(null)
 
-const handleAction = (actionCode: string) => {
+  const handleAction = (actionCode: string) => {
     if (actionCode === 'changeProject') {
-        showProjectPicker.value = true
+      showProjectPicker.value = true
     }
-}
+  }
 
-// #region ProjectModal
+  // #region ProjectModal
 
-const onProjectConfirm = async (item: IProjectModalItem) => {
+  const onProjectConfirm = async (item: IProjectModalItem) => {
     showProjectPicker.value = false
     selectedProject.value = item
-    
+
     const project = await projectApi.getProject(item.id)
     userStore.tenantId = Number(project.id)
-    
+
     projectStore.updateUserProjectInfo()
     triggerTableUpdate.value = true
-}
+  }
 
-const loadProjects = async (): Promise<IProjectModalItem[]> => {
+  const loadProjects = async (): Promise<IProjectModalItem[]> => {
     const connectecProjects = await projectApi.getConnectedProjects()
     return connectecProjects.map(conn => ({
-        id: conn.id,
-        name: conn.project.name,
-        description: conn.project.description
+      id: conn.id,
+      name: conn.project.name,
+      description: conn.project.description,
     }))
-}
+  }
 
-// #endregion
+  // #endregion
 </script>
 
 <style>
-.layout-container {
+  .layout-container {
     height: 100%;
     width: 100%;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
+  }
 
-.info-container {
+  .info-container {
     width: 100%;
     height: fit-content;
-}
+  }
 
-.info-label {
+  .info-label {
     background-color: black;
     color: white;
     display: inline;
     border-radius: 5px;
     padding: 5px;
-}
+  }
 
-.info-content {
+  .info-content {
     background-color: rgba(177, 177, 177, 0.315);
     height: fit-content;
     width: 100%;
     padding: 7px;
     margin-block: 5px;
-}
+  }
 
-.content-block {
+  .content-block {
     display: flex;
     gap: 10px;
     align-items: center;
-}
+  }
 
-.container-actions {
+  .container-actions {
     width: 100%;
     display: flex;
     justify-content: right;
     gap: 10px;
-}
+  }
 
-.action {
+  .action {
     padding: 5px 10px;
     background-color: rgba(128, 128, 128, 0.212);
     border-radius: 7px;
     cursor: pointer;
-}
+  }
 
-.block-label {
+  .block-label {
     min-width: 200px;
-}
-
+  }
 </style>

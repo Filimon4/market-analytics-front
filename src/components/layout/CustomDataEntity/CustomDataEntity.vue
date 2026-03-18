@@ -1,21 +1,13 @@
 <template>
   <div class="blocks">
     <div v-for="block in blocks" :key="block.code" class="block">
-      <slot
-        name="block-header"
-        :block="block"
-        :title="block.name"
-        :code="block.code"
-      >
+      <slot name="block-header" :block="block" :title="block.name" :code="block.code">
         <div class="block-header">
           <p>{{ block.name }}</p>
         </div>
       </slot>
 
-      <div 
-        class="block-content" 
-        :class="{ 'tree-view': block.blockType === 'tree' }"
-      >
+      <div class="block-content" :class="{ 'tree-view': block.blockType === 'tree' }">
         <BlockTableContent
           v-if="!block.blockType || block.blockType === 'table'"
           :fields="getBlockDetails(block.code).fields"
@@ -23,12 +15,7 @@
           :block="block"
         >
           <template #field="{ field, value, block }">
-            <slot
-              name="field"
-              :field="field"
-              :value="value"
-              :block="block"
-            />
+            <slot name="field" :field="field" :value="value" :block="block" />
           </template>
         </BlockTableContent>
 
@@ -54,22 +41,23 @@
 </template>
 
 <script setup lang="ts">
-  import type { Action, Block, BlockDetail, BlockTreeDetail, Data } from './CustomDataEntity.types';
-import BlockTableContent from './DataContentType/BlockTableContent.vue';
-import BlockTreeContent from './DataContentType/BlockTreeContent.vue';
+  import type { Action, Block, BlockDetail, BlockTreeDetail, Data } from './CustomDataEntity.types'
+  import BlockTableContent from './DataContentType/BlockTableContent.vue'
+  import BlockTreeContent, { type Tree } from './DataContentType/BlockTreeContent.vue'
 
-  const props = withDefaults(defineProps<{
-    blocks: Block[]
-    blockDetails: (BlockDetail | BlockTreeDetail)[]
-    data: Data
-    actions?: Action[]
-  }>(), {
-    actions: () => []
-  })
+  const props = withDefaults(
+    defineProps<{
+      blocks: Block[]
+      blockDetails: (BlockDetail | BlockTreeDetail)[]
+      data: Data
+      actions?: Action[]
+    }>(),
+    {
+      actions: () => [],
+    }
+  )
 
-  const emit = defineEmits([
-    'click:action'
-  ])
+  const emit = defineEmits(['click:action'])
 
   const clickAction = (code: string) => {
     emit('click:action', code)
@@ -81,19 +69,17 @@ import BlockTreeContent from './DataContentType/BlockTreeContent.vue';
   }
 
   const getBlockDetails = (blockCode: string): BlockDetail => {
-    return (
-      props.blockDetails.find(b => b.blockCode === blockCode) as BlockDetail
-    )
+    return props.blockDetails.find(b => b.blockCode === blockCode) as BlockDetail
   }
 
   const getBlockTreeDetails = (blockCode: string): BlockTreeDetail => {
-    return (
-      props.blockDetails.find(b => b.blockCode === blockCode) as BlockTreeDetail
-    )
+    return props.blockDetails.find(b => b.blockCode === blockCode) as BlockTreeDetail
   }
-  
-  const getValueForField = (field: any) => {
-    return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
+
+  const getValueForField = (field: string): unknown => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return field.split('.').reduce((obj, key: string) => obj?.[key], props.data)
   }
 </script>
 
@@ -156,9 +142,18 @@ import BlockTreeContent from './DataContentType/BlockTreeContent.vue';
   }
 
   /* Size variants */
-  .size-small  { padding: 0.35rem 0.75rem; font-size: 0.875rem; }
-  .size-medium { padding: 0.5rem 1rem;    font-size: 0.95rem;  }
-  .size-large  { padding: 0.65rem 1.35rem; font-size: 1.05rem; }
+  .size-small {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  .size-medium {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+  .size-large {
+    padding: 0.65rem 1.35rem;
+    font-size: 1.05rem;
+  }
 
   /* New override for tree view */
   .block-content.tree-view {

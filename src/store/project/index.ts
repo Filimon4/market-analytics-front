@@ -1,13 +1,13 @@
-import type { IPanelElement } from "@/src/utils/api/models/panelElement"
-import type { IPermission } from "@/src/utils/api/models/permission"
+import type { IPanelElement } from '@/src/utils/api/models/panelElement'
+import type { IPermission } from '@/src/utils/api/models/permission'
 // import type { IProject } from "@/src/utils/api/models/project"
-import type { IRole } from "@/src/utils/api/models/role"
-import type { IRolePermission } from "@/src/utils/api/models/rolePermission"
+import type { IRole } from '@/src/utils/api/models/role'
+import type { IRolePermission } from '@/src/utils/api/models/rolePermission'
 // import type { IUserToProject } from "@/src/utils/api/models/userToProject"
-import projectApi from "@/src/utils/api/project"
-import { useStorage } from "@vueuse/core"
-import { defineStore } from "pinia"
-import { type Ref } from "vue"
+import projectApi from '@/src/utils/api/project'
+import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
+import { type Ref } from 'vue'
 
 interface IProjectStore {
   // project: Ref<IProject | null>
@@ -15,11 +15,11 @@ interface IProjectStore {
   role: Ref<IRole | null>
   permissions: Ref<(IPermission & IRolePermission)[] | null>
   panel: Ref<IPanelElement[] | null>
-  
+
   updateUserProjectInfo: () => Promise<void>
 }
 
-export const useProjectStore = defineStore("useProjectStore",(): IProjectStore => {
+export const useProjectStore = defineStore('useProjectStore', (): IProjectStore => {
   // const project: IProjectStore['project'] = useStorage('project', null, localStorage, {
   //   mergeDefaults: true,
   //   serializer: {
@@ -53,7 +53,7 @@ export const useProjectStore = defineStore("useProjectStore",(): IProjectStore =
       read(raw) {
         return JSON.parse(raw)
       },
-    }
+    },
   }) satisfies Ref<IRole | null>
 
   const permissions: IProjectStore['permissions'] = useStorage('permissions', null, localStorage, {
@@ -65,7 +65,7 @@ export const useProjectStore = defineStore("useProjectStore",(): IProjectStore =
       read(raw) {
         return JSON.parse(raw)
       },
-    }
+    },
   }) satisfies Ref<(IPermission & IRolePermission)[] | null>
 
   const panel: IProjectStore['panel'] = useStorage('panel', null, localStorage, {
@@ -77,7 +77,7 @@ export const useProjectStore = defineStore("useProjectStore",(): IProjectStore =
       read(raw) {
         return JSON.parse(raw)
       },
-    }
+    },
   }) satisfies Ref<IPanelElement[] | null>
 
   const updateUserProjectInfo = async () => {
@@ -97,6 +97,6 @@ export const useProjectStore = defineStore("useProjectStore",(): IProjectStore =
     role,
     permissions,
     panel,
-    updateUserProjectInfo
+    updateUserProjectInfo,
   }
 })

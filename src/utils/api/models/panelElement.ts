@@ -1,9 +1,8 @@
-
 export interface IPanelElement {
-  name: string,
-  code: string,
+  name: string
+  code: string
   children: Array<{
-    name: string,
+    name: string
     code: string
   }>
 }

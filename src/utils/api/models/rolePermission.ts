@@ -1,4 +1,4 @@
 export interface IRolePermission {
-  granted: boolean;
-  permissionId: number;
+  granted: boolean
+  permissionId: number
 }

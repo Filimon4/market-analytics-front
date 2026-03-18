@@ -7,21 +7,21 @@
   </div>
 </template>
 
-<script setup>
-import Panel from '@/src/components/common/dashboard/panel/Panel.vue';
+<script setup lang="ts">
+  import Panel from '@/src/components/common/dashboard/panel/Panel.vue'
 </script>
 
 <style lang="css" scoped>
-.dashboard-container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-}
+  .dashboard-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+  }
 
-.dashboard-content {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+  .dashboard-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 </style>

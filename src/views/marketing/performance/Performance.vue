@@ -1,8 +1,5 @@
 <template>
-  <div>
-    Performance
-  </div>
+  <div>Performance</div>
 </template>
 
-<script setup>
-</script>
+<script setup lang="ts"></script>

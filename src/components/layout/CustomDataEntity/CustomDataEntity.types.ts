@@ -2,8 +2,8 @@ export interface Block {
   name: string
   code: string
   columnCapacity: number
-  maxColumns: number,
-  blockType: "table" | "tree"
+  maxColumns: number
+  blockType: 'table' | 'tree'
 }
 
 export interface Field {

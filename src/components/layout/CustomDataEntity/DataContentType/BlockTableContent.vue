@@ -5,19 +5,10 @@
     class="column"
     :class="`column-${getColumnsForBlock(block).length}`"
   >
-    <div
-      v-for="entity in column"
-      :key="entity.path"
-      class="detail-row"
-    >
+    <div v-for="entity in column" :key="entity.path" class="detail-row">
       <div class="detail-label">{{ entity.title }}</div>
       <div class="detail-value">
-        <slot
-          name="field"
-          :field="entity"
-          :value="getValueForField(entity)"
-          :block="block"
-        >
+        <slot name="field" :field="entity" :value="getValueForField(entity)" :block="block">
           {{ getValueForField(entity) }}
         </slot>
       </div>
@@ -26,37 +17,37 @@
 </template>
 
 <script setup lang="ts">
-import type { Block } from '../CustomDataEntity.types';
+  import type { Block } from '../CustomDataEntity.types'
 
-const props = defineProps<{
-  fields: any[]
-  data: any
-  block: Block
-}>()
+  const props = defineProps<{
+    fields: any[]
+    data: any
+    block: Block
+  }>()
 
-const getColumnsForBlock = (block: { columnCapacity: number; maxColumns: number }) => {
-  const fields = props.fields
-  if (!fields.length) return []
+  const getColumnsForBlock = (block: { columnCapacity: number; maxColumns: number }) => {
+    const fields = props.fields
+    if (!fields.length) return []
 
-  const columns: Array<typeof fields> = []
-  let currentColumn: typeof fields = []
+    const columns: Array<typeof fields> = []
+    let currentColumn: typeof fields = []
 
-  for (const field of fields) {
-    if (currentColumn.length >= block.columnCapacity) {
-      if (columns.length + 1 >= block.maxColumns) break
-      columns.push(currentColumn)
-      currentColumn = []
+    for (const field of fields) {
+      if (currentColumn.length >= block.columnCapacity) {
+        if (columns.length + 1 >= block.maxColumns) break
+        columns.push(currentColumn)
+        currentColumn = []
+      }
+      currentColumn.push(field)
     }
-    currentColumn.push(field)
+
+    if (currentColumn.length > 0) columns.push(currentColumn)
+    return columns
   }
 
-  if (currentColumn.length > 0) columns.push(currentColumn)
-  return columns
-}
-
-const getValueForField = (field: any) => {
-  return field.path.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
-}
+  const getValueForField = (field: any) => {
+    return field.path.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
+  }
 </script>
 
 <style scoped>
@@ -68,14 +59,32 @@ const getValueForField = (field: any) => {
     gap: 6px;
   }
 
-  .column-1 .detail-row { display: grid; grid-template-columns: 1fr 4fr; gap: 16px; }
-  .column-2 .detail-row { display: grid; grid-template-columns: 1fr 3fr; gap: 14px; }
-  .column-3 .detail-row { display: grid; grid-template-columns: 1fr 2.5fr; gap: 12px; }
+  .column-1 .detail-row {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    gap: 16px;
+  }
+  .column-2 .detail-row {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 14px;
+  }
+  .column-3 .detail-row {
+    display: grid;
+    grid-template-columns: 1fr 2.5fr;
+    gap: 12px;
+  }
   .column-4 .detail-row,
-  .column-5 .detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .column-5 .detail-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
 
   .column-4 .detail-label,
-  .column-5 .detail-label { font-size: 0.95em; }
+  .column-5 .detail-label {
+    font-size: 0.95em;
+  }
 
   .detail-row {
     display: grid;

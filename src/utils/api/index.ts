@@ -11,7 +11,7 @@ export const api: AxiosInstance = axios.create({
 })
 
 api.interceptors.request.use(
-  (config) => {
+  config => {
     const userStore = useUserStore()
     if (userStore.accessToken) {
       config.headers.Authorization = `Bearer ${userStore.accessToken}`
@@ -21,24 +21,22 @@ api.interceptors.request.use(
     }
     return config
   },
-  (error) => Promise.reject(error)
+  error => Promise.reject(error)
 )
 
 api.interceptors.response.use(
-  (response) => response,
+  response => response,
   async (error: AxiosError) => {
     const userStore = useUserStore()
-    const originalRequest: any = error.config
+    const originalRequest = error.config!
 
-    if (error.response?.status === 401 && !originalRequest?._retry) {
-      originalRequest._retry = true
-
+    if (error.response?.status === 401) {
       try {
         const token = await authApi.refresh()
 
         userStore.accessToken = token
 
-        originalRequest.headers = originalRequest.headers || {}
+        originalRequest.headers = originalRequest?.headers || {}
         originalRequest.headers.Authorization = `Bearer ${token}`
 
         return api(originalRequest)

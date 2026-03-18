@@ -13,7 +13,7 @@
   />
 </template>
 
-<script setup>
-import InfoDataTable from "@/src/components/layout/InfoDataTable/InfoDataTable.vue";
-import apiKeysApi from "@/src/utils/api/apikeys";
+<script setup lang="ts">
+  import InfoDataTable from '@/src/components/layout/InfoDataTable/InfoDataTable.vue'
+  import apiKeysApi from '@/src/utils/api/apikeys'
 </script>
