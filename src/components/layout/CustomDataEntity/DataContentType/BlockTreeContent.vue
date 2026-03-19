@@ -13,15 +13,8 @@
 
 <script setup lang="ts">
   import { NTree } from 'naive-ui'
-  import type { TreeOptions } from 'naive-ui/es/tree/src/interface'
   import { ref } from 'vue'
-
-  export interface Tree {
-    nodes: TreeOptions
-    defaultCheckedKeys?: string[]
-    checkable?: boolean
-    draggable?: boolean
-  }
+  import type { Tree } from '../CustomDataEntity.types'
 
   const props = defineProps<{
     treeData: Tree

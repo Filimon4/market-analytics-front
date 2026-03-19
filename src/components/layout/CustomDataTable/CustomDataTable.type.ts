@@ -1,11 +1,15 @@
-export interface ColumnDefinition {
+export interface ITableColumn {
   code: string
-  filtrable: boolean
   name: string
-  type: string
+  type: 'string' | 'number' | 'boolean' | 'date' | 'select' | 'constants'
+  filtrable: boolean
+  selectUrl?: string // for select
+  constantList?: string[] // for constant
+  path?: string
 }
 
-export interface RowData {
+export interface DataRow {
+  id: string
   [key: string]: unknown
 }
 
@@ -15,12 +19,11 @@ export interface Action {
   size: 'small' | 'medium' | 'large'
 }
 
-export interface Props {
-  columns: ColumnDefinition[]
-  data?: RowData[]
-  page?: number
-  pageSize?: number
-  total?: number
-  maxPage?: number
+export interface ITableList<T extends DataRow[]> {
+  columns: ITableColumn[]
+  data: T
+  page: number
+  total: number
+  maxPage: number
   actions?: Action[]
 }

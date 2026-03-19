@@ -21,7 +21,7 @@
 
         <BlockTreeContent
           v-else-if="block.blockType === 'tree'"
-          :treeData="getValueForField(getBlockTreeDetails(block.code).treePath)"
+          :treeData="getValueForField<Tree>(getBlockTreeDetails(block.code).treePath)"
         />
       </div>
 
@@ -47,6 +47,7 @@
     IBlockDetail,
     IBlockTreeDetail,
     Data,
+    Tree,
   } from './CustomDataEntity.types'
   import BlockTableContent from './DataContentType/BlockTableContent.vue'
   import BlockTreeContent from './DataContentType/BlockTreeContent.vue'
@@ -82,7 +83,7 @@
     return props.blockDetails.find(b => b.blockCode === blockCode) as IBlockTreeDetail
   }
 
-  const getValueForField = (field: string): unknown => {
+  const getValueForField = <T,>(field: string): T => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
   }

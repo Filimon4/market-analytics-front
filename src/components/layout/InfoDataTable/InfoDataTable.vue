@@ -26,9 +26,9 @@
           />
 
           <n-select
-            v-else-if="column.type === 'select'"
+            v-else-if="column.type === 'constants'"
             v-model:value="tableFilters[column.code]"
-            :options="column.options"
+            :options="column.constantList"
             placeholder=""
             size="small"
             :bordered="false"
@@ -72,7 +72,12 @@
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
   import { useRouter } from 'vue-router'
-  import type { Action, ColumnDefinition } from '../CustomDataTable/CustomDataTable.type'
+  import type {
+    Action,
+    DataRow,
+    ITableColumn,
+    ITableList,
+  } from '../CustomDataTable/CustomDataTable.type'
 
   const emit = defineEmits(['click:action'])
 
@@ -86,7 +91,11 @@
     fetchDataReq: {
       required: true,
       type: Function as PropType<
-        (page: number, size: number, filters: Record<string, string | number>) => Promise<any>
+        <T extends DataRow>(
+          page: number,
+          size: number,
+          filters: Record<string, string | number>
+        ) => Promise<ITableList<T[]>>
       >,
     },
     defaultPageSize: {
@@ -101,9 +110,9 @@
   })
 
   // Data table
-  const tableItems = ref([])
-  const tableColumns = ref<ColumnDefinition[]>([])
-  const tableFilters = ref<any>({})
+  const tableItems = ref<DataRow[]>([])
+  const tableColumns = ref<ITableColumn[]>([])
+  const tableFilters = ref<Record<string, string | number>>({})
 
   // Date page
   const pageCurrent = ref<number>(1)
@@ -111,20 +120,20 @@
   const pageMax = ref<number>(0)
   const itemsTotal = ref<number>(0)
 
-  const handleClickEntity = (entity: any) => {
+  const handleClickEntity = (entity: DataRow) => {
     router.push(`${props.redirectEntityUrl}/${entity.id}`)
   }
 
   const fetchData = async () => {
     const allData = await props.fetchDataReq(pageCurrent.value, pageSize.value, tableFilters.value)
-    tableItems.value = allData.data
+    tableItems.value = allData.data || []
     tableColumns.value = allData.columns
 
-    pageMax.value = allData.data.maxPage
-    itemsTotal.value = allData.data.total
+    pageMax.value = allData.maxPage
+    itemsTotal.value = allData.total
   }
 
-  const renderRow = (row: any, col: any) => {
+  const renderRow = (row: DataRow, col: ITableColumn) => {
     const value = col?.path ? getValueForField(col.path, row) : row[col.code]
 
     if (col.type === 'boolean') {
@@ -134,7 +143,8 @@
     return value
   }
 
-  const getValueForField = (field: any, data: object) => {
+  const getValueForField = (field: string, data: object) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return field.split('.').reduce((obj: any, key: string) => obj?.[key], data)
   }
 

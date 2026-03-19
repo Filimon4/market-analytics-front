@@ -16,7 +16,7 @@
       <table class="data-body">
         <thead>
           <tr>
-            <th v-for="col in columns as any[]" :key="col.code">
+            <th v-for="col in columns" :key="col.code">
               <slot
                 name="header"
                 :column="col"
@@ -32,8 +32,8 @@
         </thead>
 
         <tbody>
-          <tr class="default-row" v-for="row in data as any[]" :key="row.id || JSON.stringify(row)">
-            <td v-for="col in columns as any[]" :key="col.key" @click="emit('click:entity', row)">
+          <tr class="default-row" v-for="row in data" :key="row.id">
+            <td v-for="col in columns" :key="col.code" @click="emit('click:entity', row)">
               <slot name="row" :row="row" :col="col">
                 {{ col?.path ? getValueForField(col.path) : (row[col.code] ?? '—') }}
               </slot>
@@ -62,10 +62,10 @@
 <script setup lang="ts">
   import { ref, watch, onUnmounted } from 'vue'
   import { NPagination } from 'naive-ui' // or use auto-import if configured
-  import type { Props } from './CustomDataTable.type'
+  import type { DataRow, ITableList } from './CustomDataTable.type'
 
-  const props = withDefaults(defineProps<Props>(), {
-    data: () => [],
+  const props = withDefaults(defineProps<ITableList<DataRow[]> & { pageSize: number }>(), {
+    columns: () => [],
     page: 1,
     pageSize: 20,
     total: 0,
@@ -82,7 +82,7 @@
     'change',
   ])
 
-  const filters = ref<Record<string, string>>({}) // or accept as prop if parent controls it fully
+  const filters = ref<Record<string, string | number>>({})
 
   const localPage = ref(props.page)
   const localPageSize = ref(props.pageSize)
@@ -96,7 +96,7 @@
     emit('change')
   }
 
-  const updateFilter = (key: any, value: any) => {
+  const updateFilter = (key: string, value: string | number) => {
     filters.value[key] = value
 
     if (filterTimeout !== undefined) {
@@ -108,13 +108,13 @@
     }, 400)
   }
 
-  const onPageChange = (newPage: any) => {
+  const onPageChange = (newPage: number) => {
     localPage.value = newPage
     emit('update:page', newPage)
     emit('change')
   }
 
-  const onPageSizeChange = (newSize: any) => {
+  const onPageSizeChange = (newSize: number) => {
     localPageSize.value = newSize
     localPage.value = 1
     emit('update:pageSize', newSize)
@@ -126,7 +126,8 @@
     emit('click:action', code)
   }
 
-  const getValueForField = (field: any) => {
+  const getValueForField = (field: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
   }
 

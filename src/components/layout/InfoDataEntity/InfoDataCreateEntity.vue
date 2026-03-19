@@ -5,6 +5,7 @@
       <FieldRenderer :field="field" :value="value" @update="handleFieldUpdate" />
     </template>
   </CustomDataEntity>
+  <!--  Global save button -->
 </template>
 
 <script setup lang="ts">
