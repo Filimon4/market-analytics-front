@@ -1,5 +1,8 @@
 <template>
-  <InfoDataCreateEntity :fetch-data-req="roleApi.getCreateTable" />
+  <InfoDataCreateEntity
+    :fetch-data-req="roleApi.getCreateTable"
+    :save-data-req="roleApi.createEntity"
+  />
 </template>
 
 <script setup lang="ts">

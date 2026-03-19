@@ -9,7 +9,7 @@ export interface ITableColumn {
 }
 
 export interface DataRow {
-  id: string
+  id: string | number
   [key: string]: unknown
 }
 

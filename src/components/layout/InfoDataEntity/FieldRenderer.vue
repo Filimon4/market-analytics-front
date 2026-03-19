@@ -51,7 +51,7 @@
 
   const props = defineProps<{
     field: IField
-    value: Data
+    value: Data[string]
   }>()
 
   const emit = defineEmits<{
@@ -59,7 +59,7 @@
   }>()
 
   const isEditing = ref(false)
-  const localValue = ref(props.value ?? props.field.createDefault ?? '')
+  const localValue = ref(props.value ?? '')
 
   const canEdit = computed(() => props.field?.editable !== false)
   const isDisabled = computed(() => props.field?.editable === false && !props.field?.createEditable)
@@ -98,7 +98,7 @@
   }
 
   function cancel() {
-    localValue.value = props.value ?? props.field.createDefault ?? ''
+    localValue.value = props.value ?? ''
     isEditing.value = false
   }
 </script>

@@ -12,9 +12,9 @@
     </CustomDataEntity>
     <Affix :bottom="'10px'" :right="'50%'" :transform="'translateX(50%)'">
       <div class="entity-submit">
-        <n-button type="primary" :loading="saving" @click="handleSave" color="#2f9acc"
-          >Сохранить</n-button
-        >
+        <n-button type="primary" :loading="saving" @click="handleSave" color="#2f9acc">
+          Сохранить
+        </n-button>
         <n-button @click="handleCancel" color="#7c7c7cc0">Отмена</n-button>
       </div>
     </Affix>
@@ -25,12 +25,20 @@
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import FieldRenderer from './FieldRenderer.vue'
-  import type { Data, IEntity, IField } from '../CustomDataEntity/CustomDataEntity.types'
+  import type {
+    Data,
+    IBlockDetail,
+    IEntity,
+    IField,
+  } from '../CustomDataEntity/CustomDataEntity.types'
   import Affix from '../../common/affix/Affix.vue'
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
 
   const saving = ref(false)
 
-  const data = ref({})
+  const data = ref<Data>({})
 
   const apiResult = ref<Pick<IEntity, 'blocks' | 'blockDetails'>>({
     blocks: [],
@@ -41,6 +49,10 @@
     fetchDataReq: {
       required: true,
       type: Function as PropType<() => Promise<Pick<IEntity, 'blocks' | 'blockDetails'>>>,
+    },
+    saveDataReq: {
+      required: true,
+      type: Function as PropType<(data: Data) => Promise<{ id: string }>>,
     },
   })
 
@@ -56,21 +68,78 @@
       }),
       blockDetails: response.blockDetails,
     }
+
+    const blockTables = response.blocks.filter(block => block.blockType == 'table')
+    response.blockDetails
+      .filter(block => blockTables.map(bt => bt.code).includes(block.blockCode))
+      .flatMap(block2 => (block2 as IBlockDetail).fields)
+      .filter(field => !field.editable && field.createDefault !== undefined)
+      .forEach(defaultField => {
+        handleFieldUpdate({ field: defaultField, value: defaultField.createDefault })
+      })
   }
 
   function handleFieldUpdate({ field, value }: { field: IField; value: Data[string] }) {
-    console.log('Field update:', field.title, '→', value)
+    let subObject: Data = {}
+    const paths = field.path.split('.').reverse()
+
+    const mergeObjects = (target: Data, source: Data) => {
+      let out = target
+
+      for (const key in target) {
+        if (key in source) {
+          const targetSub = target[key]
+          const sourceSub = source[key]
+          if (typeof targetSub !== 'object' && typeof sourceSub !== 'object') {
+            out[key] = sourceSub
+          } else {
+            out[key] = mergeObjects(targetSub as Data, sourceSub as Data)
+          }
+        } else {
+          out = Object.assign(out, source)
+        }
+      }
+
+      return out
+    }
+
+    for (let i = 0; i <= paths.length - 1; i++) {
+      if (i == paths.length - 1) {
+        subObject[paths[i] as string] = value
+        data.value = mergeObjects(subObject, data.value)
+      } else if (i == 0) {
+        subObject[paths[i] as string] = value
+      } else {
+        const copy = subObject
+        subObject = {}
+        subObject[paths[i] as string] = copy
+      }
+    }
   }
 
   onMounted(() => {
     fetchData()
   })
 
-  function handleSave() {
-    /* ... */
+  async function handleSave() {
+    if (saving.value) return
+    saving.value = true
+    const response = await props.saveDataReq(data.value).catch(() => {
+      return null
+    })
+
+    if (!response) {
+      saving.value = false
+      return
+    }
+
+    router.push(response.id)
+    saving.value = false
   }
+
   function handleCancel() {
-    /* ... */
+    data.value = {}
+    router.back()
   }
 </script>
 

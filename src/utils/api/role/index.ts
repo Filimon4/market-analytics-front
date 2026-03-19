@@ -20,6 +20,11 @@ class RoleApi {
     const data = await api.get(`/v1/project/role/table/create`)
     return data.data.result
   }
+
+  async createEntity(dto: object) {
+    const data = await api.post<{ result: { id: string; code: string } }>('/v1/project/role', dto)
+    return data.data.result
+  }
 }
 
 const roleApi = new RoleApi()

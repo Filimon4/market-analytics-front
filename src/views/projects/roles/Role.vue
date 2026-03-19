@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Кнопку delete добавить -->
   <InfoDataEntity :fetch-data-req="async () => roleApi.getTableById(roleId)" />
 </template>
 

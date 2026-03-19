@@ -54,10 +54,13 @@ const routes: RouteRecordRaw[] = [
         path: 'projects',
         children: [
           { path: 'developer', component: Developer },
+
           { path: 'apikeys', component: Apikeys },
           { path: 'apikeys/:id', component: Apikey },
+
           { path: 'users', component: Users },
           { path: 'users/:id', component: User },
+
           { path: 'roles', component: Roles },
           { path: 'roles/create', component: CreateRole },
           { path: 'roles/:id', component: Role },
