@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Affix: typeof import('./src/components/common/affix/Affix.vue')['default']
     BlockTableContent: typeof import('./src/components/layout/CustomDataEntity/DataContentType/BlockTableContent.vue')['default']
     BlockTreeContent: typeof import('./src/components/layout/CustomDataEntity/DataContentType/BlockTreeContent.vue')['default']
     copy: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity copy.vue')['default']
@@ -24,6 +25,7 @@ declare module 'vue' {
     InfoDataEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity.vue')['default']
     InfoDataTable: typeof import('./src/components/layout/InfoDataTable/InfoDataTable.vue')['default']
     InfoTable: typeof import('./src/components/layout/ProjectDataTable/InfoTable.vue')['default']
+    NAffix: typeof import('naive-ui')['NAffix']
     NButton: typeof import('naive-ui')['NButton']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDataTable: typeof import('naive-ui')['NDataTable']

@@ -30,6 +30,7 @@
       </select>
 
       <div class="actions">
+        <!-- TODO: Переделать на n-button -->
         <button @click.stop="save" class="actions-action save">
           <img class="action-sprite" :src="acceptIcon" alt="accept" />
         </button>

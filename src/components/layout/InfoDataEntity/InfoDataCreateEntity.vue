@@ -1,11 +1,24 @@
 <template>
-  <!-- TODO: add loader and sort filters -->
-  <CustomDataEntity :blocks="apiResult.blocks" :block-details="apiResult.blockDetails" :data="data">
-    <template #field="{ field, value }">
-      <FieldRenderer :field="field" :value="value" @update="handleFieldUpdate" />
-    </template>
-  </CustomDataEntity>
-  <!--  Global save button -->
+  <div style="height: 100%; width: 100%; position: relative">
+    <!-- TODO: add loader and sort filters -->
+    <CustomDataEntity
+      :blocks="apiResult.blocks"
+      :block-details="apiResult.blockDetails"
+      :data="data"
+    >
+      <template #field="{ field, value }">
+        <FieldRenderer :field="field" :value="value" @update="handleFieldUpdate" />
+      </template>
+    </CustomDataEntity>
+    <Affix :bottom="'10px'" :right="'50%'" :transform="'translateX(50%)'">
+      <div class="entity-submit">
+        <n-button type="primary" :loading="saving" @click="handleSave" color="#2f9acc"
+          >Сохранить</n-button
+        >
+        <n-button @click="handleCancel" color="#7c7c7cc0">Отмена</n-button>
+      </div>
+    </Affix>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -13,6 +26,9 @@
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import FieldRenderer from './FieldRenderer.vue'
   import type { Data, IEntity, IField } from '../CustomDataEntity/CustomDataEntity.types'
+  import Affix from '../../common/affix/Affix.vue'
+
+  const saving = ref(false)
 
   const data = ref({})
 
@@ -49,4 +65,19 @@
   onMounted(() => {
     fetchData()
   })
+
+  function handleSave() {
+    /* ... */
+  }
+  function handleCancel() {
+    /* ... */
+  }
 </script>
+
+<style scoped>
+  .entity-submit {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+</style>
