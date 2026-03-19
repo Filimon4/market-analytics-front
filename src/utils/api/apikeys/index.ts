@@ -15,6 +15,16 @@ class ApiKeysApi {
     const data = await api.get(`/v1/project/api-keys/table/${apiKeyId}`)
     return data.data.result
   }
+
+  async getCreateTable() {
+    const data = await api.get(`/v1/project/api-keys/table/create`)
+    return data.data.result
+  }
+
+  async createEntity(dto: object) {
+    const data = await api.post<{ result: { id: string } }>('/v1/project/api-keys', dto)
+    return data.data.result
+  }
 }
 
 const apiKeysApi = new ApiKeysApi()
