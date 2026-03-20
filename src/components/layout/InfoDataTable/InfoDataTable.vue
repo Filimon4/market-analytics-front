@@ -36,7 +36,7 @@
           />
 
           <n-select
-            v-if="column.type === 'boolean'"
+            v-else-if="column.type === 'boolean'"
             v-model:value="tableFilters[column.code]"
             :options="[
               { label: 'Все', value: '' },

@@ -17,9 +17,9 @@ declare module 'vue' {
     copy: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity copy.vue')['default']
     CustomDataCreateEntity: typeof import('./src/components/layout/CustomDataEntity/CustomDataCreateEntity.vue')['default']
     CustomDataEntity: typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.vue')['default']
-    'CustomDataEntity,types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity
-    'CustomDataEntity.types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.types.vue')['default']
+    'CustomDataEntity.type': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.type.vue')['default']
     CustomDataTable: typeof import('./src/components/layout/CustomDataTable/CustomDataTable.vue')['default']
+    'CustomDataTable.type': typeof import('./src/components/layout/CustomDataTable/CustomDataTable.type.vue')['default']
     FieldEditable: typeof import('./src/components/layout/InfoDataEntity/FieldEditable.vue')['default']
     FieldRenderer: typeof import('./src/components/layout/InfoDataEntity/FieldRenderer.vue')['default']
     InfoDataCreateEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataCreateEntity.vue')['default']

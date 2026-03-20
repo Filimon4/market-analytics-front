@@ -1,16 +1,14 @@
 <template>
-  <n-config-provider style="height: 100vh">
-    <n-modal-provider>
-      <n-dialog-provider>
-        <n-message-provider>
-          <router-view />
-        </n-message-provider>
-      </n-dialog-provider>
-    </n-modal-provider>
-  </n-config-provider>
+  <n-modal-provider>
+    <n-dialog-provider>
+      <n-message-provider>
+        <router-view />
+      </n-message-provider>
+    </n-dialog-provider>
+  </n-modal-provider>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
   import './style.css'
 </script>
 

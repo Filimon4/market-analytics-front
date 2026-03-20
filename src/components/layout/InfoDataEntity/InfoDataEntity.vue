@@ -9,13 +9,12 @@
       @click:action="(...args: any[]) => emit('click:action', ...args)"
     >
       <template #field="{ field, value }">
-        <!-- TODO: InfoField -->
-        <!-- {{ formatFieldValue(field, value) }} -->
-        <InfoField
-          :value="value"
-          :type="field.type"
+        <!-- TODO: Для апи ключа в boolean показывается "всё" -->
+        <FieldEditable
+          :field="field"
           :editable="field.editable"
-          @click:edit="toggleEdit"
+          :value="value"
+          @update="handleFieldUpdate"
         />
       </template>
     </CustomDataEntity>
@@ -37,7 +36,7 @@
     IEntity,
   } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import SaveAffix from './SaveAffix.vue'
-  import InfoField from '../../common/infodata/infoField/InfoField.vue'
+  import FieldEditable from './FieldEditable.vue'
 
   const saving = ref(false)
   const changedData = ref<boolean>(false)
@@ -64,32 +63,11 @@
     apiResult.value = await props.fetchDataReq()
   }
 
-  // const formatFieldValue = (field: IField, value: string | number | boolean) => {
-  //   if (value === null || value === undefined) return ''
-  //   const { type } = field
-
-  //   if (type === 'datetime') {
-  //     return DateTime.fromISO(value as string, {
-  //       zone: 'utc',
-  //       locale: 'ru',
-  //     })
-  //       .setLocale('ru')
-  //       .toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
-  //       .replace(' г.,', ' г.')
-  //   }
-
-  //   if (type === 'boolean') {
-  //     return value ? 'Да' : 'Нет'
-  //   }
-
-  //   return value
-  // }
-
   const handleSave = async () => {}
 
   const handleCancel = async () => {}
 
-  const toggleEdit = () => {}
+  const handleFieldUpdate = () => {}
 
   onMounted(() => {
     fetchData()

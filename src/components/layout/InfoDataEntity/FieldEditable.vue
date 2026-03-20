@@ -4,7 +4,6 @@
       disabled: isDisabled,
     }"
   >
-    <!-- VIEW MODE -->
     <div v-if="!isEditing" class="view-mode">
       <InfoField
         :value="displayValue"
@@ -15,24 +14,8 @@
       />
     </div>
 
-    <!-- EDIT MODE -->
     <div v-else class="edit-mode">
-      <!-- TODO: Edit field -->
-      <input
-        v-if="field.type !== 'boolean'"
-        v-model="localValue"
-        :type="getInputType"
-        @click.stop
-        @keyup.enter="save"
-        @keyup.escape="cancel"
-        autofocus
-      />
-
-      <select v-else v-model="localValue" @click.stop>
-        <option :value="true">Да</option>
-        <option :value="false">Нет</option>
-      </select>
-      <!-- End here -->
+      <InfoEditField :type="field.type" :select-url="field.selectUrl" v-model:value="localValue" />
 
       <div class="actions">
         <!-- TODO: Переделать на n-button -->
@@ -54,6 +37,7 @@
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
   import InfoField from '../../common/infodata/infoField/InfoField.vue'
+  import InfoEditField from '../../common/infodata/infoEditField/InfoEditField.vue'
 
   const props = defineProps<{
     field: IField
@@ -65,15 +49,18 @@
   }>()
 
   const isEditing = ref(false)
-  const localValue = ref(props.value ?? '')
+  const localValue = ref<number | string | boolean>(
+    (props.value as number | string | boolean) ?? ''
+  )
 
-  const canEdit = computed(() => props.field?.editable !== false)
-  const isDisabled = computed(() => props.field?.editable === false && !props.field?.createEditable)
+  const canEdit = computed(() => {
+    if (props.field?.createEditable) {
+      return props.field?.createEditable
+    }
 
-  const getInputType = computed(() => {
-    if (props.field?.type === 'number') return 'number'
-    return 'text'
+    return props.field?.editable
   })
+  const isDisabled = computed(() => props.field?.editable === false && !props.field?.createEditable)
 
   const displayValue = computed(() => {
     const v: Data[string] = localValue.value
@@ -104,7 +91,7 @@
   }
 
   function cancel() {
-    localValue.value = props.value ?? ''
+    localValue.value = (props.value as number | string | boolean) ?? ''
     isEditing.value = false
   }
 </script>
@@ -129,8 +116,10 @@
   .edit-mode {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
+    min-width: 200px;
+    max-width: 50%;
   }
 
   .edit-mode input {

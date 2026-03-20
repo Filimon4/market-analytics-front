@@ -99,6 +99,7 @@
     font-weight: 500;
     color: #555;
     padding: 5px;
+    width: max-content;
   }
 
   .detail-value {
