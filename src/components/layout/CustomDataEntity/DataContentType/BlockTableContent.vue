@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { Data, IBlock, IField } from '../CustomDataEntity.types'
+  import type { Data, IBlock, IField } from '../CustomDataEntity.type'
 
   const props = defineProps<{
     fields: IField[]

@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%; width: 100%; position: relative">
+  <div class="entity-wrapper">
     <!-- TODO: add loader and sort filters -->
     <CustomDataEntity
       :blocks="apiResult.blocks"
@@ -7,32 +7,25 @@
       :data="data"
     >
       <template #field="{ field, value }">
-        <FieldRenderer :field="field" :value="value" @update="handleFieldUpdate" />
+        <FieldEditable :field="field" :value="value" @update="handleFieldUpdate" />
       </template>
     </CustomDataEntity>
-    <Affix :bottom="'10px'" :right="'50%'" :transform="'translateX(50%)'">
-      <div class="entity-submit">
-        <n-button type="primary" :loading="saving" @click="handleSave" color="#2f9acc">
-          Сохранить
-        </n-button>
-        <n-button @click="handleCancel" color="#7c7c7cc0">Отмена</n-button>
-      </div>
-    </Affix>
+    <SaveAffix v-model:saving="saving" @cancel="handleCancel" @save="handleSave" />
   </div>
 </template>
 
 <script setup lang="ts">
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
-  import FieldRenderer from './FieldRenderer.vue'
+  import FieldEditable from './FieldEditable.vue'
   import type {
     Data,
     IBlockDetail,
     IEntity,
     IField,
-  } from '../CustomDataEntity/CustomDataEntity.types'
-  import Affix from '../../common/affix/Affix.vue'
+  } from '../CustomDataEntity/CustomDataEntity.type'
   import { useRouter } from 'vue-router'
+  import SaveAffix from './SaveAffix.vue'
 
   const router = useRouter()
 
@@ -117,10 +110,6 @@
     }
   }
 
-  onMounted(() => {
-    fetchData()
-  })
-
   async function handleSave() {
     if (saving.value) return
     saving.value = true
@@ -141,12 +130,16 @@
     data.value = {}
     router.back()
   }
+
+  onMounted(() => {
+    fetchData()
+  })
 </script>
 
 <style scoped>
-  .entity-submit {
-    display: flex;
-    gap: 10px;
-    flex-wrap: nowrap;
+  .entity-wrapper {
+    height: 100%;
+    width: 100%;
+    position: relative;
   }
 </style>

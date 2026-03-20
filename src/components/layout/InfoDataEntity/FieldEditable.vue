@@ -2,18 +2,22 @@
   <div
     :class="{
       disabled: isDisabled,
-      editable: canEdit && !isDisabled && !isEditing,
     }"
-    @click="toggleEdit"
   >
     <!-- VIEW MODE -->
     <div v-if="!isEditing" class="view-mode">
-      <span class="value">{{ displayValue }}</span>
-      <span v-if="canEdit && !isDisabled">✎</span>
+      <InfoField
+        :value="displayValue"
+        :type="field.type"
+        :editable="canEdit"
+        :disabled="isDisabled"
+        @click:edit="toggleEdit"
+      />
     </div>
 
     <!-- EDIT MODE -->
     <div v-else class="edit-mode">
+      <!-- TODO: Edit field -->
       <input
         v-if="field.type !== 'boolean'"
         v-model="localValue"
@@ -28,6 +32,7 @@
         <option :value="true">Да</option>
         <option :value="false">Нет</option>
       </select>
+      <!-- End here -->
 
       <div class="actions">
         <!-- TODO: Переделать на n-button -->
@@ -45,9 +50,10 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { DateTime } from 'luxon'
-  import type { IField, Data } from '../CustomDataEntity/CustomDataEntity.types'
+  import type { IField, Data } from '../CustomDataEntity/CustomDataEntity.type'
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
+  import InfoField from '../../common/infodata/infoField/InfoField.vue'
 
   const props = defineProps<{
     field: IField

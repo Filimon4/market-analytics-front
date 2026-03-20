@@ -20,10 +20,13 @@ declare module 'vue' {
     'CustomDataEntity,types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity
     'CustomDataEntity.types': typeof import('./src/components/layout/CustomDataEntity/CustomDataEntity.types.vue')['default']
     CustomDataTable: typeof import('./src/components/layout/CustomDataTable/CustomDataTable.vue')['default']
+    FieldEditable: typeof import('./src/components/layout/InfoDataEntity/FieldEditable.vue')['default']
     FieldRenderer: typeof import('./src/components/layout/InfoDataEntity/FieldRenderer.vue')['default']
     InfoDataCreateEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataCreateEntity.vue')['default']
     InfoDataEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity.vue')['default']
     InfoDataTable: typeof import('./src/components/layout/InfoDataTable/InfoDataTable.vue')['default']
+    InfoEditField: typeof import('./src/components/common/infodata/infoEditField/InfoEditField.vue')['default']
+    InfoField: typeof import('./src/components/common/infodata/infoField/InfoField.vue')['default']
     InfoTable: typeof import('./src/components/layout/ProjectDataTable/InfoTable.vue')['default']
     NAffix: typeof import('naive-ui')['NAffix']
     NButton: typeof import('naive-ui')['NButton']
@@ -52,5 +55,6 @@ declare module 'vue' {
     ProjectModel: typeof import('./src/components/ui/projectModel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SaveAffix: typeof import('./src/components/layout/InfoDataEntity/SaveAffix.vue')['default']
   }
 }

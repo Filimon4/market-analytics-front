@@ -15,6 +15,7 @@
     <template #header="{ column, updateValue }">
       <div class="custom-header">
         <div class="title">{{ column.name }}</div>
+        <!-- TODO: InfoFieldEdit -->
         <template v-if="column.filtrable !== false">
           <n-input
             v-if="column.type === 'string'"
@@ -22,17 +23,6 @@
             placeholder=""
             size="small"
             :bordered="false"
-            @update:value="updateValue($event)"
-          />
-
-          <n-select
-            v-else-if="column.type === 'constants'"
-            v-model:value="tableFilters[column.code]"
-            :options="column.constantList"
-            placeholder=""
-            size="small"
-            :bordered="false"
-            clearable
             @update:value="updateValue($event)"
           />
 
@@ -63,7 +53,10 @@
     </template>
 
     <template #row="{ row, col }">
-      {{ renderRow(row, col) }}
+      <InfoField
+        :value="col?.path ? getValueForField(col.path, row) : row[col.code]"
+        :type="col.type"
+      />
     </template>
   </CustomDataTable>
 </template>
@@ -78,6 +71,7 @@
     ITableColumn,
     ITableList,
   } from '../CustomDataTable/CustomDataTable.type'
+  import InfoField from '../../common/infodata/infoField/InfoField.vue'
 
   const emit = defineEmits(['click:action'])
 
@@ -131,16 +125,6 @@
 
     pageMax.value = allData.maxPage
     itemsTotal.value = allData.total
-  }
-
-  const renderRow = (row: DataRow, col: ITableColumn) => {
-    const value = col?.path ? getValueForField(col.path, row) : row[col.code]
-
-    if (col.type === 'boolean') {
-      return value ? 'Да' : 'Нет'
-    }
-
-    return value
   }
 
   const getValueForField = (field: string, data: object) => {

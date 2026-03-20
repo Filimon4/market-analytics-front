@@ -14,7 +14,7 @@
 <script setup lang="ts">
   import { NTree } from 'naive-ui'
   import { ref } from 'vue'
-  import type { Tree } from '../CustomDataEntity.types'
+  import type { Tree } from '../CustomDataEntity.type'
 
   const props = defineProps<{
     treeData: Tree

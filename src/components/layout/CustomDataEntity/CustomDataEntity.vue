@@ -48,7 +48,7 @@
     IBlockTreeDetail,
     Data,
     Tree,
-  } from './CustomDataEntity.types'
+  } from './CustomDataEntity.type'
   import BlockTableContent from './DataContentType/BlockTableContent.vue'
   import BlockTreeContent from './DataContentType/BlockTreeContent.vue'
 
