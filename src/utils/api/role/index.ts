@@ -25,6 +25,16 @@ class RoleApi {
     const data = await api.post<{ result: { id: string; code: string } }>('/v1/project/role', dto)
     return data.data.result
   }
+
+  async deleteRole(id: number) {
+    const data = await api.delete<{ result: boolean }>('/v1/project/role', {
+      // TODO: сделать на бэке
+      data: {
+        roleId: id,
+      },
+    })
+    return data.data.result
+  }
 }
 
 const roleApi = new RoleApi()

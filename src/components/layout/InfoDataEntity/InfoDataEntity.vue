@@ -1,12 +1,12 @@
 <template>
   <div class="entity-wrapper">
-    <!-- TODO: add loader and sort filters -->
     <CustomDataEntity
       :blocks="apiResult.blocks"
       :block-details="apiResult.blockDetails"
       :data="apiResult.data"
       :actions="actions"
       @click:action="(...args: any[]) => emit('click:action', ...args)"
+      :loading="loading"
     >
       <template #field="{ field, value }">
         <!-- TODO: Для апи ключа в boolean показывается "всё" -->
@@ -45,6 +45,7 @@
     blockDetails: [],
     data: {},
   })
+  const loading = ref<boolean>(true)
 
   const triggerTableUpdate = defineModel<boolean>({ required: false, default: false })
   const props = defineProps({
@@ -60,7 +61,9 @@
   const emit = defineEmits(['click:action'])
 
   const fetchData = async () => {
+    loading.value = true
     apiResult.value = await props.fetchDataReq()
+    loading.value = false
   }
 
   const handleSave = async () => {}

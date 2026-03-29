@@ -31,7 +31,10 @@
           </tr>
         </thead>
 
-        <tbody>
+        <div v-if="loading" class="data-body-loading">
+          <n-spin stroke="#2f9acc" />
+        </div>
+        <tbody v-else>
           <tr class="default-row" v-for="row in data" :key="row.id">
             <td v-for="col in columns" :key="col.code" @click="emit('click:entity', row)">
               <slot name="row" :row="row" :col="col">
@@ -64,14 +67,18 @@
   import { NPagination } from 'naive-ui' // or use auto-import if configured
   import type { DataRow, ITableList } from './CustomDataTable.type'
 
-  const props = withDefaults(defineProps<ITableList<DataRow[]> & { pageSize: number }>(), {
-    columns: () => [],
-    page: 1,
-    pageSize: 20,
-    total: 0,
-    maxPage: 0,
-    actions: () => [],
-  })
+  const props = withDefaults(
+    defineProps<ITableList<DataRow[]> & { pageSize: number; loading: boolean }>(),
+    {
+      columns: () => [],
+      page: 1,
+      pageSize: 20,
+      total: 0,
+      maxPage: 0,
+      actions: () => [],
+      loading: false,
+    }
+  )
 
   const emit = defineEmits([
     'update:page',
@@ -164,13 +171,25 @@
   }
 
   .data-body-wrapper {
+    box-shadow: 0px 0px 6px #0000003f;
     height: 100%;
 
     border-radius: 8px;
     overflow: auto;
   }
 
+  .data-body-loading {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 200px;
+  }
+
   .data-body {
+    position: relative;
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;

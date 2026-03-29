@@ -1,6 +1,5 @@
 <template>
   <div class="entity-wrapper">
-    <!-- TODO: add loader and sort filters -->
     <CustomDataEntity
       :blocks="apiResult.blocks"
       :block-details="apiResult.blockDetails"

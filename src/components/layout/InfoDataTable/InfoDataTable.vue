@@ -8,6 +8,7 @@
     v-model:filters="tableFilters"
     v-model:maxPage="pageMax"
     :total="itemsTotal"
+    :loading="pageLoading"
     @change="fetchData"
     @click:entity="handleClickEntity"
     @click:action="code => emit('click:action', code)"
@@ -109,6 +110,7 @@
   const tableFilters = ref<Record<string, string | number>>({})
 
   // Date page
+  const pageLoading = ref<boolean>(false)
   const pageCurrent = ref<number>(1)
   const pageSize = ref<number>(props.defaultPageSize)
   const pageMax = ref<number>(0)
@@ -119,9 +121,11 @@
   }
 
   const fetchData = async () => {
+    pageLoading.value = true
     const allData = await props.fetchDataReq(pageCurrent.value, pageSize.value, tableFilters.value)
     tableItems.value = allData.data || []
     tableColumns.value = allData.columns
+    pageLoading.value = false
 
     pageMax.value = allData.maxPage
     itemsTotal.value = allData.total

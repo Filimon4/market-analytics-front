@@ -18,7 +18,7 @@ export interface IBlock {
 export interface IField {
   title: string
   editable: boolean
-  type: 'string' | 'number' | 'boolean' | 'datetime' | 'select'
+  type: 'string' | 'number' | 'boolean' | 'date' | 'datetime' | 'select'
   path: string
   editPath?: string
   selectUrl?: string

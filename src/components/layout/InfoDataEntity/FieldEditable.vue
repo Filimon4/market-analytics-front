@@ -18,13 +18,20 @@
       <InfoEditField :type="field.type" :select-url="field.selectUrl" v-model:value="localValue" />
 
       <div class="actions">
-        <!-- TODO: Переделать на n-button -->
-        <button @click.stop="save" class="actions-action save">
-          <img class="action-sprite" :src="acceptIcon" alt="accept" />
-        </button>
-        <button @click.stop="cancel" class="actions-action cancel">
-          <img class="action-sprite" :src="cancelIcon" alt="cancel" />
-        </button>
+        <n-button type="info" color="#2f9acc" @click="save" size="tiny">
+          <template #icon>
+            <n-icon>
+              <img class="action-sprite" :src="acceptIcon" alt="accept" />
+            </n-icon>
+          </template>
+        </n-button>
+        <n-button type="info" color="#7c7c7cc0" @click="cancel" size="tiny">
+          <template #icon>
+            <n-icon>
+              <img class="action-sprite" :src="cancelIcon" alt="cancel" />
+            </n-icon>
+          </template>
+        </n-button>
       </div>
     </div>
   </div>
@@ -140,24 +147,6 @@
   .actions {
     display: flex;
     gap: 6px;
-  }
-
-  .actions-action {
-    display: flex;
-    align-items: center;
-    padding: 3px;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .save {
-    background: #2f9acc;
-  }
-
-  .cancel {
-    background: #7c7c7cc0;
   }
 
   .action-sprite {

@@ -32,7 +32,14 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401) {
       try {
-        const token = await authApi.refresh()
+        const token = await authApi.refresh().catch(error => {
+          if (error.status === 401) {
+            userStore.accessToken = null
+            userStore.user = null
+            window.location.href = '/auth/signin'
+          }
+          throw error
+        })
 
         userStore.accessToken = token
 

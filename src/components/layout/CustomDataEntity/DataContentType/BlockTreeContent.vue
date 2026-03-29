@@ -7,6 +7,7 @@
     :draggable="props.treeData.draggable ?? false"
     :checked-keys="internalCheckedKeys"
     @update:checked-keys="handleCheckedUpdate"
+    :cascade="true"
     style="width: 100%"
   />
 </template>
