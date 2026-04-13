@@ -16,7 +16,6 @@
     <template #header="{ column, updateValue }">
       <div class="custom-header">
         <div class="title">{{ column.name }}</div>
-        <!-- TODO: InfoFieldEdit -->
         <template v-if="column.filtrable !== false">
           <n-input
             v-if="column.type === 'string'"
@@ -49,6 +48,19 @@
             placeholder=""
             @update:value="updateValue"
           />
+
+          <n-select
+            v-else-if="column.type === 'select'"
+            v-model:value="tableFilters[column.code]"
+            remote
+            size="small"
+            :bordered="false"
+            placeholder=""
+            @update:value="updateValue"
+            @update:show="(opened: boolean) => opened && selectSearch(column)"
+          />
+
+          <!-- TODO: Datetime добавить -->
         </template>
       </div>
     </template>
@@ -118,6 +130,10 @@
 
   const handleClickEntity = (entity: DataRow) => {
     router.push(`${props.redirectEntityUrl}/${entity.id}`)
+  }
+
+  const selectSearch = (column: ITableColumn) => {
+    console.log(`selectSearch: `, column)
   }
 
   const fetchData = async () => {

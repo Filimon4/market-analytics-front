@@ -31,7 +31,7 @@
           :key="action.code"
           class="action-btn"
           :class="`size-${action.size}`"
-          @click="clickAction(action.code)"
+          @click="emit('click:action', action.code)"
         >
           {{ action.title }}
         </button>
@@ -65,10 +65,6 @@
   )
 
   const emit = defineEmits(['click:action'])
-
-  const clickAction = (code: string) => {
-    emit('click:action', code)
-  }
 
   const getBlockActions = (blockCode: string): Action[] | null => {
     const blockActions = props.actions.filter(b => b.blockCode === blockCode)
