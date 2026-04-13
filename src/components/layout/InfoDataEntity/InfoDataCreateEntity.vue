@@ -6,7 +6,7 @@
       :data="data"
     >
       <template #field="{ field, value }">
-        <FieldEditable :field="field" :value="value" @update="handleFieldUpdate" />
+        <InfoEditableField :field="field" :value="value" @update="handleFieldUpdate" />
       </template>
     </CustomDataEntity>
     <SaveAffix v-model:saving="saving" @cancel="handleCancel" @save="handleSave" />
@@ -16,7 +16,7 @@
 <script setup lang="ts">
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
-  import FieldEditable from './FieldEditable.vue'
+  import InfoEditableField from '@/src/components/common/infodata/InfoEditableField/InfoEditableField.vue'
   import type {
     Data,
     IBlockDetail,
@@ -24,7 +24,7 @@
     IField,
   } from '../CustomDataEntity/CustomDataEntity.type'
   import { useRouter } from 'vue-router'
-  import SaveAffix from './SaveAffix.vue'
+  import SaveAffix from '@/src/components/common/affix/SaveAffix.vue'
 
   const router = useRouter()
 

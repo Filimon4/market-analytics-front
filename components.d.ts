@@ -25,6 +25,7 @@ declare module 'vue' {
     InfoDataCreateEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataCreateEntity.vue')['default']
     InfoDataEntity: typeof import('./src/components/layout/InfoDataEntity/InfoDataEntity.vue')['default']
     InfoDataTable: typeof import('./src/components/layout/InfoDataTable/InfoDataTable.vue')['default']
+    InfoEditableField: typeof import('./src/components/common/infodata/InfoEditableField/InfoEditableField.vue')['default']
     InfoEditField: typeof import('./src/components/common/infodata/infoEditField/InfoEditField.vue')['default']
     InfoField: typeof import('./src/components/common/infodata/infoField/InfoField.vue')['default']
     InfoTable: typeof import('./src/components/layout/ProjectDataTable/InfoTable.vue')['default']
@@ -56,6 +57,6 @@ declare module 'vue' {
     ProjectModel: typeof import('./src/components/ui/projectModel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SaveAffix: typeof import('./src/components/layout/InfoDataEntity/SaveAffix.vue')['default']
+    SaveAffix: typeof import('./src/components/common/affix/SaveAffix.vue')['default']
   }
 }

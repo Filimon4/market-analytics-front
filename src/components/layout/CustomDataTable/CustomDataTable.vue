@@ -46,7 +46,6 @@
       </table>
     </div>
 
-    <!-- TODO: Поправить отображение страниц -->
     <div class="data-table-pagination">
       <n-pagination
         v-model:page="localPage"

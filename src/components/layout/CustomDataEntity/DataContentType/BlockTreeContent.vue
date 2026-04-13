@@ -1,3 +1,4 @@
+<!-- TODO: Сделать получение нового дерева -->
 <template>
   <n-tree
     :data="props.treeData.nodes"
@@ -25,7 +26,6 @@
     (e: 'update:checked-keys', keys: string[]): void
   }>()
 
-  // Внутреннее состояние (инициализируем значениями по умолчанию с бэка)
   const internalCheckedKeys = ref<string[]>(props.treeData.defaultCheckedKeys ?? [])
 
   const handleCheckedUpdate = (keys: string[]) => {

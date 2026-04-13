@@ -40,11 +40,11 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { DateTime } from 'luxon'
-  import type { IField, Data } from '../CustomDataEntity/CustomDataEntity.type'
+  import type { IField, Data } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
-  import InfoField from '../../common/infodata/infoField/InfoField.vue'
-  import InfoEditField from '../../common/infodata/infoEditField/InfoEditField.vue'
+  import InfoField from '@/src/components/common/infodata/infoField/InfoField.vue'
+  import InfoEditField from '@/src/components/common/infodata/infoEditField/InfoEditField.vue'
 
   const props = defineProps<{
     field: IField
@@ -101,6 +101,8 @@
     localValue.value = (props.value as number | string | boolean) ?? ''
     isEditing.value = false
   }
+
+  defineExpose({ save, cancel })
 </script>
 
 <style scoped>

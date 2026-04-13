@@ -10,7 +10,7 @@
     >
       <template #field="{ field, value }">
         <!-- TODO: Для апи ключа в boolean показывается "всё" -->
-        <FieldEditable
+        <InfoEditableField
           :field="field"
           :editable="field.editable"
           :value="value"
@@ -19,12 +19,7 @@
       </template>
     </CustomDataEntity>
 
-    <SaveAffix
-      v-show="changedData"
-      v-model:saving="saving"
-      @save="handleSave"
-      @cancel="handleCancel"
-    />
+    <SaveAffix v-show="isDataChanged" v-model:saving="saving" @save="saveAll" @cancel="cancelAll" />
   </div>
 </template>
 
@@ -35,17 +30,19 @@
     Action,
     IEntity,
   } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
-  import SaveAffix from './SaveAffix.vue'
-  import FieldEditable from './FieldEditable.vue'
+  import SaveAffix from '@/src/components/common/affix/SaveAffix.vue'
+  import InfoEditableField from '@/src/components/common/infodata/InfoEditableField/InfoEditableField.vue'
 
   const saving = ref(false)
-  const changedData = ref<boolean>(false)
+  const isDataChanged = ref<boolean>(true)
   const apiResult = ref<IEntity>({
     blocks: [],
     blockDetails: [],
     data: {},
   })
   const loading = ref<boolean>(true)
+
+  const childrenActions = ref()
 
   const triggerTableUpdate = defineModel<boolean>({ required: false, default: false })
   const props = defineProps({
@@ -66,11 +63,13 @@
     loading.value = false
   }
 
-  const handleSave = async () => {}
-
-  const handleCancel = async () => {}
-
   const handleFieldUpdate = () => {}
+
+  const saveAll = () => {
+    console.log(childrenActions.value)
+  }
+
+  const cancelAll = () => {}
 
   onMounted(() => {
     fetchData()
