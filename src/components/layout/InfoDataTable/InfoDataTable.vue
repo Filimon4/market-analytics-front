@@ -51,7 +51,7 @@
 
           <n-select
             v-else-if="column.type === 'select'"
-            v-model:value="tableFilters[column.code]"
+            :value="tableFilters[column.code]"
             remote
             size="small"
             :bordered="false"
@@ -59,8 +59,6 @@
             @update:value="updateValue"
             @update:show="(opened: boolean) => opened && selectSearch(column)"
           />
-
-          <!-- TODO: Datetime добавить -->
         </template>
       </div>
     </template>
@@ -132,9 +130,7 @@
     router.push(`${props.redirectEntityUrl}/${entity.id}`)
   }
 
-  const selectSearch = (column: ITableColumn) => {
-    console.log(`selectSearch: `, column)
-  }
+  const selectSearch = (column: ITableColumn) => {}
 
   const fetchData = async () => {
     pageLoading.value = true

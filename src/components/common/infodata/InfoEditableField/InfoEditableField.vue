@@ -4,13 +4,15 @@
       disabled: isDisabled,
     }"
   >
-    <div v-if="!isEditing" class="view-mode">
+    <div v-if="!isEditing" :class="{ 'view-mode': true, 'resetable-field': canBeReseted }">
       <InfoField
-        :value="displayValue"
+        :value="localValue || ''"
         :type="field.type"
         :editable="canEdit"
         :disabled="isDisabled"
+        :resetable="canBeReseted"
         @click:edit="toggleEdit"
+        @click:reset="onResetField"
       />
     </div>
 
@@ -38,8 +40,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
-  import { DateTime } from 'luxon'
+  import { ref, computed, onMounted } from 'vue'
   import type { IField, Data } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
@@ -51,11 +52,16 @@
     value: Data[string]
   }>()
 
+  const initValue = ref()
+
   const emit = defineEmits<{
     (e: 'update', payload: { field: IField; value: Data[string] }): void
   }>()
 
   const isEditing = ref(false)
+  const canBeReseted = computed(() => {
+    return initValue.value !== props.value
+  })
   const localValue = ref<number | string | boolean>(
     (props.value as number | string | boolean) ?? ''
   )
@@ -69,23 +75,10 @@
   })
   const isDisabled = computed(() => props.field?.editable === false && !props.field?.createEditable)
 
-  const displayValue = computed(() => {
-    const v: Data[string] = localValue.value
-    if (v == null) return ''
-
-    const type = props.field?.type
-
-    if (type === 'datetime') {
-      return DateTime.fromISO(v as string, { zone: 'utc' })
-        .setLocale('ru')
-        .toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
-        .replace(' г.,', ' г.')
-    }
-    if (type === 'boolean') {
-      return v ? 'Да' : 'Нет'
-    }
-    return v
-  })
+  function onResetField() {
+    localValue.value = structuredClone(initValue.value)
+    save()
+  }
 
   function toggleEdit() {
     if (!canEdit.value || isDisabled.value) return
@@ -103,6 +96,10 @@
   }
 
   defineExpose({ save, cancel })
+
+  onMounted(() => {
+    initValue.value = structuredClone(props.value)
+  })
 </script>
 
 <style scoped>
@@ -120,6 +117,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  .resetable-field {
+    background: linear-gradient(260deg, rgba(47, 154, 204, 0.22) 0%, rgba(47, 154, 204, 0) 100%);
   }
 
   .edit-mode {

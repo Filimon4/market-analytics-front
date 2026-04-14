@@ -5,7 +5,10 @@
     v-if="props.editable && !props.disabled"
     @click="emit('click:edit')"
   >
-    ✎
+    <img :src="pencil" alt="edit" :style="{ height: '12px' }" />
+  </span>
+  <span class="editable-cursor" v-if="props.resetable" @click="emit('click:reset')">
+    <img :src="undo" alt="undo" :style="{ height: '12px' }" />
   </span>
 </template>
 
@@ -13,9 +16,12 @@
   import type { IField } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import { DateTime } from 'luxon'
   import { computed } from 'vue'
+  import undo from '/icons/undo.png'
+  import pencil from '/icons/pencil.png'
 
   const emit = defineEmits<{
     (e: 'click:edit'): void
+    (e: 'click:reset'): void
   }>()
 
   const props = withDefaults(
@@ -23,6 +29,7 @@
       Partial<Pick<IField, 'type' | 'selectUrl' | 'editable' | 'path'>> & {
         value: string | number | boolean | object
         disabled?: boolean
+        resetable?: boolean
       }
     >(),
     {
@@ -30,6 +37,7 @@
       selectUrl: undefined,
       editable: false,
       disabled: false,
+      resetable: false,
     }
   )
 
@@ -57,9 +65,7 @@
     }
 
     if (props.type === 'select') {
-      console.log(props)
       return props.value
-      // return props.selectUrl!.split('.').reduce((obj: any, key: string) => obj?.[key], props.value)
     }
 
     return props.value
