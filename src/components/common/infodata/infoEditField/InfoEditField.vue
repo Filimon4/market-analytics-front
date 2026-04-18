@@ -29,6 +29,14 @@
     :placeholder="''"
     @update:value="handleSelectUpdate"
   />
+
+  <n-date-picker
+    v-else-if="props.type === 'datetime'"
+    :value="dateTimeValue"
+    type="datetime"
+    clearable
+    @update:value="handleDateTimeUpdate"
+  />
 </template>
 
 <script setup lang="ts">
@@ -59,6 +67,7 @@
 
   const selectOptions = ref<SelectOptionWithPayload[]>([])
   const selectValue = ref<string | number | null>(null)
+  const dateTimeValue = ref<number | null>(null)
   const loading = ref(false)
 
   const syncSelectValueFromModel = () => {
@@ -89,6 +98,30 @@
     selectValue.value = newValue
     const selectedOption = option as SelectOptionWithPayload | null
     value.value = (selectedOption?.payload.code ?? null) as typeof value.value
+  }
+
+  const syncDateTimeValueFromModel = () => {
+    if (props.type !== 'datetime') return
+
+    if (typeof value.value === 'number') {
+      dateTimeValue.value = Number.isFinite(value.value) ? value.value : null
+      return
+    }
+
+    if (typeof value.value === 'string' && value.value) {
+      const parsed = Date.parse(value.value)
+      dateTimeValue.value = Number.isNaN(parsed) ? null : parsed
+      return
+    }
+
+    dateTimeValue.value = null
+  }
+
+  const handleDateTimeUpdate = (newValue: number | null) => {
+    dateTimeValue.value = newValue
+    value.value = (
+      newValue === null ? null : new Date(newValue).toISOString()
+    ) as typeof value.value
   }
 
   const fetchDataForSelect = async () => {
@@ -122,6 +155,7 @@
     () => value.value,
     () => {
       syncSelectValueFromModel()
+      syncDateTimeValueFromModel()
     },
     { deep: true }
   )
@@ -129,6 +163,10 @@
   onMounted(() => {
     if (props.type === 'select') {
       fetchDataForSelect()
+    }
+
+    if (props.type === 'datetime') {
+      syncDateTimeValueFromModel()
     }
   })
 </script>
