@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, watch } from 'vue'
   import type { IField, Data } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
@@ -62,7 +62,7 @@
   const canBeReseted = computed(() => {
     return initValue.value !== props.value
   })
-  const localValue = ref<number | string | boolean | Record<string, unknown> | null>(
+  const localValue = ref(
     (props.value as number | string | boolean | Record<string, unknown> | null) ?? null
   )
 
@@ -101,6 +101,13 @@
   onMounted(() => {
     initValue.value = structuredClone(props.value)
   })
+
+  watch(
+    () => props.value,
+    value => {
+      localValue.value = value as number | string | boolean | Record<string, unknown> | null
+    }
+  )
 </script>
 
 <style scoped>

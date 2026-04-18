@@ -49,8 +49,6 @@
   const loading = ref<boolean>(true)
   const infoDataEntityStore = useInfoDataEntityStore()
 
-  const childrenActions = ref()
-
   const triggerTableUpdate = defineModel<boolean>({ required: false, default: false })
   const props = defineProps({
     fetchDataReq: {
@@ -72,12 +70,10 @@
   }
 
   const handleFieldUpdate = ({ field, value }: { field: IField; value: Data[string] }) => {
-    infoDataEntityStore.updateFieldValue(field.path, value)
+    infoDataEntityStore.updateFieldValue(field?.editPath || field.path, value)
   }
 
-  const saveAll = () => {
-    console.log(childrenActions.value)
-  }
+  const saveAll = () => {}
 
   const cancelAll = () => {
     infoDataEntityStore.resetDataToDefault()

@@ -95,9 +95,10 @@
     newValue: string | number | null,
     option: SelectOption | SelectOption[] | null
   ) => {
-    selectValue.value = newValue
     const selectedOption = option as SelectOptionWithPayload | null
-    value.value = (selectedOption?.payload.code ?? null) as typeof value.value
+
+    selectValue.value = newValue
+    value.value = (selectedOption?.payload ?? null) as typeof value.value
   }
 
   const syncDateTimeValueFromModel = () => {
