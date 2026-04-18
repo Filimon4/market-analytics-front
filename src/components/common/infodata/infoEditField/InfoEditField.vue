@@ -22,10 +22,12 @@
 
   <n-select
     v-else-if="props.type === 'select'"
-    v-model:value="value"
+    :value="selectValue"
     :options="selectOptions"
+    :loading="loading"
     size="small"
     :placeholder="''"
+    @update:value="handleSelectUpdate"
   />
 </template>
 
@@ -33,18 +35,61 @@
   import type { IField } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import api from '@/src/utils/api'
   import type { SelectOption } from 'naive-ui'
-  import { ref } from 'vue'
-  import { onMounted } from 'vue'
+  import { onMounted, ref, watch } from 'vue'
 
-  const value = defineModel<number | string | boolean>('value', { required: true })
+  type SelectResponseItem = {
+    id: string
+    code: string
+    [key: string]: unknown
+  }
+
+  type SelectOptionWithPayload = SelectOption & {
+    value: string
+    payload: SelectResponseItem
+  }
+
+  const value = defineModel<number | string | boolean | Record<string, unknown> | null>('value', {
+    required: true,
+  })
 
   const props = withDefaults(defineProps<Partial<Pick<IField, 'selectUrl' | 'type'>>>(), {
     type: 'string',
     selectUrl: undefined,
   })
 
-  const selectOptions = ref<SelectOption[]>([])
+  const selectOptions = ref<SelectOptionWithPayload[]>([])
+  const selectValue = ref<string | number | null>(null)
   const loading = ref(false)
+
+  const syncSelectValueFromModel = () => {
+    if (props.type !== 'select') return
+
+    if (typeof value.value === 'string' || typeof value.value === 'number') {
+      selectValue.value = value.value
+      return
+    }
+
+    if (
+      value.value &&
+      typeof value.value === 'object' &&
+      'id' in value.value &&
+      (typeof value.value.id === 'string' || typeof value.value.id === 'number')
+    ) {
+      selectValue.value = value.value.id
+      return
+    }
+
+    selectValue.value = null
+  }
+
+  const handleSelectUpdate = (
+    newValue: string | number | null,
+    option: SelectOption | SelectOption[] | null
+  ) => {
+    selectValue.value = newValue
+    const selectedOption = option as SelectOptionWithPayload | null
+    value.value = (selectedOption?.payload.code ?? null) as typeof value.value
+  }
 
   const fetchDataForSelect = async () => {
     if (!props.selectUrl) {
@@ -54,24 +99,32 @@
 
     loading.value = true
 
-    const response = await api
-      .get<{ response: { id: string; title: string }[] }>(props.selectUrl)
-      .catch(() => {
-        return null
-      })
+    const response = await api.get<{ result: SelectResponseItem[] }>(props.selectUrl).catch(() => {
+      return null
+    })
 
-    if (!response?.data.response) {
+    if (!response?.data.result) {
       loading.value = false
       return
     }
 
-    selectOptions.value = response.data.response.map((item: { id: string; title: string }) => ({
-      label: item.title,
+    selectOptions.value = response.data.result.map(item => ({
+      label: item.code,
       value: item.id,
+      payload: item,
     }))
+    syncSelectValueFromModel()
 
     loading.value = false
   }
+
+  watch(
+    () => value.value,
+    () => {
+      syncSelectValueFromModel()
+    },
+    { deep: true }
+  )
 
   onMounted(() => {
     if (props.type === 'select') {

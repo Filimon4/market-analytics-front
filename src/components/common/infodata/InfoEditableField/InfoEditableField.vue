@@ -62,8 +62,8 @@
   const canBeReseted = computed(() => {
     return initValue.value !== props.value
   })
-  const localValue = ref<number | string | boolean>(
-    (props.value as number | string | boolean) ?? ''
+  const localValue = ref<number | string | boolean | Record<string, unknown> | null>(
+    (props.value as number | string | boolean | Record<string, unknown> | null) ?? null
   )
 
   const canEdit = computed(() => {
@@ -91,7 +91,8 @@
   }
 
   function cancel() {
-    localValue.value = (props.value as number | string | boolean) ?? ''
+    localValue.value =
+      (props.value as number | string | boolean | Record<string, unknown> | null) ?? null
     isEditing.value = false
   }
 
