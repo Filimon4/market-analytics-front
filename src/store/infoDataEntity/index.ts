@@ -1,12 +1,25 @@
 import { defineStore } from 'pinia'
 import { computed, ref, type Ref } from 'vue'
-import type { Data } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+import type {
+  Data,
+  IBlockDetail,
+  IBlockTreeDetail,
+  IEntity,
+  IField,
+} from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
 
 interface IInfoDataEntityStore {
   initialData: Ref<Data>
   currentData: Ref<Data>
+  blocksData: Ref<IEntity['blocks']>
+  blockDetailsData: Ref<IEntity['blockDetails']>
   hasChanges: Ref<boolean>
-  setData: (data: Data) => void
+  setData: (data: IEntity['data']) => void
+  getValueOfField: (field: IField) => unknown
+  setBlocks: (blocks: IEntity['blocks']) => void
+  getColumnsForBlock: (blockCode: string, capacity: number, max: number) => IField[][]
+  setBlockDetails: (blockDetails: IEntity['blockDetails']) => void
+  getBlockDetails: <T extends IBlockTreeDetail | IBlockDetail>(blockCode: string) => T
   resetDataToDefault: () => void
   updateFieldValue: (path: string, value: Data[string]) => void
 }
@@ -20,15 +33,45 @@ export const useInfoDataEntityStore = defineStore(
   (): IInfoDataEntityStore => {
     const initialData = ref<Data>({})
     const currentData = ref<Data>({})
+    const blocksData = ref<IEntity['blocks']>([])
+    const blockDetailsData = ref<IEntity['blockDetails']>([])
 
     const hasChanges = computed(
       () => JSON.stringify(initialData.value) !== JSON.stringify(currentData.value)
     )
 
-    const setData = (data: Data) => {
+    const setData = (data: IEntity['data']) => {
       const clonedData = cloneData(data ?? {})
       initialData.value = clonedData
       currentData.value = cloneData(clonedData)
+    }
+
+    const setBlocks = (blocks: IEntity['blocks']) => {
+      blocksData.value = blocks
+    }
+
+    const getColumnsForBlock = (blockCode: string, capacity: number, max: number) => {
+      const fields = getBlockDetails<IBlockDetail>(blockCode).fields
+      if (!fields.length) return []
+
+      const columns: Array<typeof fields> = []
+      let currentColumn: typeof fields = []
+
+      for (const field of fields) {
+        if (currentColumn.length >= capacity) {
+          if (columns.length + 1 >= max) break
+          columns.push(currentColumn)
+          currentColumn = []
+        }
+        currentColumn.push(field)
+      }
+
+      if (currentColumn.length > 0) columns.push(currentColumn)
+      return columns
+    }
+
+    const setBlockDetails = (blockDetails: IEntity['blockDetails']) => {
+      blockDetailsData.value = blockDetails
     }
 
     const resetDataToDefault = () => {
@@ -55,11 +98,31 @@ export const useInfoDataEntityStore = defineStore(
       })
     }
 
+    const getValueOfField = (field: IField) => {
+      return (
+        field.path
+          .split('.')
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .reduce((obj: any, key: string) => obj?.[key], currentData.value) as unknown
+      )
+    }
+
+    const getBlockDetails = <T extends IBlockTreeDetail | IBlockDetail>(blockCode: string): T => {
+      return blockDetailsData.value.find(block => block.blockCode === blockCode) as T
+    }
+
     return {
       initialData,
       currentData,
+      blocksData,
+      blockDetailsData,
       hasChanges,
       setData,
+      getValueOfField,
+      setBlocks,
+      getColumnsForBlock,
+      setBlockDetails,
+      getBlockDetails,
       resetDataToDefault,
       updateFieldValue,
     }

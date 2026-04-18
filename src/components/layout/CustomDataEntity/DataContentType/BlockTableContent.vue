@@ -1,54 +1,37 @@
 <template>
   <div
-    v-for="(column, colIndex) in getColumnsForBlock(block)"
+    v-for="(column, colIndex) in getColumnsForBlock"
     :key="colIndex"
     class="column"
-    :class="`column-${getColumnsForBlock(block).length}`"
+    :class="`column-${getColumnsForBlock.length}`"
   >
     <div v-for="entity in column" :key="entity.path" class="detail-row">
       <div class="detail-label">{{ entity.title }}</div>
       <div class="detail-value">
-        <slot name="field" :field="entity" :value="getValueForField(entity)" :block="block">
-          {{ getValueForField(entity) }}
-        </slot>
+        <slot name="field" :field="entity" :block="block" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { Data, IBlock, IField } from '../CustomDataEntity.type'
+  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+  import type { IBlock } from '../CustomDataEntity.type'
+  import { computed } from 'vue'
+
+  const infoDataEntityStore = useInfoDataEntityStore()
 
   const props = defineProps<{
-    fields: IField[]
-    data: Data
     block: IBlock
   }>()
 
-  const getColumnsForBlock = (block: { columnCapacity: number; maxColumns: number }) => {
-    const fields = props.fields
-    if (!fields.length) return []
-
-    const columns: Array<typeof fields> = []
-    let currentColumn: typeof fields = []
-
-    for (const field of fields) {
-      if (currentColumn.length >= block.columnCapacity) {
-        if (columns.length + 1 >= block.maxColumns) break
-        columns.push(currentColumn)
-        currentColumn = []
-      }
-      currentColumn.push(field)
-    }
-
-    if (currentColumn.length > 0) columns.push(currentColumn)
-    return columns
-  }
-
-  const getValueForField = (field: IField) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return field.path.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
-  }
+  const getColumnsForBlock = computed(() => {
+    return infoDataEntityStore.getColumnsForBlock(
+      props.block.code,
+      props.block.columnCapacity,
+      props.block.maxColumns
+    )
+  })
 </script>
 
 <style scoped>

@@ -5,8 +5,12 @@
       :block-details="apiResult.blockDetails"
       :data="data"
     >
-      <template #field="{ field, value }">
-        <InfoEditableField :field="field" :value="value" @update="handleFieldUpdate" />
+      <template #field="{ field }">
+        <InfoEditableField
+          :field="field"
+          :value="infoDataEntityStore.getValueOfField(field)"
+          @update="handleFieldUpdate"
+        />
       </template>
     </CustomDataEntity>
     <SaveAffix v-model:saving="saving" @cancel="handleCancel" @save="handleSave" />
@@ -25,7 +29,9 @@
   } from '../CustomDataEntity/CustomDataEntity.type'
   import { useRouter } from 'vue-router'
   import SaveAffix from '@/src/components/common/affix/SaveAffix.vue'
+  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
 
+  const infoDataEntityStore = useInfoDataEntityStore()
   const router = useRouter()
 
   const saving = ref(false)

@@ -1,6 +1,6 @@
 <template>
   <div class="blocks">
-    <div v-for="block in blocks" :key="block.code" class="block">
+    <div v-for="block in infoDataEntityStore.blocksData" :key="block.code" class="block">
       <slot name="block-header" :block="block" :title="block.name" :code="block.code">
         <div class="block-header">
           <p>{{ block.name }}</p>
@@ -8,21 +8,16 @@
       </slot>
 
       <div class="block-content" :class="{ 'tree-view': block.blockType === 'tree' }">
-        <BlockTableContent
-          v-if="!block.blockType || block.blockType === 'table'"
-          :fields="getBlockDetails(block.code).fields"
-          :data="data"
-          :block="block"
-        >
-          <template #field="{ field, value, block }">
-            <slot name="field" :field="field" :value="value" :block="block" />
+        <BlockTableContent v-if="!block.blockType || block.blockType === 'table'" :block="block">
+          <template #field="{ field, block }">
+            <slot name="field" :field="field" :block="block" />
           </template>
         </BlockTableContent>
 
-        <BlockTreeContent
+        <!-- <BlockTreeContent
           v-else-if="block.blockType === 'tree'"
           :treeData="getValueForField<Tree>(getBlockTreeDetails(block.code).treePath)"
-        />
+        /> -->
       </div>
 
       <div class="block-actions" v-if="getBlockActions(block.code)">
@@ -41,22 +36,14 @@
 </template>
 
 <script setup lang="ts">
-  import type {
-    Action,
-    IBlock,
-    IBlockDetail,
-    IBlockTreeDetail,
-    Data,
-    Tree,
-  } from './CustomDataEntity.type'
+  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+  import type { Action } from './CustomDataEntity.type'
   import BlockTableContent from './DataContentType/BlockTableContent.vue'
-  import BlockTreeContent from './DataContentType/BlockTreeContent.vue'
+
+  const infoDataEntityStore = useInfoDataEntityStore()
 
   const props = withDefaults(
     defineProps<{
-      blocks: IBlock[]
-      blockDetails: (IBlockDetail | IBlockTreeDetail)[]
-      data: Data
       actions?: Action[]
     }>(),
     {
@@ -69,19 +56,6 @@
   const getBlockActions = (blockCode: string): Action[] | null => {
     const blockActions = props.actions.filter(b => b.blockCode === blockCode)
     return blockActions.length ? blockActions : null
-  }
-
-  const getBlockDetails = (blockCode: string): IBlockDetail => {
-    return props.blockDetails.find(b => b.blockCode === blockCode) as IBlockDetail
-  }
-
-  const getBlockTreeDetails = (blockCode: string): IBlockTreeDetail => {
-    return props.blockDetails.find(b => b.blockCode === blockCode) as IBlockTreeDetail
-  }
-
-  const getValueForField = <T,>(field: string): T => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
   }
 </script>
 

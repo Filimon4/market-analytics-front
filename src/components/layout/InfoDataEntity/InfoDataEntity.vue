@@ -1,18 +1,16 @@
 <template>
+  <!-- :data="infoDataEntityStore.currentData" -->
   <div class="entity-wrapper">
     <CustomDataEntity
-      :blocks="apiResult.blocks"
-      :block-details="apiResult.blockDetails"
-      :data="infoDataEntityStore.currentData"
       :actions="actions"
       @click:action="(...args: any[]) => emit('click:action', ...args)"
       :loading="loading"
     >
-      <template #field="{ field, value }">
+      <template #field="{ field }">
         <InfoEditableField
           :field="field"
           :editable="field.editable"
-          :value="value"
+          :value="infoDataEntityStore.getValueOfField(field)"
           @update="handleFieldUpdate"
         />
       </template>
@@ -41,15 +39,9 @@
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
 
   const saving = ref(false)
-  const apiResult = ref<IEntity>({
-    blocks: [],
-    blockDetails: [],
-    data: {},
-  })
   const loading = ref<boolean>(true)
   const infoDataEntityStore = useInfoDataEntityStore()
 
-  const triggerTableUpdate = defineModel<boolean>({ required: false, default: false })
   const props = defineProps({
     fetchDataReq: {
       required: true,
@@ -64,8 +56,10 @@
 
   const fetchData = async () => {
     loading.value = true
-    apiResult.value = await props.fetchDataReq()
-    infoDataEntityStore.setData(apiResult.value.data)
+    const result = await props.fetchDataReq()
+    infoDataEntityStore.setData(result.data)
+    infoDataEntityStore.setBlocks(result.blocks)
+    infoDataEntityStore.setBlockDetails(result.blockDetails)
     loading.value = false
   }
 
@@ -83,11 +77,16 @@
     fetchData()
   })
 
+  // #region tiregger update
+
+  const triggerTableUpdate = defineModel<boolean>({ required: false, default: false })
   watch(triggerTableUpdate, (value: boolean) => {
     if (!value) return
     fetchData()
     triggerTableUpdate.value = false
   })
+
+  // #endregion
 </script>
 
 <style>

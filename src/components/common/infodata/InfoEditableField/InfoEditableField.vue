@@ -75,6 +75,7 @@
   })
   const isDisabled = computed(() => props.field?.editable === false && !props.field?.createEditable)
 
+  // TODO: Резетит локальное занчение а надо брать из pinia store
   function onResetField() {
     localValue.value = structuredClone(initValue.value)
     save()
@@ -95,8 +96,6 @@
       (props.value as number | string | boolean | Record<string, unknown> | null) ?? null
     isEditing.value = false
   }
-
-  defineExpose({ save, cancel })
 
   onMounted(() => {
     initValue.value = structuredClone(props.value)
