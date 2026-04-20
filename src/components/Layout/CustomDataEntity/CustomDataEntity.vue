@@ -14,10 +14,11 @@
           </template>
         </BlockTableContent>
 
-        <!-- <BlockTreeContent
-          v-else-if="block.blockType === 'tree'"
-          :treeData="getValueForField<Tree>(getBlockTreeDetails(block.code).treePath)"
-        /> -->
+        <BlockTreeContent v-else-if="block.blockType === 'tree'" :block="block">
+          <template #tree="{ block }">
+            <slot name="tree" :block="block" />
+          </template>
+        </BlockTreeContent>
       </div>
 
       <div class="block-actions" v-if="getBlockActions(block.code)">
@@ -39,6 +40,7 @@
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import type { Action } from './CustomDataEntity.type'
   import BlockTableContent from './DataContentType/BlockTableContent.vue'
+  import BlockTreeContent from './DataContentType/BlockTreeContent.vue'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 

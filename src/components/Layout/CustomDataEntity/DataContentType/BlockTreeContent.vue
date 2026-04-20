@@ -1,37 +1,23 @@
 <!-- TODO: Сделать получение нового дерева -->
 <template>
-  <n-tree
-    :data="props.treeData.nodes"
-    key-field="key"
-    label-field="label"
-    :checkable="props.treeData.checkable ?? false"
-    :draggable="props.treeData.draggable ?? false"
-    :checked-keys="internalCheckedKeys"
-    @update:checked-keys="handleCheckedUpdate"
-    :cascade="true"
-    style="width: 100%"
-  />
+  <!-- :data="props.treeData.nodes" -->
+  <!-- :checkable="props.treeData.checkable ?? false"
+  :draggable="props.treeData.draggable ?? false" -->
+  <!-- :checked-keys="internalCheckedKeys" -->
+  <!-- @update:checked-keys="handleCheckedUpdate" -->
+  <!-- <n-tree key-field="key" label-field="label" :cascade="true" style="width: 100%" /> -->
+
+  <div class="tree">
+    <slot name="field" :block="props.block" />
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { NTree } from 'naive-ui'
-  import { ref } from 'vue'
-  import type { Tree } from '../CustomDataEntity.type'
+  import type { IBlock } from '../CustomDataEntity.type'
 
   const props = defineProps<{
-    treeData: Tree
+    block: IBlock
   }>()
-
-  const emit = defineEmits<{
-    (e: 'update:checked-keys', keys: string[]): void
-  }>()
-
-  const internalCheckedKeys = ref<string[]>(props.treeData.defaultCheckedKeys ?? [])
-
-  const handleCheckedUpdate = (keys: string[]) => {
-    internalCheckedKeys.value = keys
-    emit('update:checked-keys', keys)
-  }
 </script>
 
 <style scoped>

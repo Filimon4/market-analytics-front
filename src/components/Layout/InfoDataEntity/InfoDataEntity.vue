@@ -13,6 +13,7 @@
           @update="handleFieldUpdate"
         />
       </template>
+      <template #tree="{ block }"></template>
     </CustomDataEntity>
 
     <SaveAffix
