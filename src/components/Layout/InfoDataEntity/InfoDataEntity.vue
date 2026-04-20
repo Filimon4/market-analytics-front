@@ -33,8 +33,8 @@
     IEntity,
     IField,
   } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
-  import SaveAffix from '@/src/components/common/affix/SaveAffix.vue'
-  import InfoEditableField from '@/src/components/common/infodata/InfoEditableField/InfoEditableField.vue'
+  import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
+  import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
 
   const saving = ref(false)

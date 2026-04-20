@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import Affix from '../../common/affix/Affix.vue'
+  import Affix from '../../common/Affix/Affix.vue'
 
   const saving = defineModel<boolean>('saving', { required: true, default: false })
 

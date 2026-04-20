@@ -20,7 +20,7 @@
 <script setup lang="ts">
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
-  import InfoEditableField from '@/src/components/common/infodata/InfoEditableField/InfoEditableField.vue'
+  import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import type {
     Data,
     IBlockDetail,
@@ -28,7 +28,7 @@
     IField,
   } from '../CustomDataEntity/CustomDataEntity.type'
   import { useRouter } from 'vue-router'
-  import SaveAffix from '@/src/components/common/affix/SaveAffix.vue'
+  import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
 
   const infoDataEntityStore = useInfoDataEntityStore()

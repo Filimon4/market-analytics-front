@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
   import type { Action } from '@/src/components/Layout/CustomDataTable/CustomDataTable.type'
-  import InfoDataTable from '@/src/components/layout/InfoDataTable/InfoDataTable.vue'
+  import InfoDataTable from '@/src/components/Layout/InfoDataTable/InfoDataTable.vue'
   import roleApi from '@/src/utils/api/role'
   import { useRouter } from 'vue-router'
 

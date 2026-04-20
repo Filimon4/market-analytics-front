@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-  import InfoDataTable from '@/src/components/layout/InfoDataTable/InfoDataTable.vue'
+  import InfoDataTable from '@/src/components/Layout/InfoDataTable/InfoDataTable.vue'
   import userApi from '@/src/utils/api/user'
 
   const handleAction = async () => {}

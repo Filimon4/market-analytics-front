@@ -6,6 +6,6 @@
 </template>
 
 <script setup lang="ts">
-  import InfoDataCreateEntity from '@/src/components/layout/InfoDataEntity/InfoDataCreateEntity.vue'
+  import InfoDataCreateEntity from '@/src/components/Layout/InfoDataEntity/InfoDataCreateEntity.vue'
   import roleApi from '@/src/utils/api/role'
 </script>

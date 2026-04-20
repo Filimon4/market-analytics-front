@@ -82,7 +82,7 @@
     ITableColumn,
     ITableList,
   } from '../CustomDataTable/CustomDataTable.type'
-  import InfoField from '../../common/infodata/infoField/InfoField.vue'
+  import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
 
   const emit = defineEmits(['click:action'])
 

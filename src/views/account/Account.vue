@@ -22,7 +22,7 @@
   import { useUserStore } from '@/src/store/user'
   import { useProjectStore } from '@/src/store/project'
   import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
-  import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue'
+  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
   import userApi from '@/src/utils/api/user'
   import { ref } from 'vue'
 

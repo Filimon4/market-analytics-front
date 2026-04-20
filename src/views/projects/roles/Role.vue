@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue'
+  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
   import roleApi from '@/src/utils/api/role'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
