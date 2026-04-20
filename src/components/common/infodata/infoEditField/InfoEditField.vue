@@ -37,24 +37,35 @@
     clearable
     @update:value="handleDateTimeUpdate"
   />
+
+  <div class="actions">
+    <n-button type="info" color="#2f9acc" @click="emits('save')" size="tiny">
+      <template #icon>
+        <n-icon>
+          <img class="action-sprite" :src="acceptIcon" alt="accept" />
+        </n-icon>
+      </template>
+    </n-button>
+    <n-button type="info" color="#7c7c7cc0" @click="emits('cancel')" size="tiny">
+      <template #icon>
+        <n-icon>
+          <img class="action-sprite" :src="cancelIcon" alt="cancel" />
+        </n-icon>
+      </template>
+    </n-button>
+  </div>
 </template>
 
 <script setup lang="ts">
+  import acceptIcon from '/icons/accept.svg'
+  import cancelIcon from '/icons/cancel.svg'
   import type { IField } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import api from '@/src/utils/api'
-  import type { SelectOption } from 'naive-ui'
   import { onMounted, ref, watch } from 'vue'
+  import type { SelectOptionWithPayload, SelectResponseItem } from './infoEditField.types'
+  import type { SelectOption } from 'naive-ui'
 
-  type SelectResponseItem = {
-    id: string
-    code: string
-    [key: string]: unknown
-  }
-
-  type SelectOptionWithPayload = SelectOption & {
-    value: string
-    payload: SelectResponseItem
-  }
+  const emits = defineEmits(['save', 'cancel'])
 
   const value = defineModel<number | string | boolean | Record<string, unknown> | null>('value', {
     required: true,
@@ -171,3 +182,15 @@
     }
   })
 </script>
+
+<style>
+  .actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .action-sprite {
+    height: 15px;
+    width: 15px;
+  }
+</style>

@@ -7,6 +7,7 @@ import type {
   IEntity,
   IField,
 } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+import { cloneData } from '@/src/utils/cloneData'
 
 interface IInfoDataEntityStore {
   initialData: Ref<Data>
@@ -14,18 +15,20 @@ interface IInfoDataEntityStore {
   blocksData: Ref<IEntity['blocks']>
   blockDetailsData: Ref<IEntity['blockDetails']>
   hasChanges: Ref<boolean>
+
+  // work with currentData
   setData: (data: IEntity['data']) => void
-  getValueOfField: (field: IField) => unknown
+  getValueOfField: (field: IField, isInit?: boolean) => unknown
   setBlocks: (blocks: IEntity['blocks']) => void
   getColumnsForBlock: (blockCode: string, capacity: number, max: number) => IField[][]
   setBlockDetails: (blockDetails: IEntity['blockDetails']) => void
   getBlockDetails: <T extends IBlockTreeDetail | IBlockDetail>(blockCode: string) => T
-  resetDataToDefault: () => void
   updateFieldValue: (path: string, value: Data[string]) => void
-}
 
-const cloneData = (data: Data): Data => {
-  return JSON.parse(JSON.stringify(data)) as Data
+  // work with initData
+  resetData: () => void
+  resetFieldValue: (field: IField) => unknown
+  isFieldDiffFromDefault: (field: IField) => boolean
 }
 
 export const useInfoDataEntityStore = defineStore(
@@ -41,9 +44,8 @@ export const useInfoDataEntityStore = defineStore(
     )
 
     const setData = (data: IEntity['data']) => {
-      const clonedData = cloneData(data ?? {})
-      initialData.value = clonedData
-      currentData.value = cloneData(clonedData)
+      initialData.value = cloneData(data)
+      currentData.value = cloneData(data)
     }
 
     const setBlocks = (blocks: IEntity['blocks']) => {
@@ -74,10 +76,6 @@ export const useInfoDataEntityStore = defineStore(
       blockDetailsData.value = blockDetails
     }
 
-    const resetDataToDefault = () => {
-      currentData.value = cloneData(initialData.value)
-    }
-
     const updateFieldValue = (path: string, value: Data[string]) => {
       const keys = path.split('.')
       let target: Record<string, unknown> = currentData.value
@@ -98,17 +96,34 @@ export const useInfoDataEntityStore = defineStore(
       })
     }
 
-    const getValueOfField = (field: IField) => {
-      return (
-        field.path
-          .split('.')
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .reduce((obj: any, key: string) => obj?.[key], currentData.value) as unknown
-      )
+    const getValueOfField = (field: IField, isInit = false) => {
+      return field.path.split('.').reduce(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (obj: any, key: string) => obj?.[key],
+        !isInit ? currentData.value : initialData.value
+      ) as unknown
     }
 
     const getBlockDetails = <T extends IBlockTreeDetail | IBlockDetail>(blockCode: string): T => {
       return blockDetailsData.value.find(block => block.blockCode === blockCode) as T
+    }
+
+    const resetData = () => {
+      currentData.value = cloneData(initialData.value)
+    }
+
+    const resetFieldValue = (field: IField) => {
+      const initKey = field.path.split('.')[0]
+      if (!initKey) throw new Error(`There is no init key in field: ${JSON.stringify(field)}`)
+      currentData.value[initKey] = initialData.value[initKey]
+      return getValueOfField(field)
+    }
+
+    const isFieldDiffFromDefault = (field: IField) => {
+      const initKey = field.path.split('.')[0]
+      if (!initKey) throw new Error(`There is no init key in field: ${JSON.stringify(field)}`)
+      if (getValueOfField(field) != getValueOfField(field, true)) return true
+      return false
     }
 
     return {
@@ -123,8 +138,10 @@ export const useInfoDataEntityStore = defineStore(
       getColumnsForBlock,
       setBlockDetails,
       getBlockDetails,
-      resetDataToDefault,
       updateFieldValue,
+      resetData,
+      resetFieldValue,
+      isFieldDiffFromDefault,
     }
   }
 )

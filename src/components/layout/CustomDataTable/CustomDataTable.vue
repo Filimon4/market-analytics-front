@@ -63,7 +63,6 @@
 
 <script setup lang="ts">
   import { ref, watch, onUnmounted } from 'vue'
-  import { NPagination } from 'naive-ui' // or use auto-import if configured
   import type { DataRow, ITableList } from './CustomDataTable.type'
 
   const props = withDefaults(

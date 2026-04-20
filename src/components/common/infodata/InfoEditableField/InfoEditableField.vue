@@ -10,61 +10,42 @@
         :type="field.type"
         :editable="canEdit"
         :disabled="isDisabled"
-        :resetable="canBeReseted"
+        :resetable="canBeReseted && !isDisabled"
         @click:edit="toggleEdit"
         @click:reset="onResetField"
       />
     </div>
 
     <div v-else class="edit-mode">
-      <InfoEditField :type="field.type" :select-url="field.selectUrl" v-model:value="localValue" />
-
-      <div class="actions">
-        <n-button type="info" color="#2f9acc" @click="save" size="tiny">
-          <template #icon>
-            <n-icon>
-              <img class="action-sprite" :src="acceptIcon" alt="accept" />
-            </n-icon>
-          </template>
-        </n-button>
-        <n-button type="info" color="#7c7c7cc0" @click="cancel" size="tiny">
-          <template #icon>
-            <n-icon>
-              <img class="action-sprite" :src="cancelIcon" alt="cancel" />
-            </n-icon>
-          </template>
-        </n-button>
-      </div>
+      <InfoEditField
+        :type="field.type"
+        :select-url="field.selectUrl"
+        v-model:value="localValue"
+        @save="save"
+        @cancel="cancel"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, computed, onMounted, watch } from 'vue'
-  import type { IField, Data } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
-  import acceptIcon from '/icons/accept.svg'
-  import cancelIcon from '/icons/cancel.svg'
+  import type { IField } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
   import InfoField from '@/src/components/common/infodata/infoField/InfoField.vue'
   import InfoEditField from '@/src/components/common/infodata/infoEditField/InfoEditField.vue'
+  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+
+  const infoDataEntityStore = useInfoDataEntityStore()
 
   const props = defineProps<{
     field: IField
-    value: Data[string]
-  }>()
-
-  const initValue = ref()
-
-  const emit = defineEmits<{
-    (e: 'update', payload: { field: IField; value: Data[string] }): void
   }>()
 
   const isEditing = ref(false)
   const canBeReseted = computed(() => {
-    return initValue.value !== props.value
+    return infoDataEntityStore.isFieldDiffFromDefault(props.field)
   })
-  const localValue = ref(
-    (props.value as number | string | boolean | Record<string, unknown> | null) ?? null
-  )
+  const localValue = ref()
 
   const canEdit = computed(() => {
     if (props.field?.createEditable) {
@@ -75,36 +56,36 @@
   })
   const isDisabled = computed(() => props.field?.editable === false && !props.field?.createEditable)
 
-  // TODO: Резетит локальное занчение а надо брать из pinia store
-  function onResetField() {
-    localValue.value = structuredClone(initValue.value)
-    save()
+  const onResetField = () => {
+    infoDataEntityStore.resetFieldValue(props.field)
   }
 
-  function toggleEdit() {
+  const toggleEdit = () => {
     if (!canEdit.value || isDisabled.value) return
     isEditing.value = !isEditing.value
   }
 
-  function save() {
-    emit('update', { field: props.field, value: localValue.value })
+  const save = () => {
+    infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, localValue.value)
+    infoDataEntityStore.getValueOfField(props.field)
     isEditing.value = false
   }
 
-  function cancel() {
-    localValue.value =
-      (props.value as number | string | boolean | Record<string, unknown> | null) ?? null
+  const cancel = () => {
+    infoDataEntityStore.resetFieldValue(props.field)
     isEditing.value = false
   }
 
   onMounted(() => {
-    initValue.value = structuredClone(props.value)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    localValue.value = infoDataEntityStore.getValueOfField(props.field) as any
   })
 
   watch(
-    () => props.value,
-    value => {
-      localValue.value = value as number | string | boolean | Record<string, unknown> | null
+    () => infoDataEntityStore.getValueOfField(props.field),
+    () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      localValue.value = infoDataEntityStore.getValueOfField(props.field) as any
     }
   )
 </script>
@@ -152,15 +133,5 @@
     background: none;
     border: none;
     outline: none;
-  }
-
-  .actions {
-    display: flex;
-    gap: 6px;
-  }
-
-  .action-sprite {
-    height: 15px;
-    width: 15px;
   }
 </style>

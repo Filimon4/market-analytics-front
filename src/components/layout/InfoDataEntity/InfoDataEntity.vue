@@ -1,5 +1,4 @@
 <template>
-  <!-- :data="infoDataEntityStore.currentData" -->
   <div class="entity-wrapper">
     <CustomDataEntity
       :actions="actions"
@@ -70,7 +69,7 @@
   const saveAll = () => {}
 
   const cancelAll = () => {
-    infoDataEntityStore.resetDataToDefault()
+    infoDataEntityStore.resetData()
   }
 
   onMounted(() => {
