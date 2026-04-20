@@ -18,10 +18,10 @@
 
 <script setup lang="ts">
   import projectApi from '@/src/utils/api/project'
-  import type { IProjectModalItem } from '@/src/components/ui/projectModal/projectModal.types'
+  import type { IProjectModalItem } from '@/src/components/Ui/ProjectModal/ProjectModal.types'
   import { useUserStore } from '@/src/store/user'
   import { useProjectStore } from '@/src/store/project'
-  import type { Action } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+  import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoDataEntity from '@/src/components/layout/InfoDataEntity/InfoDataEntity.vue'
   import userApi from '@/src/utils/api/user'
   import { ref } from 'vue'

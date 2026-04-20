@@ -49,7 +49,7 @@
 <script setup lang="ts">
   import { ref, computed, watch, type PropType } from 'vue'
   import { NModal, NList, NListItem, NInput, NButton, NSpin } from 'naive-ui'
-  import type { IProjectModalItem } from './projectModal.types'
+  import type { IProjectModalItem } from './ProjectModal.types'
 
   const show = defineModel<boolean>('show')
 

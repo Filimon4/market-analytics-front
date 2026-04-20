@@ -32,7 +32,7 @@
     Data,
     IEntity,
     IField,
-  } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+  } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import SaveAffix from '@/src/components/common/affix/SaveAffix.vue'
   import InfoEditableField from '@/src/components/common/infodata/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'

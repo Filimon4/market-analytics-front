@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { IField } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+  import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import { DateTime } from 'luxon'
   import { computed } from 'vue'
   import undo from '/icons/undo.png'

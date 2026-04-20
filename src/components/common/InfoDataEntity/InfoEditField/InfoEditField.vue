@@ -59,10 +59,10 @@
 <script setup lang="ts">
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
-  import type { IField } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+  import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import api from '@/src/utils/api'
   import { onMounted, ref, watch } from 'vue'
-  import type { SelectOptionWithPayload, SelectResponseItem } from './infoEditField.types'
+  import type { SelectOptionWithPayload, SelectResponseItem } from './InfoEditField.types'
   import type { SelectOption } from 'naive-ui'
 
   const emits = defineEmits(['save', 'cancel'])

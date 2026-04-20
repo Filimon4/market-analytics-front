@@ -6,7 +6,7 @@ import type {
   IBlockTreeDetail,
   IEntity,
   IField,
-} from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+} from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import { cloneData } from '@/src/utils/cloneData'
 
 interface IInfoDataEntityStore {

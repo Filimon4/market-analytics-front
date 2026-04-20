@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
   import { ref, computed, onMounted, watch } from 'vue'
-  import type { IField } from '@/src/components/layout/CustomDataEntity/CustomDataEntity.type'
+  import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoField from '@/src/components/common/infodata/infoField/InfoField.vue'
   import InfoEditField from '@/src/components/common/infodata/infoEditField/InfoEditField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
