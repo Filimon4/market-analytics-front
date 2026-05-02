@@ -41,6 +41,14 @@ export interface Data {
   [key: string]: unknown
 }
 
+export interface Tree {
+  nodes: TreeOptions
+  defaultCheckedKeys?: string[]
+  checkable?: boolean
+  cascade?: boolean
+  draggable?: boolean
+}
+
 export interface IEntity {
   blocks: IBlock[]
   blockDetails: (IBlockDetail | IBlockTreeDetail)[]
@@ -52,11 +60,4 @@ export interface Action {
   code: string
   size: 'small' | 'medium' | 'large'
   blockCode: string
-}
-
-export interface Tree {
-  nodes: TreeOptions
-  defaultCheckedKeys?: string[]
-  checkable?: boolean
-  draggable?: boolean
 }

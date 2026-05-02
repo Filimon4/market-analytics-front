@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
-import { computed, ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import type {
   Data,
   IBlockDetail,
   IBlockTreeDetail,
   IEntity,
   IField,
+  Tree,
 } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import { cloneData } from '@/src/utils/cloneData'
 
@@ -25,6 +26,9 @@ interface IInfoDataEntityStore {
   getBlockDetails: <T extends IBlockTreeDetail | IBlockDetail>(blockCode: string) => T
   updateFieldValue: (path: string, value: Data[string]) => void
 
+  // work with tree
+  getTreeNodes: (blockTree: IBlockTreeDetail) => Tree
+
   // work with initData
   resetData: () => void
   resetFieldValue: (field: IField) => unknown
@@ -39,8 +43,13 @@ export const useInfoDataEntityStore = defineStore(
     const blocksData = ref<IEntity['blocks']>([])
     const blockDetailsData = ref<IEntity['blockDetails']>([])
 
-    const hasChanges = computed(
-      () => JSON.stringify(initialData.value) !== JSON.stringify(currentData.value)
+    const hasChanges = ref<boolean>(false)
+
+    watch(
+      () => JSON.stringify(currentData.value),
+      value => {
+        hasChanges.value = JSON.stringify(initialData.value) !== value
+      }
     )
 
     const setData = (data: IEntity['data']) => {
@@ -126,6 +135,14 @@ export const useInfoDataEntityStore = defineStore(
       return false
     }
 
+    const getTreeNodes = (blockTree: IBlockTreeDetail) => {
+      return blockTree.treePath.split('.').reduce(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (obj: any, key: string) => obj?.[key],
+        currentData.value
+      ) as Tree
+    }
+
     return {
       initialData,
       currentData,
@@ -142,6 +159,7 @@ export const useInfoDataEntityStore = defineStore(
       resetData,
       resetFieldValue,
       isFieldDiffFromDefault,
+      getTreeNodes,
     }
   }
 )

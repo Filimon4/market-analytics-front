@@ -10,10 +10,11 @@
           :field="field"
           :editable="field.editable"
           :value="infoDataEntityStore.getValueOfField(field)"
-          @update="handleFieldUpdate"
         />
       </template>
-      <template #tree="{ block }"></template>
+      <template #tree="{ block }">
+        <InfoEditableTree :block="block" />
+      </template>
     </CustomDataEntity>
 
     <SaveAffix
@@ -30,13 +31,12 @@
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import type {
     Action,
-    Data,
     IEntity,
-    IField,
   } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
   import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+  import InfoEditableTree from '@/src/components/common/InfoDataEntity/InfoEditableTree/InfoEditableTree.vue'
 
   const saving = ref(false)
   const loading = ref<boolean>(true)
@@ -61,10 +61,6 @@
     infoDataEntityStore.setBlocks(result.blocks)
     infoDataEntityStore.setBlockDetails(result.blockDetails)
     loading.value = false
-  }
-
-  const handleFieldUpdate = ({ field, value }: { field: IField; value: Data[string] }) => {
-    infoDataEntityStore.updateFieldValue(field?.editPath || field.path, value)
   }
 
   const saveAll = () => {}

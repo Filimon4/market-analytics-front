@@ -31,6 +31,7 @@
             :key="sub.id"
             :item="sub"
             :is-hover="subHoverId === sub.id"
+            :label-visible="true"
             @click="onItemClick(sub)"
             @mouseenter="subHoverId = sub.id"
             @mouseleave="subHoverId = null"

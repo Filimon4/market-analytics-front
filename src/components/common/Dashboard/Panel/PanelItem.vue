@@ -7,7 +7,7 @@
       @mouseleave="$emit('mouseleave')"
     >
       <img v-if="item.icon" :src="item.icon" width="30" height="30" alt="" />
-      <span>{{ item.name }}</span>
+      <span v-if="labelVisible">{{ item.name }}</span>
     </div>
   </div>
 </template>

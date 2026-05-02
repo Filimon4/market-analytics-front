@@ -1,21 +1,13 @@
-<!-- TODO: Сделать получение нового дерева -->
 <template>
-  <!-- :data="props.treeData.nodes" -->
-  <!-- :checkable="props.treeData.checkable ?? false"
-  :draggable="props.treeData.draggable ?? false" -->
-  <!-- :checked-keys="internalCheckedKeys" -->
-  <!-- @update:checked-keys="handleCheckedUpdate" -->
-  <!-- <n-tree key-field="key" label-field="label" :cascade="true" style="width: 100%" /> -->
-
   <div class="tree">
-    <slot name="field" :block="props.block" />
+    <slot name="field" :block="block" />
   </div>
 </template>
 
 <script setup lang="ts">
   import type { IBlock } from '../CustomDataEntity.type'
 
-  const props = defineProps<{
+  defineProps<{
     block: IBlock
   }>()
 </script>

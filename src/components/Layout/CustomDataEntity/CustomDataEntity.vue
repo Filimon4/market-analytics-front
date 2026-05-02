@@ -15,7 +15,7 @@
         </BlockTableContent>
 
         <BlockTreeContent v-else-if="block.blockType === 'tree'" :block="block">
-          <template #tree="{ block }">
+          <template #field="{ block }">
             <slot name="tree" :block="block" />
           </template>
         </BlockTreeContent>
