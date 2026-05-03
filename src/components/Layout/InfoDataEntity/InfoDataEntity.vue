@@ -13,7 +13,10 @@
         />
       </template>
       <template #tree="{ block }">
-        <InfoEditableTree :block="block" />
+        <InfoEditableTree
+          :block="block"
+          :blockDetails="infoDataEntityStore.getBlockDetails<IBlockTreeDetail>(block.code)"
+        />
       </template>
     </CustomDataEntity>
 
@@ -31,6 +34,7 @@
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import type {
     Action,
+    IBlockTreeDetail,
     IEntity,
   } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'

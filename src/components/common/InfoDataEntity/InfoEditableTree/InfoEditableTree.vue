@@ -21,21 +21,19 @@
   import { onMounted, ref } from 'vue'
   import { NTree } from 'naive-ui'
   import { cloneData } from '@/src/utils/cloneData'
+  import { watch } from 'vue'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 
   const props = defineProps<{
     block: IBlock
+    blockDetails: IBlockTreeDetail
   }>()
 
   const localValue = ref<Tree>()
 
   onMounted(() => {
-    const blockData = infoDataEntityStore.getBlockDetails<IBlockTreeDetail>(props.block.code)
-    const nodes = infoDataEntityStore.getTreeNodes(blockData)
-    // if (nodes.defaultCheckedKeys?.length === 0) {
-    //   nodes.defaultCheckedKeys = ['']
-    // }
+    const nodes = infoDataEntityStore.getTreeNodes(props.blockDetails)
     localValue.value = nodes
   })
 
@@ -43,7 +41,15 @@
     const newValue = cloneData(localValue.value!) as Tree
     newValue.defaultCheckedKeys = defaultCheckedKeys
     localValue.value = newValue
-    const blockData = infoDataEntityStore.getBlockDetails<IBlockTreeDetail>(props.block.code)
-    infoDataEntityStore.updateFieldValue(blockData.treePath, localValue)
+    infoDataEntityStore.updateFieldValue(props.blockDetails.treePath, localValue)
   }
+
+  watch(
+    () => JSON.stringify(infoDataEntityStore.getTreeNodes(props.blockDetails)),
+    () => {
+      console.log('changes: ')
+      const nodes = infoDataEntityStore.getTreeNodes(props.blockDetails)
+      localValue.value = nodes
+    }
+  )
 </script>
