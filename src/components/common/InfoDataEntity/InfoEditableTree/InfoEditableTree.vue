@@ -1,27 +1,21 @@
 <template>
-  <div v-if="localValue?.nodes.length">
-    <n-tree
-      :data="localValue?.nodes"
-      :checkable="localValue?.checkable"
-      :draggable="localValue?.draggable"
-      :cascade="localValue?.cascade"
-      :default-checked-keys="localValue?.defaultCheckedKeys"
-      @update:checked-keys="updateCheckedKeys"
-    />
-  </div>
+  <Tree
+    v-if="loaded"
+    v-model:value="localValue"
+    :cascade="options.cascade"
+    :checkable="options.checkable"
+  />
 </template>
 
 <script setup lang="ts">
   import type {
     IBlock,
     IBlockTreeDetail,
-    Tree,
   } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import { onMounted, ref } from 'vue'
-  import { NTree } from 'naive-ui'
-  import { cloneData } from '@/src/utils/cloneData'
-  import { watch } from 'vue'
+  import Tree from '@/src/components/Ui/Tree/Tree.vue'
+  import type { TreeNodes } from '@/src/components/Ui/Tree/types'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 
@@ -30,26 +24,17 @@
     blockDetails: IBlockTreeDetail
   }>()
 
-  const localValue = ref<Tree>()
+  const loaded = ref<boolean>(false)
+  const localValue = ref<TreeNodes>([])
+  const options = ref<{ cascade?: boolean; checkable?: boolean }>({})
 
   onMounted(() => {
     const nodes = infoDataEntityStore.getTreeNodes(props.blockDetails)
-    localValue.value = nodes
-  })
-
-  const updateCheckedKeys = (defaultCheckedKeys: Array<string & number>) => {
-    const newValue = cloneData(localValue.value!) as Tree
-    newValue.defaultCheckedKeys = defaultCheckedKeys
-    localValue.value = newValue
-    infoDataEntityStore.updateFieldValue(props.blockDetails.treePath, localValue)
-  }
-
-  watch(
-    () => JSON.stringify(infoDataEntityStore.getTreeNodes(props.blockDetails)),
-    () => {
-      console.log('changes: ')
-      const nodes = infoDataEntityStore.getTreeNodes(props.blockDetails)
-      localValue.value = nodes
+    localValue.value = nodes['nodes']
+    options.value = {
+      cascade: nodes.cascade,
+      checkable: nodes.checkable,
     }
-  )
+    loaded.value = true
+  })
 </script>

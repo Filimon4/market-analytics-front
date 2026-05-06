@@ -1,4 +1,4 @@
-import type { TreeOptions } from 'naive-ui/es/tree/src/interface'
+import type { TreeNodes } from '../../Ui/Tree/types'
 
 export interface IBlockIndentifier {
   blockCode: string
@@ -42,11 +42,9 @@ export interface Data {
 }
 
 export interface Tree {
-  nodes: TreeOptions
-  defaultCheckedKeys?: string[]
+  nodes: TreeNodes
   checkable?: boolean
   cascade?: boolean
-  draggable?: boolean
 }
 
 export interface IEntity {

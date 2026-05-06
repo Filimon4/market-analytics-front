@@ -62,5 +62,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SaveAffix: typeof import('./src/components/common/Affix/SaveAffix.vue')['default']
+    Tree: typeof import('./src/components/Ui/Tree/Tree.vue')['default']
+    TreeNode: typeof import('./src/components/Ui/Tree/TreeNode.vue')['default']
   }
 }
