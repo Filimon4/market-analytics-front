@@ -20,12 +20,7 @@
       </template>
     </CustomDataEntity>
 
-    <SaveAffix
-      v-show="infoDataEntityStore.hasChanges"
-      v-model:saving="saving"
-      @save="saveAll"
-      @cancel="cancelAll"
-    />
+    <SaveAffix v-show="infoDataEntityStore.hasChanges" @save="saveAll" @cancel="cancelAll" />
   </div>
 </template>
 
@@ -42,7 +37,6 @@
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import InfoEditableTree from '@/src/components/common/InfoDataEntity/InfoEditableTree/InfoEditableTree.vue'
 
-  const saving = ref(false)
   const loading = ref<boolean>(true)
   const infoDataEntityStore = useInfoDataEntityStore()
 
@@ -67,7 +61,9 @@
     loading.value = false
   }
 
-  const saveAll = () => {}
+  const saveAll = () => {
+    fetchData()
+  }
 
   const cancelAll = () => {
     infoDataEntityStore.resetData()

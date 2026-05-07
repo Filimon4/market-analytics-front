@@ -12,7 +12,7 @@
 <script setup lang="ts">
   import Affix from '../../common/Affix/Affix.vue'
 
-  const saving = defineModel<boolean>('saving', { required: true, default: false })
+  const saving = defineModel<boolean>('saving', { required: false, default: false })
 
   const emit = defineEmits<{
     (e: 'save'): void

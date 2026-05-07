@@ -1,6 +1,7 @@
 <template>
   <InfoDataEntity
     :fetch-data-req="async () => roleApi.getTableById(roleId)"
+    :save-data-req="async (data: IEntity['data']) => roleApi.saveRole(data)"
     :actions="[
       {
         title: 'Удалить',
@@ -14,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+  import type { IEntity } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
   import roleApi from '@/src/utils/api/role'
   import { computed } from 'vue'

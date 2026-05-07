@@ -1,3 +1,4 @@
+import type { IEntity } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import api from '..'
 
 class RoleApi {
@@ -34,6 +35,12 @@ class RoleApi {
       },
     })
     return data.data.result
+  }
+
+  async saveRole(data: IEntity['data']) {
+    const response = await api.patch<{ result: IEntity['data'] }>('/v1/project/role', data)
+
+    return response.data.result
   }
 }
 
