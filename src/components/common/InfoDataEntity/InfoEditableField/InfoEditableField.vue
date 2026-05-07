@@ -82,8 +82,11 @@
   })
 
   watch(
-    () => infoDataEntityStore.getValueOfField(props.field),
+    () => infoDataEntityStore.getCancelationToken(),
     () => {
+      if (isEditing.value) {
+        cancel()
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       localValue.value = infoDataEntityStore.getValueOfField(props.field) as any
     }

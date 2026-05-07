@@ -9,6 +9,7 @@ import type {
   Tree,
 } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import { cloneData } from '@/src/utils/cloneData'
+import { v4 as uuidv4 } from 'uuid'
 
 interface IInfoDataEntityStore {
   initialData: Ref<Data>
@@ -16,6 +17,9 @@ interface IInfoDataEntityStore {
   blocksData: Ref<IEntity['blocks']>
   blockDetailsData: Ref<IEntity['blockDetails']>
   hasChanges: Ref<boolean>
+
+  cancelationToken: Ref<string>
+  getCancelationToken: () => string
 
   // work with currentData
   setData: (data: IEntity['data']) => void
@@ -44,6 +48,12 @@ export const useInfoDataEntityStore = defineStore(
     const blockDetailsData = ref<IEntity['blockDetails']>([])
 
     const hasChanges = ref<boolean>(false)
+
+    const cancelationToken = ref<string>(uuidv4())
+
+    const getCancelationToken = () => {
+      return cancelationToken.value
+    }
 
     watch(
       () => JSON.stringify(currentData.value),
@@ -119,6 +129,7 @@ export const useInfoDataEntityStore = defineStore(
 
     const resetData = () => {
       currentData.value = cloneData(initialData.value)
+      cancelationToken.value = uuidv4()
     }
 
     const resetFieldValue = (field: IField) => {
@@ -149,6 +160,8 @@ export const useInfoDataEntityStore = defineStore(
       blocksData,
       blockDetailsData,
       hasChanges,
+      cancelationToken,
+      getCancelationToken,
       setData,
       getValueOfField,
       setBlocks,

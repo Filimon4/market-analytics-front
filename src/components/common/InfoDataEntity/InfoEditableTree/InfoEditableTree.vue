@@ -13,7 +13,7 @@
     IBlockTreeDetail,
   } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, watch } from 'vue'
   import Tree from '@/src/components/Ui/Tree/Tree.vue'
   import type { TreeNodes } from '@/src/components/Ui/Tree/types'
 
@@ -37,4 +37,12 @@
     }
     loaded.value = true
   })
+
+  watch(
+    () => infoDataEntityStore.getCancelationToken(),
+    () => {
+      const nodes = infoDataEntityStore.getTreeNodes(props.blockDetails)
+      localValue.value = nodes['nodes']
+    }
+  )
 </script>
