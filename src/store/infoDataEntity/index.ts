@@ -18,6 +18,7 @@ interface IInfoDataEntityStore {
   blockDetailsData: Ref<IEntity['blockDetails']>
   hasChanges: Ref<boolean>
 
+  // cancelation logic
   cancelationToken: Ref<string>
   getCancelationToken: () => string
 
@@ -37,6 +38,9 @@ interface IInfoDataEntityStore {
   resetData: () => void
   resetFieldValue: (field: IField) => unknown
   isFieldDiffFromDefault: (field: IField) => boolean
+
+  // save logic
+  getSaveData: () => IEntity['data']
 }
 
 export const useInfoDataEntityStore = defineStore(
@@ -65,6 +69,7 @@ export const useInfoDataEntityStore = defineStore(
     const setData = (data: IEntity['data']) => {
       initialData.value = cloneData(data)
       currentData.value = cloneData(data)
+      hasChanges.value = false
     }
 
     const setBlocks = (blocks: IEntity['blocks']) => {
@@ -154,6 +159,20 @@ export const useInfoDataEntityStore = defineStore(
       ) as Tree
     }
 
+    const getSaveData = () => {
+      const saveData = cloneData(currentData.value)
+
+      const treeBlockType = blocksData.value.find(block => block.blockType === 'tree')
+
+      if (treeBlockType) {
+        const block = getBlockDetails<IBlockTreeDetail>(treeBlockType.code)
+
+        saveData[block.treePath] = getTreeNodes(block).nodes
+      }
+
+      return saveData
+    }
+
     return {
       initialData,
       currentData,
@@ -173,6 +192,7 @@ export const useInfoDataEntityStore = defineStore(
       resetFieldValue,
       isFieldDiffFromDefault,
       getTreeNodes,
+      getSaveData,
     }
   }
 )

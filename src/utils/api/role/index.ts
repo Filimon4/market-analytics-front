@@ -38,7 +38,6 @@ class RoleApi {
   }
 
   async saveRole(data: IEntity['data']) {
-    console.log(data)
     const response = await api.patch<{ result: boolean }>('/v1/project/role', data)
 
     return response.data.result

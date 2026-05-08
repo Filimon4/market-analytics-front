@@ -1,4 +1,8 @@
 <template>
+  <div v-if="loading" class="loading-overlay" />
+  <Affix v-if="loading" :top="'50%'" :right="'50%'" :transform="'translateX(50%)'" :z-index="10000">
+    <n-spin size="large" />
+  </Affix>
   <div class="blocks">
     <div v-for="block in infoDataEntityStore.blocksData" :key="block.code" class="block">
       <slot name="block-header" :block="block" :title="block.name" :code="block.code">
@@ -41,15 +45,18 @@
   import type { Action } from './CustomDataEntity.type'
   import BlockTableContent from './DataContentType/BlockTableContent.vue'
   import BlockTreeContent from './DataContentType/BlockTreeContent.vue'
+  import Affix from '../../common/Affix/Affix.vue'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 
   const props = withDefaults(
     defineProps<{
       actions?: Action[]
+      loading: boolean
     }>(),
     {
       actions: () => [],
+      loading: false,
     }
   )
 
@@ -62,6 +69,13 @@
 </script>
 
 <style scoped>
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 9999;
+  }
+
   .blocks {
     display: flex;
     flex-direction: column;
