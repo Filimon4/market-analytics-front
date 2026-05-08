@@ -36,6 +36,7 @@
   import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import InfoEditableTree from '@/src/components/common/InfoDataEntity/InfoEditableTree/InfoEditableTree.vue'
+  import { cloneData } from '@/src/utils/cloneData'
 
   const loading = ref<boolean>(true)
   const infoDataEntityStore = useInfoDataEntityStore()
@@ -44,6 +45,10 @@
     fetchDataReq: {
       required: true,
       type: Function as PropType<() => Promise<IEntity>>,
+    },
+    saveDataReq: {
+      required: true,
+      type: Function as PropType<(data: IEntity['data']) => Promise<boolean>>,
     },
     actions: {
       required: false,
@@ -61,8 +66,16 @@
     loading.value = false
   }
 
-  const saveAll = () => {
-    fetchData()
+  const saveAll = async () => {
+    const resonse = await props.saveDataReq(
+      cloneData(infoDataEntityStore.currentData) as IEntity['data']
+    )
+
+    if (!resonse) {
+      return
+    }
+
+    await fetchData()
   }
 
   const cancelAll = () => {
