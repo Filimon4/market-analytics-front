@@ -95,7 +95,7 @@
       loading.value = true
 
       try {
-        const token = await authApi.singup(form.email, form.password)
+        const token = await authApi.singup(form.email, form.password, form.name)
         userStore.accessToken = token
         userStore.user = await userApi.getCurrent()
 

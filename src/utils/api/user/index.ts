@@ -1,6 +1,7 @@
+import type { IEntity } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import api from '..'
 import type { IUser } from '../models/user'
-import type { IUserToProject, IUserToProjectTableCurrent } from '../models/userToProject'
+import type { IUserToProject } from '../models/userToProject'
 
 class UserApi {
   async getCurrent(): Promise<IUser> {
@@ -13,10 +14,10 @@ class UserApi {
     return data
   }
 
-  async getTable(): Promise<IUserToProjectTableCurrent> {
+  async getTable(): Promise<IEntity> {
     const {
       data: { result },
-    } = await api.post<{ result: IUserToProjectTableCurrent }>('/v1/user/table/current')
+    } = await api.post<{ result: IEntity }>('/v1/user/table/current')
     return result
   }
 

@@ -1,16 +1,21 @@
 <template>
-  <n-input v-if="props.type === 'string'" v-model:value="value" size="small" :placeholder="''" />
+  <n-input
+    v-if="props.type === 'string'"
+    v-model:value="localValue"
+    size="small"
+    :placeholder="''"
+  />
 
   <n-input-number
     v-else-if="props.type === 'number'"
-    v-model:value="value"
+    v-model:value="localValue"
     size="small"
     :placeholder="''"
   />
 
   <n-select
     v-else-if="props.type === 'boolean'"
-    v-model:value="value"
+    v-model:value="localValue"
     :options="[
       { label: 'Все', value: '' },
       { label: 'Да', value: 'true' },
@@ -67,9 +72,12 @@
 
   const emits = defineEmits(['save', 'cancel'])
 
-  const value = defineModel<number | string | boolean | Record<string, unknown> | null>('value', {
-    required: true,
-  })
+  const localValue = defineModel<number | string | boolean | Record<string, unknown> | null>(
+    'value',
+    {
+      required: true,
+    }
+  )
 
   const props = withDefaults(defineProps<Partial<Pick<IField, 'selectUrl' | 'type'>>>(), {
     type: 'string',
@@ -84,18 +92,18 @@
   const syncSelectValueFromModel = () => {
     if (props.type !== 'select') return
 
-    if (typeof value.value === 'string' || typeof value.value === 'number') {
-      selectValue.value = value.value
+    if (typeof localValue.value === 'string' || typeof localValue.value === 'number') {
+      selectValue.value = localValue.value
       return
     }
 
     if (
-      value.value &&
-      typeof value.value === 'object' &&
-      'id' in value.value &&
-      (typeof value.value.id === 'string' || typeof value.value.id === 'number')
+      localValue.value &&
+      typeof localValue.value === 'object' &&
+      'id' in localValue.value &&
+      (typeof localValue.value.id === 'string' || typeof localValue.value.id === 'number')
     ) {
-      selectValue.value = value.value.id
+      selectValue.value = localValue.value.id
       return
     }
 
@@ -109,19 +117,19 @@
     const selectedOption = option as SelectOptionWithPayload | null
 
     selectValue.value = newValue
-    value.value = (selectedOption?.payload ?? null) as typeof value.value
+    localValue.value = (selectedOption?.payload ?? null) as typeof localValue.value
   }
 
   const syncDateTimeValueFromModel = () => {
     if (props.type !== 'datetime') return
 
-    if (typeof value.value === 'number') {
-      dateTimeValue.value = Number.isFinite(value.value) ? value.value : null
+    if (typeof localValue.value === 'number') {
+      dateTimeValue.value = Number.isFinite(localValue.value) ? localValue.value : null
       return
     }
 
-    if (typeof value.value === 'string' && value.value) {
-      const parsed = Date.parse(value.value)
+    if (typeof localValue.value === 'string' && localValue.value) {
+      const parsed = Date.parse(localValue.value)
       dateTimeValue.value = Number.isNaN(parsed) ? null : parsed
       return
     }
@@ -131,9 +139,9 @@
 
   const handleDateTimeUpdate = (newValue: number | null) => {
     dateTimeValue.value = newValue
-    value.value = (
+    localValue.value = (
       newValue === null ? null : new Date(newValue).toISOString()
-    ) as typeof value.value
+    ) as typeof localValue.value
   }
 
   const fetchDataForSelect = async () => {
@@ -164,7 +172,7 @@
   }
 
   watch(
-    () => value.value,
+    () => localValue.value,
     () => {
       syncSelectValueFromModel()
       syncDateTimeValueFromModel()

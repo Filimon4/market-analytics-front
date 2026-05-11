@@ -2,6 +2,7 @@
   <InfoDataEntity
     :fetch-data-req="userApi.getTable"
     :actions="actions"
+    :save-data-req="async () => false"
     @click:action="handleAction"
     v-model="triggerTableUpdate"
   />
@@ -25,8 +26,15 @@
   import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
   import userApi from '@/src/utils/api/user'
   import { ref } from 'vue'
+  import authApi from '@/src/utils/api/auth'
 
   const actions = ref<Action[]>([
+    {
+      title: 'Выйти',
+      code: 'logout',
+      size: 'medium',
+      blockCode: 'main',
+    },
     {
       title: 'Поменять проект',
       code: 'changeProject',
@@ -48,9 +56,22 @@
   const showProjectPicker = ref(false)
   const selectedProject = ref<IProjectModalItem | null>(null)
 
-  const handleAction = (actionCode: string) => {
+  const handleAction = async (actionCode: string) => {
     if (actionCode === 'changeProject') {
       showProjectPicker.value = true
+    } else if (actionCode === 'logout') {
+      const result = await authApi.logout()
+
+      if (!result) return
+
+      projectStore.panel = null
+      projectStore.permissions = null
+      projectStore.role = null
+      userStore.isAuth = false
+      userStore.tenantId = null
+      userStore.accessToken = null
+      userStore.user = null
+      window.location.href = '/auth/signin'
     }
   }
 

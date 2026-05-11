@@ -45,15 +45,18 @@
     if (props.value === null || props.value === undefined) return ''
 
     if (props.type === 'datetime') {
-      const valid = DateTime.fromISO(props.value as string, {
+      const dateTime = DateTime.fromISO(props.value as string, {
         zone: 'utc',
         locale: 'ru',
-      })
-        .setLocale('ru')
+      }).setLocale('ru')
+
+      if (!dateTime.isValid) return ''
+
+      const time = dateTime
         .toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
         .replace(' г.,', ' г.')
 
-      return valid || ''
+      return time || ''
     }
 
     if (props.type == 'number') {
@@ -61,6 +64,8 @@
     }
 
     if (props.type === 'boolean') {
+      if (!props.value && typeof props.value !== 'boolean') return ''
+
       return props.value ? 'Да' : 'Нет'
     }
 

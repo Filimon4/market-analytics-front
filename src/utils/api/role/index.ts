@@ -28,12 +28,12 @@ class RoleApi {
   }
 
   async deleteRole(id: number) {
-    const data = await api.delete<{ result: boolean }>('/v1/project/role', {
-      // TODO: сделать на бэке
-      data: {
-        roleId: id,
-      },
-    })
+    const data = await api.delete<{ result: boolean }>(`/v1/project/role/${id}`)
+    return data.data.result
+  }
+
+  async restoreRole(id: number) {
+    const data = await api.patch<{ result: boolean }>(`/v1/project/role/restore/${id}`)
     return data.data.result
   }
 

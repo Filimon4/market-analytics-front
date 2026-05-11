@@ -6,7 +6,7 @@
   >
     <div v-if="!isEditing" :class="{ 'view-mode': true, 'resetable-field': canBeReseted }">
       <InfoField
-        :value="localValue || ''"
+        :value="localValue"
         :type="field.type"
         :editable="canEdit"
         :disabled="isDisabled"

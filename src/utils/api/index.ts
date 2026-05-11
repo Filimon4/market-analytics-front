@@ -1,6 +1,9 @@
 import { useUserStore } from '@/src/store/user'
 import axios, { type AxiosInstance, type AxiosError } from 'axios'
+import { createDiscreteApi } from 'naive-ui'
 import authApi from './auth'
+
+const { message } = createDiscreteApi(['message'])
 
 export const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL_API,
@@ -28,9 +31,16 @@ api.interceptors.response.use(
   response => response,
   async (error: AxiosError) => {
     const userStore = useUserStore()
-    const originalRequest = error.config!
+    const originalRequest = error.config as AxiosError['config'] & { _retryCount?: number }
 
     if (error.response?.status === 401) {
+      originalRequest._retryCount = originalRequest._retryCount || 0
+      if (originalRequest._retryCount >= 2) {
+        return Promise.reject(error)
+      }
+
+      originalRequest._retryCount += 1
+
       try {
         const token = await authApi.refresh().catch(error => {
           if (error.status === 401) {
@@ -50,6 +60,19 @@ api.interceptors.response.use(
       } catch (refreshError) {
         return Promise.reject(refreshError)
       }
+    }
+
+    return Promise.reject(error)
+  }
+)
+
+api.interceptors.response.use(
+  response => response,
+  (error: AxiosError<{ message?: string; error?: string }>) => {
+    if (error.response?.status !== 401) {
+      const backendMessage = error.response?.data?.message || error.response?.data?.error
+      const fallbackMessage = error.message || 'Произошла ошибка при выполнении запроса'
+      message.error(backendMessage || fallbackMessage)
     }
 
     return Promise.reject(error)

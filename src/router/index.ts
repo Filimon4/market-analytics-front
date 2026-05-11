@@ -19,8 +19,13 @@ import Roles from '../views/projects/roles/Roles.vue'
 import Role from '../views/projects/roles/Role.vue'
 import CreateRole from '../views/projects/roles/CreateRole.vue'
 import CreateApiKey from '../views/projects/apikeys/CreateApiKey.vue'
+import Invite from '../views/invite/Invite.vue'
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: '/invite',
+    component: Invite,
+  },
   {
     path: '/auth',
     component: Auth,
@@ -91,7 +96,7 @@ router.beforeEach((to, _from, next) => {
     }
   }
 
-  if (to.path.startsWith('/') && !to.path.split('/').includes('auth')) {
+  if (to.path.startsWith('/') && !to.path.startsWith('/auth') && !to.path.startsWith('/invite')) {
     if (!userStore.accessToken) {
       next('/auth/signin')
       return

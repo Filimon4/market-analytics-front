@@ -59,6 +59,7 @@
   const fetchData = async () => {
     loading.value = true
     const result = await props.fetchDataReq()
+    infoDataEntityStore.resetData()
     infoDataEntityStore.setData(result.data)
     infoDataEntityStore.setBlocks(result.blocks)
     infoDataEntityStore.setBlockDetails(result.blockDetails)

@@ -3,6 +3,7 @@
     <CustomDataEntity
       :blocks="apiResult.blocks"
       :block-details="apiResult.blockDetails"
+      :loading="false"
       :data="data"
     >
       <template #field="{ field }">
@@ -35,6 +36,7 @@
   const router = useRouter()
 
   const saving = ref(false)
+  const loading = ref<boolean>(false)
 
   const data = ref<Data>({})
 
@@ -55,6 +57,7 @@
   })
 
   async function fetchData() {
+    loading.value = true
     const response = await props.fetchDataReq()
 
     apiResult.value = {
@@ -75,6 +78,7 @@
       .forEach(defaultField => {
         handleFieldUpdate({ field: defaultField, value: defaultField.createDefault })
       })
+    loading.value = false
   }
 
   function handleFieldUpdate({ field, value }: { field: IField; value: Data[string] }) {

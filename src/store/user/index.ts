@@ -6,7 +6,7 @@ import type { IUser } from '@/src/utils/api/models/user'
 interface IUserStore {
   isAuth: Ref<boolean>
   user: Ref<IUser | null>
-  tenantId: Ref<number>
+  tenantId: Ref<number | null>
   accessToken: Ref<string | null>
 }
 
@@ -26,7 +26,7 @@ export const useUserStore = defineStore('useUserStore', (): IUserStore => {
 
   const tenantId = useStorage<number>('tenantId', null, localStorage, {
     mergeDefaults: true,
-  }) satisfies Ref<number>
+  }) satisfies Ref<number | null>
 
   const accessToken = useStorage<string>('accessToken', null, localStorage, {
     mergeDefaults: true,

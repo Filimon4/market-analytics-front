@@ -86,8 +86,7 @@
 
         message.success('Успешный вход!')
         router.push('/')
-      } catch (err) {
-        console.error(err)
+      } catch {
         message.error('Ошибка входа. Проверьте данные.')
       } finally {
         loading.value = false

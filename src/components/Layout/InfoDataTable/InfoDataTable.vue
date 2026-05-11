@@ -130,6 +130,7 @@
     router.push(`${props.redirectEntityUrl}/${entity.id}`)
   }
 
+  // TODO: Доделать
   const selectSearch = (column: ITableColumn) => {}
 
   const fetchData = async () => {
@@ -148,8 +149,12 @@
     return field.split('.').reduce((obj: any, key: string) => obj?.[key], data)
   }
 
-  onMounted(() => {
-    fetchData()
+  onMounted(async () => {
+    await fetchData()
+
+    for (const column of tableColumns.value.filter(c => c.type === 'boolean')) {
+      tableFilters.value[column.code] = ''
+    }
   })
 </script>
 

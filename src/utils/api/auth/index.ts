@@ -19,14 +19,15 @@ export class AuthApi {
     return token
   }
 
-  async singup(email: string, password: string) {
+  async singup(email: string, password: string, name: string) {
     const {
       data: { token },
     } = await api.post<{ token: string }>(
-      '/v1/auth/singup',
+      '/v1/auth/signup',
       {
         email,
         password,
+        name,
       },
       {
         withCredentials: true,
@@ -47,6 +48,18 @@ export class AuthApi {
     } = await axios.post<{ token: string }>('/v1/auth/refresh', {}, config)
 
     return token
+  }
+
+  async logout() {
+    const response = await api.post<{ result: boolean }>(
+      '/v1/auth/logout',
+      {},
+      {
+        withCredentials: true,
+      }
+    )
+
+    return response.data.result
   }
 }
 
