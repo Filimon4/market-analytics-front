@@ -1,38 +1,29 @@
 <template>
-  <n-input
-    v-if="props.type === 'string'"
+  <InfoInput
+    v-if="props.type === 'string' && typeof localValue === 'string'"
     v-model:value="localValue"
-    size="small"
-    :placeholder="''"
   />
 
-  <n-input-number
-    v-else-if="props.type === 'number'"
+  <InfoInputNumber
+    v-else-if="props.type === 'number' && typeof localValue === 'number'"
     v-model:value="localValue"
-    size="small"
-    :placeholder="''"
   />
 
-  <n-select
-    v-else-if="props.type === 'boolean'"
+  <InfoBooleanSelect
+    v-else-if="
+      props.type === 'boolean' &&
+      typeof localValue === 'number' &&
+      (localValue === 1 || localValue === 0)
+    "
     v-model:value="localValue"
-    :options="[
-      { label: 'Все', value: '' },
-      { label: 'Да', value: 'true' },
-      { label: 'Нет', value: 'false' },
-    ]"
-    size="small"
-    :placeholder="''"
   />
 
-  <n-select
-    v-else-if="props.type === 'select'"
-    :value="selectValue"
-    :options="selectOptions"
-    :loading="loading"
-    size="small"
-    :placeholder="''"
-    @update:value="handleSelectUpdate"
+  <InfoSelect
+    v-else-if="
+      props.type === 'select' && (typeof localValue === 'string' || typeof localValue === 'number')
+    "
+    v-model:value="localValue"
+    :select-url="props.selectUrl"
   />
 
   <n-date-picker
@@ -65,60 +56,25 @@
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
   import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
-  import api from '@/src/utils/api'
   import { onMounted, ref, watch } from 'vue'
-  import type { SelectOptionWithPayload, SelectResponseItem } from './InfoEditField.types'
-  import type { SelectOption } from 'naive-ui'
+  import { NDatePicker } from 'naive-ui'
+  import InfoInput from './components/InfoInput.vue'
+  import InfoInputNumber from './components/InfoInputNumber.vue'
+  import InfoBooleanSelect from './components/InfoBooleanSelect.vue'
+  import InfoSelect from './components/InfoSelect.vue'
 
   const emits = defineEmits(['save', 'cancel'])
 
-  const localValue = defineModel<number | string | boolean | Record<string, unknown> | null>(
-    'value',
-    {
-      required: true,
-    }
-  )
+  const localValue = defineModel<number | string | Record<string, unknown> | null>('value', {
+    required: true,
+  })
 
   const props = withDefaults(defineProps<Partial<Pick<IField, 'selectUrl' | 'type'>>>(), {
     type: 'string',
-    selectUrl: undefined,
+    selectUrl: '',
   })
 
-  const selectOptions = ref<SelectOptionWithPayload[]>([])
-  const selectValue = ref<string | number | null>(null)
   const dateTimeValue = ref<number | null>(null)
-  const loading = ref(false)
-
-  const syncSelectValueFromModel = () => {
-    if (props.type !== 'select') return
-
-    if (typeof localValue.value === 'string' || typeof localValue.value === 'number') {
-      selectValue.value = localValue.value
-      return
-    }
-
-    if (
-      localValue.value &&
-      typeof localValue.value === 'object' &&
-      'id' in localValue.value &&
-      (typeof localValue.value.id === 'string' || typeof localValue.value.id === 'number')
-    ) {
-      selectValue.value = localValue.value.id
-      return
-    }
-
-    selectValue.value = null
-  }
-
-  const handleSelectUpdate = (
-    newValue: string | number | null,
-    option: SelectOption | SelectOption[] | null
-  ) => {
-    const selectedOption = option as SelectOptionWithPayload | null
-
-    selectValue.value = newValue
-    localValue.value = (selectedOption?.payload ?? null) as typeof localValue.value
-  }
 
   const syncDateTimeValueFromModel = () => {
     if (props.type !== 'datetime') return
@@ -144,47 +100,15 @@
     ) as typeof localValue.value
   }
 
-  const fetchDataForSelect = async () => {
-    if (!props.selectUrl) {
-      selectOptions.value = []
-      return
-    }
-
-    loading.value = true
-
-    const response = await api.get<{ result: SelectResponseItem[] }>(props.selectUrl).catch(() => {
-      return null
-    })
-
-    if (!response?.data.result) {
-      loading.value = false
-      return
-    }
-
-    selectOptions.value = response.data.result.map(item => ({
-      label: item.code,
-      value: item.id,
-      payload: item,
-    }))
-    syncSelectValueFromModel()
-
-    loading.value = false
-  }
-
   watch(
     () => localValue.value,
     () => {
-      syncSelectValueFromModel()
       syncDateTimeValueFromModel()
     },
     { deep: true }
   )
 
   onMounted(() => {
-    if (props.type === 'select') {
-      fetchDataForSelect()
-    }
-
     if (props.type === 'datetime') {
       syncDateTimeValueFromModel()
     }

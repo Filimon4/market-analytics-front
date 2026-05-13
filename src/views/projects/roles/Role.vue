@@ -1,3 +1,4 @@
+<!-- TODO: Permissions могут добалвтья, поэтому нужно придумать добавление доступов динамическое -->
 <template>
   <InfoDataEntity
     :fetch-data-req="async () => roleApi.getTableById(roleId)"

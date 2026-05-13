@@ -39,8 +39,8 @@
       </n-spin>
 
       <div class="modal-footer">
-        <n-button @click="cancel">Cancel</n-button>
-        <n-button type="primary" :disabled="!selectedId" @click="confirm"> Выбрать </n-button>
+        <n-button @click="cancel">Закрыть</n-button>
+        <n-button type="primary" :disabled="!selectedId" @click="confirm">Выбрать</n-button>
       </div>
     </div>
   </n-modal>

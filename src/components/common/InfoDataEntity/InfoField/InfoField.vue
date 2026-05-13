@@ -64,8 +64,6 @@
     }
 
     if (props.type === 'boolean') {
-      if (!props.value && typeof props.value !== 'boolean') return ''
-
       return props.value ? 'Да' : 'Нет'
     }
 
