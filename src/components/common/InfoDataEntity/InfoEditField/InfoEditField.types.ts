@@ -1,12 +1,8 @@
-import type { SelectOption } from 'naive-ui'
+import type { SelectBaseOption } from 'naive-ui/es/select/src/interface'
 
-export type SelectResponseItem = {
-  id: string
-  code: string
-  [key: string]: unknown
-}
-
-export type SelectOptionWithPayload = SelectOption & {
-  value: string
-  payload: SelectResponseItem
+export type SelectOptionWithPayload = SelectBaseOption & {
+  payload: {
+    id: number
+    code: string
+  }
 }

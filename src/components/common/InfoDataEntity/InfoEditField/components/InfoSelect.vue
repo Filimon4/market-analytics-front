@@ -1,6 +1,7 @@
+<!-- TODO: Поправить сохранение селекта и сброс обратно -->
 <template>
   <n-select
-    v-model:value="localValue"
+    v-model:value="selectedValue"
     :options="options"
     size="small"
     :placeholder="''"
@@ -11,13 +12,15 @@
 
 <script setup lang="ts">
   import { NSelect, type SelectOption } from 'naive-ui'
-  import type { SelectOptionWithPayload, SelectResponseItem } from '../InfoEditField.types'
-  import { onMounted, ref } from 'vue'
+  import type { SelectOptionWithPayload } from '../InfoEditField.types'
+  import { onMounted, ref, watch } from 'vue'
   import api from '@/src/utils/api'
 
-  const localValue = defineModel<string | number>('value', {
+  const localValue = defineModel<string>('value', {
     required: true,
   })
+
+  const selectedValue = ref<number>()
 
   const props = withDefaults(
     defineProps<{
@@ -29,11 +32,8 @@
   const loading = ref<boolean>(false)
   const options = ref<SelectOptionWithPayload[]>([])
 
-  const handleSelectUpdate = (
-    newValue: string | number | null,
-    option: SelectOption | SelectOption[] | null
-  ) => {
-    console.log(newValue, option)
+  const handleSelectUpdate = (newValue: number, option: SelectOption) => {
+    selectedValue.value = option.value as number
   }
 
   const fetchDataForSelect = async () => {
@@ -44,9 +44,11 @@
 
     loading.value = true
 
-    const response = await api.get<{ result: SelectResponseItem[] }>(props.selectUrl).catch(() => {
-      return null
-    })
+    const response = await api
+      .get<{ result: { code: string; id: number }[] }>(props.selectUrl)
+      .catch(() => {
+        return null
+      })
 
     if (!response?.data.result) {
       loading.value = false
@@ -62,7 +64,19 @@
     loading.value = false
   }
 
-  onMounted(() => {
-    fetchDataForSelect()
+  onMounted(async () => {
+    await fetchDataForSelect()
+
+    selectedValue.value = Number(options.value.find(opt => opt.label === localValue.value)?.value)
   })
+
+  watch(
+    () => selectedValue.value,
+    () => {
+      const optionNewValue = String(
+        options.value.find(opt => opt.value === selectedValue.value)?.label
+      )
+      localValue.value = optionNewValue
+    }
+  )
 </script>

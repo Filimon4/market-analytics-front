@@ -27,6 +27,7 @@
   import userApi from '@/src/utils/api/user'
   import { ref } from 'vue'
   import authApi from '@/src/utils/api/auth'
+  import ProjectModal from '@/src/components/Ui/ProjectModal/ProjectModal.vue'
 
   const actions = ref<Action[]>([
     {

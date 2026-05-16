@@ -63,12 +63,13 @@
       </div>
     </template>
 
-    <template #row="{ row, col }">
+    <!-- TODO: Поправить -->
+    <!-- <template #row="{ row, col }">
       <InfoField
         :value="col?.path ? getValueForField(col.path, row) : row[col.code]"
         :type="col.type"
       />
-    </template>
+    </template> -->
   </CustomDataTable>
 </template>
 
@@ -82,7 +83,7 @@
     ITableColumn,
     ITableList,
   } from '../CustomDataTable/CustomDataTable.type'
-  import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
+  // import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
 
   const emit = defineEmits(['click:action'])
 

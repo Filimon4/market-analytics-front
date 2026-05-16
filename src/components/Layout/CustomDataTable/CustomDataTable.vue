@@ -38,7 +38,7 @@
           <tr class="default-row" v-for="row in data" :key="row.id">
             <td v-for="col in columns" :key="col.code" @click="emit('click:entity', row)">
               <slot name="row" :row="row" :col="col">
-                {{ col?.path ? getValueForField(col.path) : (row[col.code] ?? '—') }}
+                {{ col?.path ? getValueForField(col.path) : '—' }}
               </slot>
             </td>
           </tr>

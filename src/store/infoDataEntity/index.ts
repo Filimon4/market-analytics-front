@@ -25,6 +25,8 @@ interface IInfoDataEntityStore {
   // work with currentData
   setData: (data: IEntity['data']) => void
   getValueOfField: (field: IField, isInit?: boolean) => unknown
+  canEditField: (field: IField) => boolean
+  isFieldDisabled: (field: IField) => boolean
   setBlocks: (blocks: IEntity['blocks']) => void
   getColumnsForBlock: (blockCode: string, capacity: number, max: number) => IField[][]
   setBlockDetails: (blockDetails: IEntity['blockDetails']) => void
@@ -128,6 +130,18 @@ export const useInfoDataEntityStore = defineStore(
       ) as unknown
     }
 
+    const canEditField = (field: IField) => {
+      if (field?.createEditable) {
+        return field?.createEditable
+      }
+
+      return field?.editable
+    }
+
+    const isFieldDisabled = (field: IField) => {
+      return field?.editable === false && !field?.createEditable
+    }
+
     const getBlockDetails = <T extends IBlockTreeDetail | IBlockDetail>(blockCode: string): T => {
       return blockDetailsData.value.find(block => block.blockCode === blockCode) as T
     }
@@ -138,9 +152,7 @@ export const useInfoDataEntityStore = defineStore(
     }
 
     const resetFieldValue = (field: IField) => {
-      const initKey = field.path.split('.')[0]
-      if (!initKey) throw new Error(`There is no init key in field: ${JSON.stringify(field)}`)
-      currentData.value[initKey] = initialData.value[initKey]
+      updateFieldValue(field.path, getValueOfField(field, true))
       return getValueOfField(field)
     }
 
@@ -183,6 +195,8 @@ export const useInfoDataEntityStore = defineStore(
       getCancelationToken,
       setData,
       getValueOfField,
+      canEditField,
+      isFieldDisabled,
       setBlocks,
       getColumnsForBlock,
       setBlockDetails,

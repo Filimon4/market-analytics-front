@@ -1,35 +1,27 @@
 <template>
   <div
     :class="{
-      disabled: isDisabled,
+      disabled: infoDataEntityStore.isFieldDisabled(field),
     }"
   >
-    <div v-if="!isEditing" :class="{ 'view-mode': true, 'resetable-field': canBeReseted }">
-      <InfoField
-        :value="localValue"
-        :type="field.type"
-        :editable="canEdit"
-        :disabled="isDisabled"
-        :resetable="canBeReseted && !isDisabled"
-        @click:edit="toggleEdit"
-        @click:reset="onResetField"
-      />
+    <div
+      v-if="!isEditing"
+      :class="{
+        'view-mode': true,
+        'resetable-field': infoDataEntityStore.isFieldDiffFromDefault(props.field),
+      }"
+    >
+      <InfoField :field="props.field" @click:edit="toggleEdit" @click:reset="onResetField" />
     </div>
 
     <div v-else class="edit-mode">
-      <InfoEditField
-        :type="field.type"
-        :select-url="field.selectUrl"
-        v-model:value="localValue"
-        @save="save"
-        @cancel="cancel"
-      />
+      <InfoEditField :field="props.field" @exist-editing="onExistEditing" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted, watch } from 'vue'
+  import { ref } from 'vue'
   import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoField from '@/src/components/common/InfoDataEntity/InfoField/InfoField.vue'
   import InfoEditField from '@/src/components/common/InfoDataEntity/InfoEditField/InfoEditField.vue'
@@ -42,55 +34,23 @@
   }>()
 
   const isEditing = ref(false)
-  const canBeReseted = computed(() => {
-    return infoDataEntityStore.isFieldDiffFromDefault(props.field)
-  })
-  const localValue = ref()
-
-  const canEdit = computed(() => {
-    if (props.field?.createEditable) {
-      return props.field?.createEditable
-    }
-
-    return props.field?.editable
-  })
-  const isDisabled = computed(() => props.field?.editable === false && !props.field?.createEditable)
 
   const onResetField = () => {
     infoDataEntityStore.resetFieldValue(props.field)
   }
 
   const toggleEdit = () => {
-    if (!canEdit.value || isDisabled.value) return
+    if (
+      !infoDataEntityStore.canEditField(props.field) ||
+      infoDataEntityStore.isFieldDisabled(props.field)
+    )
+      return
     isEditing.value = !isEditing.value
   }
 
-  const save = () => {
-    infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, localValue.value)
-    infoDataEntityStore.getValueOfField(props.field)
+  const onExistEditing = () => {
     isEditing.value = false
   }
-
-  const cancel = () => {
-    infoDataEntityStore.resetFieldValue(props.field)
-    isEditing.value = false
-  }
-
-  onMounted(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    localValue.value = infoDataEntityStore.getValueOfField(props.field) as any
-  })
-
-  watch(
-    () => infoDataEntityStore.getCancelationToken(),
-    () => {
-      if (isEditing.value) {
-        cancel()
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      localValue.value = infoDataEntityStore.getValueOfField(props.field) as any
-    }
-  )
 </script>
 
 <style scoped>

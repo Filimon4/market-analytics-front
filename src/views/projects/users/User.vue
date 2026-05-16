@@ -1,5 +1,8 @@
 <template>
-  <InfoDataEntity :fetch-data-req="async () => userApi.getTableById(userId)" />
+  <InfoDataEntity
+    :fetch-data-req="async () => userApi.getTableById(userId)"
+    :save-data-req="async () => true"
+  />
 </template>
 
 <script setup lang="ts">
