@@ -55,6 +55,7 @@
   import type { ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
 
+  // TODO: Вот тут закончил
   const infoDataTableStore = useInfoDataTableStore()
 
   const props = withDefaults(
