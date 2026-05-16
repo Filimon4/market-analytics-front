@@ -1,78 +1,89 @@
 <template>
-  <CustomDataTable
-    v-model:filters="infoDataTableStore.filters"
-    :columns="infoDataTableStore.getColumns()"
-    :data="infoDataTableStore.getTableData()"
-    :actions="actions"
-    :loading="pageLoading"
-    :maxPage="infoDataTableStore.getMaxPage()"
-    :pageSize="infoDataTableStore.getPageSize()"
-    :page="infoDataTableStore.getPage()"
-    :total="infoDataTableStore.getTotal()"
-    @click:entity="handleClickEntity"
-    @click:action="code => emit('click:action', code)"
-    @change:page:next="() => {}"
-    @change:page:reset="() => {}"
-    @change:page:size="(newSize: number) => {}"
-  >
-    <template #header="{ column, updateValue }">
-      <div class="custom-header">
-        <div class="title">{{ column.name }}</div>
-        <template v-if="column.filtrable !== false">
-          <n-input
-            v-if="column.type === 'string'"
-            v-model:value="infoDataTableStore.filters[column.code]"
-            placeholder=""
-            size="small"
-            :bordered="false"
-            @update:value="updateValue($event)"
-          />
+  <div>
+    <div class="block-actions" v-if="actions.length">
+      <button
+        v-for="action in actions"
+        :key="action.code"
+        class="action-btn"
+        :class="`size-${action.size}`"
+        @click="code => emit('click:action', code)"
+      >
+        {{ action.title }}
+      </button>
+    </div>
+    <CustomDataTable
+      v-model:filters="infoDataTableStore.filters"
+      :columns="infoDataTableStore.getColumns()"
+      :data="infoDataTableStore.getTableData()"
+      :loading="pageLoading"
+      :maxPage="infoDataTableStore.getMaxPage()"
+      :pageSize="infoDataTableStore.getPageSize()"
+      :page="infoDataTableStore.getPage()"
+      :total="infoDataTableStore.getTotal()"
+      @click:entity="handleClickEntity"
+      @change:page:next="() => {}"
+      @change:page:reset="() => {}"
+      @change:page:size="(newSize: number) => {}"
+    >
+      <template #header="{ column, updateValue }">
+        <div class="custom-header">
+          <div class="title">{{ column.name }}</div>
+          <template v-if="column.filtrable !== false">
+            <n-input
+              v-if="column.type === 'string'"
+              v-model:value="infoDataTableStore.filters[column.code]"
+              placeholder=""
+              size="small"
+              :bordered="false"
+              @update:value="updateValue($event)"
+            />
 
-          <n-input-number
-            v-else-if="column.type === 'number'"
-            v-model:value="infoDataTableStore.filters[column.code]"
-            placeholder=""
-            size="small"
-            :bordered="false"
-            @update:value="updateValue($event)"
-          />
+            <n-input-number
+              v-else-if="column.type === 'number'"
+              v-model:value="infoDataTableStore.filters[column.code]"
+              placeholder=""
+              size="small"
+              :bordered="false"
+              @update:value="updateValue($event)"
+            />
 
-          <n-select
-            v-else-if="column.type === 'boolean'"
-            v-model:value="infoDataTableStore.filters[column.code]"
-            :options="[
-              { label: 'Все', value: '' },
-              { label: 'Да', value: 'true' },
-              { label: 'Нет', value: 'false' },
-            ]"
-            size="small"
-            :bordered="false"
-            placeholder=""
-            @update:value="updateValue"
-          />
+            <n-select
+              v-else-if="column.type === 'boolean'"
+              v-model:value="infoDataTableStore.filters[column.code]"
+              :options="[
+                { label: 'Все', value: '' },
+                { label: 'Да', value: 'true' },
+                { label: 'Нет', value: 'false' },
+              ]"
+              size="small"
+              :bordered="false"
+              placeholder=""
+              @update:value="updateValue"
+            />
 
-          <n-select
-            v-else-if="column.type === 'select'"
-            :value="infoDataTableStore.filters[column.code]"
-            remote
-            size="small"
-            :bordered="false"
-            placeholder=""
-            @update:value="updateValue"
-            @update:show="(opened: boolean) => opened"
-          />
-        </template>
-      </div>
-    </template>
+            <n-select
+              v-else-if="column.type === 'select'"
+              :value="infoDataTableStore.filters[column.code]"
+              remote
+              size="small"
+              :bordered="false"
+              placeholder=""
+              @update:value="updateValue"
+              @update:show="(opened: boolean) => opened"
+            />
+          </template>
+        </div>
+      </template>
 
-    <!-- TODO: Поправить -->
-    <!-- <template #row="{ row, col }">
-      <InfoField
-        :value="col?.path ? getValueForField(col.path, row) : row[col.code]"
-        :type="col.type"
-      />
-    </template> -->
-  </CustomDataTable>
+      <!-- TODO: Поправить -->
+      <!-- <template #row="{ row, col }">
+        <InfoField
+          :value="col?.path ? getValueForField(col.path, row) : row[col.code]"
+          :type="col.type"
+        />
+      </template> -->
+    </CustomDataTable>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -140,5 +151,41 @@
     flex-direction: column;
     gap: 6px;
     min-width: 100px;
+  }
+
+  /* Action buttons area */
+  .block-actions {
+    padding: 24px;
+    padding-bottom: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .action-btn {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    background: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.12s;
+  }
+
+  .action-btn:hover {
+    background: #f1f5f9;
+  }
+
+  /* Size variants */
+  .size-small {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  .size-medium {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+  .size-large {
+    padding: 0.65rem 1.35rem;
+    font-size: 1.05rem;
   }
 </style>
