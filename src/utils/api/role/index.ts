@@ -1,9 +1,11 @@
-import type { IEntity } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import api from '..'
+import type { IEntity } from '../models/infoEntiyt.base'
+import type { ITableList } from '../models/infoTable.base'
+import type { IRole } from '../models/role'
 
 class RoleApi {
   async getTableList(page: number, size: number, filter: Record<string, string | number>) {
-    const data = await api.post('/v1/project/role/table/list', {
+    const data = await api.post<{ result: ITableList<IRole> }>('/v1/project/role/table/list', {
       page,
       size,
       filter,
@@ -13,7 +15,7 @@ class RoleApi {
   }
 
   async getTableById(roleId: number) {
-    const data = await api.get(`/v1/project/role/table/${roleId}`)
+    const data = await api.get<{ result: IEntity }>(`/v1/project/role/table/${roleId}`)
     return data.data.result
   }
 

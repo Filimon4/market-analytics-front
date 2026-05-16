@@ -22,10 +22,10 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoField from '@/src/components/common/InfoDataEntity/InfoField/InfoField.vue'
   import InfoEditField from '@/src/components/common/InfoDataEntity/InfoEditField/InfoEditField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+  import type { IField } from '@/src/utils/api/models/infoEntiyt.base'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 

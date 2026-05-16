@@ -27,15 +27,12 @@
 <script setup lang="ts">
   import { onMounted, ref, watch, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
-  import type {
-    Action,
-    IBlockTreeDetail,
-    IEntity,
-  } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
+  import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
   import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import InfoEditableTree from '@/src/components/common/InfoDataEntity/InfoEditableTree/InfoEditableTree.vue'
+  import type { IBlockTreeDetail, IEntity } from '@/src/utils/api/models/infoEntiyt.base'
 
   const loading = ref<boolean>(true)
   const infoDataEntityStore = useInfoDataEntityStore()

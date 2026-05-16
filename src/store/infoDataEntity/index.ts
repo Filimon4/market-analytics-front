@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref, watch, type Ref } from 'vue'
-import type {
-  Data,
-  IBlockDetail,
-  IBlockTreeDetail,
-  IEntity,
-  IField,
-  Tree,
-} from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import { cloneData } from '@/src/utils/cloneData'
 import { v4 as uuidv4 } from 'uuid'
+import type {
+  Data,
+  IEntity,
+  IField,
+  IBlockTreeDetail,
+  IBlockDetail,
+  Tree,
+} from '@/src/utils/api/models/infoEntiyt.base'
 
 interface IInfoDataEntityStore {
   initialData: Ref<Data>

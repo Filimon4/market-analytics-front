@@ -1,17 +1,19 @@
 <template>
   <CustomDataTable
-    :columns="tableColumns"
-    :data="tableItems"
+    v-model:filters="infoDataTableStore.filters"
+    :columns="infoDataTableStore.getColumns()"
+    :data="infoDataTableStore.getTableData()"
     :actions="actions"
-    v-model:page="pageCurrent"
-    v-model:pageSize="pageSize"
-    v-model:filters="tableFilters"
-    v-model:maxPage="pageMax"
-    :total="itemsTotal"
     :loading="pageLoading"
-    @change="fetchData"
+    :maxPage="infoDataTableStore.getMaxPage()"
+    :pageSize="infoDataTableStore.getPageSize()"
+    :page="infoDataTableStore.getPage()"
+    :total="infoDataTableStore.getTotal()"
     @click:entity="handleClickEntity"
     @click:action="code => emit('click:action', code)"
+    @change:page:next="() => {}"
+    @change:page:reset="() => {}"
+    @change:page:size="(newSize: number) => {}"
   >
     <template #header="{ column, updateValue }">
       <div class="custom-header">
@@ -19,7 +21,7 @@
         <template v-if="column.filtrable !== false">
           <n-input
             v-if="column.type === 'string'"
-            v-model:value="tableFilters[column.code]"
+            v-model:value="infoDataTableStore.filters[column.code]"
             placeholder=""
             size="small"
             :bordered="false"
@@ -28,7 +30,7 @@
 
           <n-input-number
             v-else-if="column.type === 'number'"
-            v-model:value="tableFilters[column.code]"
+            v-model:value="infoDataTableStore.filters[column.code]"
             placeholder=""
             size="small"
             :bordered="false"
@@ -37,7 +39,7 @@
 
           <n-select
             v-else-if="column.type === 'boolean'"
-            v-model:value="tableFilters[column.code]"
+            v-model:value="infoDataTableStore.filters[column.code]"
             :options="[
               { label: 'Все', value: '' },
               { label: 'Да', value: 'true' },
@@ -51,13 +53,13 @@
 
           <n-select
             v-else-if="column.type === 'select'"
-            :value="tableFilters[column.code]"
+            :value="infoDataTableStore.filters[column.code]"
             remote
             size="small"
             :bordered="false"
             placeholder=""
             @update:value="updateValue"
-            @update:show="(opened: boolean) => opened && selectSearch(column)"
+            @update:show="(opened: boolean) => opened"
           />
         </template>
       </div>
@@ -77,13 +79,12 @@
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
   import { useRouter } from 'vue-router'
-  import type {
-    Action,
-    DataRow,
-    ITableColumn,
-    ITableList,
-  } from '../CustomDataTable/CustomDataTable.type'
+  import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
+  import type { ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import type { Action } from '../CustomDataTable/CustomDataTable.type'
   // import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
+
+  const infoDataTableStore = useInfoDataTableStore()
 
   const emit = defineEmits(['click:action'])
 
@@ -97,11 +98,11 @@
     fetchDataReq: {
       required: true,
       type: Function as PropType<
-        <T extends DataRow>(
+        <T extends ITableRow>(
           page: number,
           size: number,
           filters: Record<string, string | number>
-        ) => Promise<ITableList<T[]>>
+        ) => Promise<ITableList<T>>
       >,
     },
     defaultPageSize: {
@@ -112,50 +113,24 @@
     actions: {
       required: false,
       type: Array as PropType<Action[]>,
+      default: () => [],
     },
   })
 
-  // Data table
-  const tableItems = ref<DataRow[]>([])
-  const tableColumns = ref<ITableColumn[]>([])
-  const tableFilters = ref<Record<string, string | number>>({})
-
-  // Date page
   const pageLoading = ref<boolean>(false)
-  const pageCurrent = ref<number>(1)
-  const pageSize = ref<number>(props.defaultPageSize)
-  const pageMax = ref<number>(0)
-  const itemsTotal = ref<number>(0)
 
-  const handleClickEntity = (entity: DataRow) => {
-    router.push(`${props.redirectEntityUrl}/${entity.id}`)
-  }
-
-  // TODO: Доделать
-  const selectSearch = (column: ITableColumn) => {}
-
-  const fetchData = async () => {
-    pageLoading.value = true
-    const allData = await props.fetchDataReq(pageCurrent.value, pageSize.value, tableFilters.value)
-    tableItems.value = allData.data || []
-    tableColumns.value = allData.columns
-    pageLoading.value = false
-
-    pageMax.value = allData.maxPage
-    itemsTotal.value = allData.total
-  }
-
-  const getValueForField = (field: string, data: object) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return field.split('.').reduce((obj: any, key: string) => obj?.[key], data)
+  const handleClickEntity = (entity: ITableRow) => {
+    router.push(infoDataTableStore.getEntityRedirectUrl(entity))
   }
 
   onMounted(async () => {
-    await fetchData()
-
-    for (const column of tableColumns.value.filter(c => c.type === 'boolean')) {
-      tableFilters.value[column.code] = ''
-    }
+    infoDataTableStore.setInitTableData(
+      props.redirectEntityUrl,
+      props.defaultPageSize,
+      1,
+      props.fetchDataReq
+    )
+    infoDataTableStore.fetchPage()
   })
 </script>
 

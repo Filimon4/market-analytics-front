@@ -20,12 +20,12 @@
 </template>
 
 <script setup lang="ts">
-  import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import { DateTime } from 'luxon'
   import { computed } from 'vue'
   import undo from '/icons/undo.png'
   import pencil from '/icons/pencil.png'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+  import type { IField } from '@/src/utils/api/models/infoEntiyt.base'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 

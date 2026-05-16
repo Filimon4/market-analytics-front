@@ -38,7 +38,7 @@
           <tr class="default-row" v-for="row in data" :key="row.id">
             <td v-for="col in columns" :key="col.code" @click="emit('click:entity', row)">
               <slot name="row" :row="row" :col="col">
-                {{ col?.path ? getValueForField(col.path) : '—' }}
+                {{ col.code ? getValueForField(col.code, row) : '—' }}
               </slot>
             </td>
           </tr>
@@ -63,28 +63,26 @@
 
 <script setup lang="ts">
   import { ref, watch, onUnmounted } from 'vue'
-  import type { DataRow, ITableList } from './CustomDataTable.type'
+  import { NPagination } from 'naive-ui'
+  import type { ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import type { Action } from './CustomDataTable.type'
 
   const props = withDefaults(
-    defineProps<ITableList<DataRow[]> & { pageSize: number; loading: boolean }>(),
+    defineProps<
+      ITableList<ITableRow> & { pageSize: number; loading: boolean; actions: Action[] }
+    >(),
     {
-      columns: () => [],
-      page: 1,
-      pageSize: 20,
-      total: 0,
-      maxPage: 0,
-      actions: () => [],
       loading: false,
     }
   )
 
   const emit = defineEmits([
-    'update:page',
+    'change:page:next',
+    'change:page:reset',
+    'change:page:size',
     'update:pageSize',
-    'update:filters',
     'click:entity',
     'click:action',
-    'change',
   ])
 
   const filters = ref<Record<string, string | number>>({})
@@ -92,48 +90,30 @@
   const localPage = ref(props.page)
   const localPageSize = ref(props.pageSize)
 
-  let filterTimeout: number | undefined
-
   const applyFilters = () => {
-    emit('update:filters', { ...filters.value })
     localPage.value = 1
-    emit('update:page', 1)
-    emit('change')
-  }
-
-  const updateFilter = (key: string, value: string | number) => {
-    filters.value[key] = value
-
-    if (filterTimeout !== undefined) {
-      clearTimeout(filterTimeout)
-    }
-
-    filterTimeout = setTimeout(() => {
-      applyFilters()
-    }, 400)
+    emit('change:page:reset')
   }
 
   const onPageChange = (newPage: number) => {
     localPage.value = newPage
-    emit('update:page', newPage)
-    emit('change')
+    // emit('update:page', newPage)
   }
 
   const onPageSizeChange = (newSize: number) => {
     localPageSize.value = newSize
     localPage.value = 1
-    emit('update:pageSize', newSize)
-    emit('update:page', 1)
-    emit('change')
+    // emit('update:pageSize', newSize)
+    // emit('update:page', 1)
   }
 
   const clickAction = (code: string) => {
     emit('click:action', code)
   }
 
-  const getValueForField = (field: string) => {
+  const getValueForField = (field: string, row: ITableRow) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return field.split('.').reduce((obj: any, key: string) => obj?.[key], props.data)
+    return field.split('.').reduce((obj: any, key: string) => obj?.[key], row)
   }
 
   watch(
@@ -149,11 +129,26 @@
     }
   )
 
+  // #region Filter timeout
+  let filterTimeout: number | undefined
+  const updateFilter = (key: string, value: string | number) => {
+    filters.value[key] = value
+
+    if (filterTimeout !== undefined) {
+      clearTimeout(filterTimeout)
+    }
+
+    filterTimeout = setTimeout(() => {
+      applyFilters()
+    }, 400)
+  }
+
   onUnmounted(() => {
     if (filterTimeout !== undefined) {
       clearTimeout(filterTimeout)
     }
   })
+  // #endregion
 </script>
 
 <style scoped>

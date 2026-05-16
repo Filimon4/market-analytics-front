@@ -24,13 +24,10 @@
     :select-url="field.selectUrl || ''"
   />
 
-  <!-- <n-date-picker
-    v-else-if="props.type === 'datetime'"
-    :value="dateTimeValue"
-    type="datetime"
-    clearable
-    @update:value="handleDateTimeUpdate"
-  /> -->
+  <InfoDatePicker
+    v-else-if="field.type === 'datetime' && typeof localValue === 'number'"
+    v-model:value="localValue"
+  />
 
   <div class="actions">
     <n-button type="info" color="#2f9acc" @click="onSave" size="tiny">
@@ -58,9 +55,10 @@
   import InfoInputNumber from './components/InfoInputNumber.vue'
   import InfoBooleanSelect from './components/InfoBooleanSelect.vue'
   import InfoSelect from './components/InfoSelect.vue'
+  import InfoDatePicker from './components/InfoDatePicker.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import type { IField } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import { watch } from 'vue'
+  import type { IField } from '@/src/utils/api/models/infoEntiyt.base'
 
   const props = withDefaults(defineProps<{ field: IField }>(), {})
 

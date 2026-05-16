@@ -1,5 +1,5 @@
-import type { IEntity } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
 import api from '..'
+import type { IEntity } from '../models/infoEntiyt.base'
 import type { IUser } from '../models/user'
 import type { IUserToProject } from '../models/userToProject'
 
