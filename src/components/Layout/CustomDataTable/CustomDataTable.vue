@@ -53,6 +53,9 @@
   import { ref, watch, onUnmounted } from 'vue'
   import { NPagination } from 'naive-ui'
   import type { ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
+
+  const infoDataTableStore = useInfoDataTableStore()
 
   const props = withDefaults(
     defineProps<ITableList<ITableRow> & { pageSize: number; loading: boolean }>(),
