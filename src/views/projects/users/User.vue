@@ -1,7 +1,7 @@
 <template>
   <InfoDataEntity
     :fetch-data-req="async () => userApi.getTableById(userId)"
-    :save-data-req="async () => true"
+    :save-data-req="userApi.updateUser"
   />
 </template>
 

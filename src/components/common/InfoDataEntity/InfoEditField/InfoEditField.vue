@@ -1,32 +1,23 @@
 <template>
-  <InfoInput
-    v-if="field.type === 'string' && typeof localValue === 'string'"
-    v-model:value="localValue"
-  />
+  <InfoInput v-if="field.type === 'string'" v-model:value="localValue" />
 
-  <InfoInputNumber
-    v-else-if="field.type === 'number' && typeof localValue === 'number'"
-    v-model:value="localValue"
-  />
+  <InfoInputNumber v-else-if="field.type === 'number'" v-model:value="localValue" />
 
   <InfoBooleanSelect
-    v-else-if="
-      field.type === 'boolean' &&
-      typeof localValue === 'number' &&
-      (localValue === 1 || localValue === 0)
-    "
+    v-else-if="field.type === 'boolean' && (localValue === 1 || localValue === 0)"
     v-model:value="localValue"
   />
 
   <InfoSelect
-    v-else-if="field.type === 'select' && typeof localValue === 'string'"
+    v-else-if="field.type === 'select'"
     v-model:value="localValue"
     :select-url="field.selectUrl || ''"
   />
 
   <InfoDatePicker
-    v-else-if="field.type === 'datetime' && typeof localValue === 'number'"
+    v-else-if="field.type === 'datetime'"
     v-model:value="localValue"
+    value-format="yyyy-MM-dd HH:mm:ss"
   />
 
   <div class="actions">
@@ -64,7 +55,8 @@
 
   const infoDataEntityStore = useInfoDataEntityStore()
 
-  const localValue = ref(infoDataEntityStore.getValueOfField(props.field))
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const localValue = ref<any>(infoDataEntityStore.getValueOfField(props.field))
 
   const emits = defineEmits(['exist-editing'])
 

@@ -35,6 +35,11 @@ class UserApi {
     const data = await api.get(`/v1/project/user/table/${roleId}`)
     return data.data.result
   }
+
+  async updateUser(user: IEntity['data']) {
+    const data = await api.patch(`/v1/project/user`, { ...user })
+    return data.data.result
+  }
 }
 
 const userApi = new UserApi()
