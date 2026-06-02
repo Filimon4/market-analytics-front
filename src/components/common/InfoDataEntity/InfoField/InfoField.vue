@@ -2,7 +2,11 @@
   {{ formatFieldValue }}
   <span
     class="editable-cursor"
-    v-if="infoDataEntityStore.canEditField(field) && !infoDataEntityStore.isFieldDisabled(field)"
+    v-if="
+      props.field &&
+      infoDataEntityStore.canEditField(props.field) &&
+      !infoDataEntityStore.isFieldDisabled(props.field)
+    "
     @click="emit('click:edit')"
   >
     <img :src="pencil" alt="edit" :style="{ height: '12px' }" />
@@ -10,8 +14,9 @@
   <span
     class="editable-cursor"
     v-if="
-      infoDataEntityStore.isFieldDiffFromDefault(field) &&
-      !infoDataEntityStore.isFieldDisabled(field)
+      props.field &&
+      infoDataEntityStore.isFieldDiffFromDefault(props.field) &&
+      !infoDataEntityStore.isFieldDisabled(props.field)
     "
     @click="emit('click:reset')"
   >
@@ -36,16 +41,24 @@
 
   const props = withDefaults(
     defineProps<{
-      field: IField
+      field?: IField
+      value?: unknown
+      type?: IField['type']
     }>(),
-    {}
+    {
+      field: undefined,
+      value: undefined,
+      type: 'string',
+    }
   )
 
   const formatFieldValue = computed(() => {
-    const value = infoDataEntityStore.getValueOfField(props.field)
+    const value = props.field ? infoDataEntityStore.getValueOfField(props.field) : props.value
     if (value === null || value === undefined) return ''
 
-    if (props.field.type === 'datetime') {
+    const fieldType = props.field?.type ?? props.type
+
+    if (fieldType === 'datetime') {
       const dateTime = DateTime.fromISO(value as string, {
         zone: 'utc',
         locale: 'ru',
@@ -60,15 +73,15 @@
       return time || ''
     }
 
-    if (props.field.type == 'number') {
+    if (fieldType === 'number') {
       return Number(value)
     }
 
-    if (props.field.type === 'boolean') {
+    if (fieldType === 'boolean') {
       return value ? 'Да' : 'Нет'
     }
 
-    if (props.field.type === 'select') {
+    if (fieldType === 'select') {
       return value
     }
 

@@ -13,17 +13,8 @@
     </div>
     <CustomDataTable
       v-model:filters="infoDataTableStore.filters"
-      :columns="infoDataTableStore.getColumns()"
-      :data="infoDataTableStore.getTableData()"
       :loading="pageLoading"
-      :maxPage="infoDataTableStore.getMaxPage()"
-      :pageSize="infoDataTableStore.getPageSize()"
-      :page="infoDataTableStore.getPage()"
-      :total="infoDataTableStore.getTotal()"
       @click:entity="handleClickEntity"
-      @change:page:next="() => {}"
-      @change:page:reset="() => {}"
-      @change:page:size="(newSize: number) => {}"
     >
       <template #header="{ column, updateValue }">
         <div class="custom-header">
@@ -75,13 +66,9 @@
         </div>
       </template>
 
-      <!-- TODO: Поправить -->
-      <!-- <template #row="{ row, col }">
-        <InfoField
-          :value="col?.path ? getValueForField(col.path, row) : row[col.code]"
-          :type="col.type"
-        />
-      </template> -->
+      <template #row="{ row, col }">
+        <InfoField :value="resolveFieldValue(col?.path ?? col.code, row)" :type="col.type" />
+      </template>
     </CustomDataTable>
   </div>
 </template>
@@ -93,7 +80,7 @@
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
   import type { ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
   import type { Action } from '../CustomDataTable/CustomDataTable.type'
-  // import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
+  import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
 
   const infoDataTableStore = useInfoDataTableStore()
 
@@ -129,6 +116,11 @@
   })
 
   const pageLoading = ref<boolean>(false)
+
+  const resolveFieldValue = (field: string, row: ITableRow) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return field.split('.').reduce((obj: any, key: string) => obj?.[key], row)
+  }
 
   const handleClickEntity = (entity: ITableRow) => {
     router.push(infoDataTableStore.getEntityRedirectUrl(entity))

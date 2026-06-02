@@ -21,7 +21,11 @@ interface IInfoDataTableStore {
   getMaxPage: () => number
   getColumns: () => ITableColumn[]
   getTableData: () => ITableRow[]
-  fetchPage: (next?: boolean) => void
+  setPage: (page: number) => Promise<void>
+  setPageSize: (size: number) => Promise<void>
+  resetPage: () => Promise<void>
+  fetchCurrentPage: () => Promise<void>
+  fetchPage: () => Promise<void>
 }
 
 export const useInfoDataTableStore = defineStore(
@@ -60,7 +64,11 @@ export const useInfoDataTableStore = defineStore(
     }
 
     const resetTableData = () => {
+      filters.value = {}
       tableDataRef.value = []
+      tableColumnRef.value = []
+      maxPageRef.value = NaN
+      totalRef.value = NaN
       pageRef.value = 1
     }
 
@@ -111,20 +119,42 @@ export const useInfoDataTableStore = defineStore(
       return `${entityRedirectUrlRef.value}/${entity.id}`
     }
 
-    const fetchPage = async (next: boolean = false) => {
+    const fetchPage = async () => {
       const isValid = isValidPageForFetch()
 
       if (!isValid) return
 
-      const page = next ? pageRef.value + 1 : pageRef.value
-
-      const response = await fetchCallbackRef.value!(page, pageSizeRef.value, filters.value)
+      const response = await fetchCallbackRef.value!(
+        pageRef.value,
+        pageSizeRef.value,
+        filters.value
+      )
 
       tableDataRef.value = response.data
       tableColumnRef.value = response.columns
       maxPageRef.value = response.maxPage
       totalRef.value = response.total
       pageRef.value = response.page
+    }
+
+    const setPage = async (page: number) => {
+      pageRef.value = page
+      await fetchPage()
+    }
+
+    const setPageSize = async (size: number) => {
+      pageSizeRef.value = size
+      pageRef.value = 1
+      await fetchPage()
+    }
+
+    const resetPage = async () => {
+      pageRef.value = 1
+      await fetchPage()
+    }
+
+    const fetchCurrentPage = async () => {
+      await fetchPage()
     }
 
     return {
@@ -137,6 +167,10 @@ export const useInfoDataTableStore = defineStore(
       getTableData,
       getColumns,
       getMaxPage,
+      setPage,
+      setPageSize,
+      resetPage,
+      fetchCurrentPage,
       fetchPage,
     }
   }

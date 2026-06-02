@@ -4,11 +4,11 @@
       <table class="data-body">
         <thead>
           <tr>
-            <th v-for="col in columns" :key="col.code">
+            <th v-for="col in infoDataTableStore.getColumns()" :key="col.code">
               <slot
                 name="header"
                 :column="col"
-                :value="filters[col.code]"
+                :value="props.filters[col.code]"
                 :update-value="(v: any) => updateFilter(col.code, v)"
               >
                 <div class="default-header">
@@ -19,14 +19,18 @@
           </tr>
         </thead>
 
-        <div v-if="loading" class="data-body-loading">
+        <div v-if="props.loading" class="data-body-loading">
           <n-spin stroke="#2f9acc" />
         </div>
         <tbody v-else>
-          <tr class="default-row" v-for="row in data" :key="row.id">
-            <td v-for="col in columns" :key="col.code" @click="emit('click:entity', row)">
+          <tr class="default-row" v-for="row in infoDataTableStore.getTableData()" :key="row.id">
+            <td
+              v-for="col in infoDataTableStore.getColumns()"
+              :key="col.code"
+              @click="emit('click:entity', row)"
+            >
               <slot name="row" :row="row" :col="col">
-                {{ col.code ? getValueForField(col.code, row) : '—' }}
+                {{ col.code ? getValueForField(col.code, row) : '-' }}
               </slot>
             </td>
           </tr>
@@ -36,64 +40,40 @@
 
     <div class="data-table-pagination">
       <n-pagination
-        v-model:page="localPage"
-        v-model:page-size="localPageSize"
-        :page-count="maxPage"
+        :page="infoDataTableStore.getPage()"
+        :page-size="infoDataTableStore.getPageSize()"
+        :page-count="infoDataTableStore.getMaxPage()"
+        :item-count="infoDataTableStore.getTotal()"
         :page-sizes="[10, 20]"
         :show-size-picker="true"
         size="large"
-        @update:page="onPageChange"
-        @update:page-size="onPageSizeChange"
+        @update:page="infoDataTableStore.setPage"
+        @update:page-size="infoDataTableStore.setPageSize"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, watch, onUnmounted } from 'vue'
+  import { onUnmounted } from 'vue'
   import { NPagination } from 'naive-ui'
-  import type { ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import type { ITableRow } from '@/src/utils/api/models/infoTable.base'
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
 
-  // TODO: Вот тут закончил
   const infoDataTableStore = useInfoDataTableStore()
 
   const props = withDefaults(
-    defineProps<ITableList<ITableRow> & { pageSize: number; loading: boolean }>(),
+    defineProps<{ loading: boolean; filters: Record<string, string | number> }>(),
     {
       loading: false,
+      filters: () => ({}),
     }
   )
 
-  const emit = defineEmits([
-    'change:page:next',
-    'change:page:reset',
-    'change:page:size',
-    'update:pageSize',
-    'click:entity',
-    'click:action',
-  ])
-
-  const filters = ref<Record<string, string | number>>({})
-
-  const localPage = ref(props.page)
-  const localPageSize = ref(props.pageSize)
+  const emit = defineEmits(['update:filters', 'click:entity', 'click:action'])
 
   const applyFilters = () => {
-    localPage.value = 1
-    emit('change:page:reset')
-  }
-
-  const onPageChange = (newPage: number) => {
-    localPage.value = newPage
-    // emit('update:page', newPage)
-  }
-
-  const onPageSizeChange = (newSize: number) => {
-    localPageSize.value = newSize
-    localPage.value = 1
-    // emit('update:pageSize', newSize)
-    // emit('update:page', 1)
+    void infoDataTableStore.resetPage()
   }
 
   const getValueForField = (field: string, row: ITableRow) => {
@@ -101,23 +81,13 @@
     return field.split('.').reduce((obj: any, key: string) => obj?.[key], row)
   }
 
-  watch(
-    () => props.page,
-    val => {
-      localPage.value = val
-    }
-  )
-  watch(
-    () => props.pageSize,
-    val => {
-      localPageSize.value = val
-    }
-  )
-
   // #region Filter timeout
   let filterTimeout: number | undefined
   const updateFilter = (key: string, value: string | number) => {
-    filters.value[key] = value
+    emit('update:filters', {
+      ...props.filters,
+      [key]: value,
+    })
 
     if (filterTimeout !== undefined) {
       clearTimeout(filterTimeout)
