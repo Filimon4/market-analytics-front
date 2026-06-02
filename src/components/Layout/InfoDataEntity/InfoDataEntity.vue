@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref, watch, type PropType } from 'vue'
+  import { onBeforeUnmount, onMounted, ref, watch, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
@@ -55,8 +55,8 @@
 
   const fetchData = async () => {
     loading.value = true
+    infoDataEntityStore.clearEntityData()
     const result = await props.fetchDataReq()
-    infoDataEntityStore.resetData()
     infoDataEntityStore.setData(result.data)
     infoDataEntityStore.setBlocks(result.blocks)
     infoDataEntityStore.setBlockDetails(result.blockDetails)
@@ -64,7 +64,9 @@
   }
 
   const saveAll = async () => {
-    const resonse = await props.saveDataReq(infoDataEntityStore.getSaveData() as IEntity['data'])
+    const resonse = await props.saveDataReq(
+      infoDataEntityStore.prebuiltSaveData() as IEntity['data']
+    )
 
     if (!resonse) {
       return
@@ -79,6 +81,10 @@
 
   onMounted(() => {
     fetchData()
+  })
+
+  onBeforeUnmount(() => {
+    infoDataEntityStore.clearEntityData()
   })
 
   // #region tiregger update

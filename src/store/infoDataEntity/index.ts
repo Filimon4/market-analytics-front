@@ -37,12 +37,13 @@ interface IInfoDataEntityStore {
   getTreeNodes: (blockTree: IBlockTreeDetail) => Tree
 
   // work with initData
+  clearEntityData: () => void
   resetData: () => void
   resetFieldValue: (field: IField) => unknown
   isFieldDiffFromDefault: (field: IField) => boolean
 
   // save logic
-  getSaveData: () => IEntity['data']
+  prebuiltSaveData: () => IEntity['data']
 }
 
 export const useInfoDataEntityStore = defineStore(
@@ -146,6 +147,15 @@ export const useInfoDataEntityStore = defineStore(
       return blockDetailsData.value.find(block => block.blockCode === blockCode) as T
     }
 
+    const clearEntityData = () => {
+      initialData.value = {}
+      currentData.value = {}
+      blocksData.value = []
+      blockDetailsData.value = []
+      hasChanges.value = false
+      cancelationToken.value = uuidv4()
+    }
+
     const resetData = () => {
       currentData.value = cloneData(initialData.value)
       cancelationToken.value = uuidv4()
@@ -171,7 +181,7 @@ export const useInfoDataEntityStore = defineStore(
       ) as Tree
     }
 
-    const getSaveData = () => {
+    const prebuiltSaveData = () => {
       const saveData = cloneData(currentData.value)
 
       const treeBlockType = blocksData.value.find(block => block.blockType === 'tree')
@@ -202,11 +212,12 @@ export const useInfoDataEntityStore = defineStore(
       setBlockDetails,
       getBlockDetails,
       updateFieldValue,
+      clearEntityData,
       resetData,
       resetFieldValue,
       isFieldDiffFromDefault,
       getTreeNodes,
-      getSaveData,
+      prebuiltSaveData,
     }
   }
 )

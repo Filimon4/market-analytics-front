@@ -1,11 +1,6 @@
 <template>
   <div class="entity-wrapper">
-    <CustomDataEntity
-      :blocks="apiResult.blocks"
-      :block-details="apiResult.blockDetails"
-      :loading="false"
-      :data="data"
-    >
+    <CustomDataEntity :loading="loading">
       <template #field="{ field }">
         <InfoEditableField
           :field="field"
@@ -19,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref, type PropType } from 'vue'
+  import { onBeforeUnmount, onMounted, ref, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useRouter } from 'vue-router'
@@ -38,13 +33,6 @@
   const saving = ref(false)
   const loading = ref<boolean>(false)
 
-  const data = ref<Data>({})
-
-  const apiResult = ref<Pick<IEntity, 'blocks' | 'blockDetails'>>({
-    blocks: [],
-    blockDetails: [],
-  })
-
   const props = defineProps({
     fetchDataReq: {
       required: true,
@@ -58,71 +46,42 @@
 
   async function fetchData() {
     loading.value = true
+    infoDataEntityStore.clearEntityData()
     const response = await props.fetchDataReq()
 
-    apiResult.value = {
-      blocks: response.blocks.filter(b => {
-        if (b?.createHide !== undefined && b?.createHide) {
-          return false
-        }
-        return true
-      }),
-      blockDetails: response.blockDetails,
-    }
+    const blocks = response.blocks.filter(block => {
+      if (block?.createHide !== undefined && block?.createHide) {
+        return false
+      }
+      return true
+    })
 
-    const blockTables = response.blocks.filter(block => block.blockType == 'table')
+    infoDataEntityStore.setBlocks(blocks)
+    infoDataEntityStore.setBlockDetails(response.blockDetails)
+    infoDataEntityStore.setData({})
+
+    const blockTables = blocks.filter(block => block.blockType === 'table')
     response.blockDetails
       .filter(block => blockTables.map(bt => bt.code).includes(block.blockCode))
       .flatMap(block2 => (block2 as IBlockDetail).fields)
       .filter(field => !field.editable && field.createDefault !== undefined)
       .forEach(defaultField => {
-        handleFieldUpdate({ field: defaultField, value: defaultField.createDefault })
+        infoDataEntityStore.updateFieldValue(defaultField.path, defaultField.createDefault)
       })
+
+    // Keep defaults as the initial state for create mode.
+    infoDataEntityStore.setData(infoDataEntityStore.prebuiltSaveData() as Data)
     loading.value = false
   }
 
   function handleFieldUpdate({ field, value }: { field: IField; value: Data[string] }) {
-    let subObject: Data = {}
-    const paths = field.path.split('.').reverse()
-
-    const mergeObjects = (target: Data, source: Data) => {
-      let out = target
-
-      for (const key in target) {
-        if (key in source) {
-          const targetSub = target[key]
-          const sourceSub = source[key]
-          if (typeof targetSub !== 'object' && typeof sourceSub !== 'object') {
-            out[key] = sourceSub
-          } else {
-            out[key] = mergeObjects(targetSub as Data, sourceSub as Data)
-          }
-        } else {
-          out = Object.assign(out, source)
-        }
-      }
-
-      return out
-    }
-
-    for (let i = 0; i <= paths.length - 1; i++) {
-      if (i == paths.length - 1) {
-        subObject[paths[i] as string] = value
-        data.value = mergeObjects(subObject, data.value)
-      } else if (i == 0) {
-        subObject[paths[i] as string] = value
-      } else {
-        const copy = subObject
-        subObject = {}
-        subObject[paths[i] as string] = copy
-      }
-    }
+    infoDataEntityStore.updateFieldValue(field.path, value)
   }
 
   async function handleSave() {
     if (saving.value) return
     saving.value = true
-    const response = await props.saveDataReq(data.value).catch(() => {
+    const response = await props.saveDataReq(infoDataEntityStore.prebuiltSaveData()).catch(() => {
       return null
     })
 
@@ -136,12 +95,16 @@
   }
 
   function handleCancel() {
-    data.value = {}
+    infoDataEntityStore.clearEntityData()
     router.back()
   }
 
   onMounted(() => {
     fetchData()
+  })
+
+  onBeforeUnmount(() => {
+    infoDataEntityStore.clearEntityData()
   })
 </script>
 
