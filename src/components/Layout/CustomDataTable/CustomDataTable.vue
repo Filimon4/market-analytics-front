@@ -42,7 +42,6 @@
       <n-pagination
         :page="infoDataTableStore.getPage()"
         :page-size="infoDataTableStore.getPageSize()"
-        :page-count="infoDataTableStore.getMaxPage()"
         :item-count="infoDataTableStore.getTotal()"
         :page-sizes="[10, 20]"
         :show-size-picker="true"

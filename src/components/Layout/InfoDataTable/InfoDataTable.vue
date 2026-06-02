@@ -6,7 +6,7 @@
         :key="action.code"
         class="action-btn"
         :class="`size-${action.size}`"
-        @click="code => emit('click:action', code)"
+        @click="() => emit('click:action', action.code)"
       >
         {{ action.title }}
       </button>

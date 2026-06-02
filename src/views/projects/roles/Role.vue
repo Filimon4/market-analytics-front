@@ -9,11 +9,9 @@
 </template>
 
 <script setup lang="ts">
-  import type {
-    Action,
-    IEntity,
-  } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
+  import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
+  import type { IEntity } from '@/src/utils/api/models/infoEntiyt.base'
   import roleApi from '@/src/utils/api/role'
   import { useDialog } from 'naive-ui'
   import { computed, ref } from 'vue'

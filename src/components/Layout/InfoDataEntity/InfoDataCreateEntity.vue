@@ -22,15 +22,15 @@
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
+  import { useRouter } from 'vue-router'
+  import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
+  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import type {
     Data,
     IBlockDetail,
     IEntity,
     IField,
-  } from '../CustomDataEntity/CustomDataEntity.type'
-  import { useRouter } from 'vue-router'
-  import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
-  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+  } from '@/src/utils/api/models/infoEntiyt.base.ts'
 
   const infoDataEntityStore = useInfoDataEntityStore()
   const router = useRouter()
