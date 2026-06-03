@@ -1,3 +1,4 @@
+<!-- TOOD: Доделать сохранение -->
 <template>
   <InfoDataEntity :fetch-data-req="async () => apiKeysApi.getTableById(apiKeyId)" />
 </template>

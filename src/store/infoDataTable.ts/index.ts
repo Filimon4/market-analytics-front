@@ -72,6 +72,14 @@ export const useInfoDataTableStore = defineStore(
       pageRef.value = 1
     }
 
+    const initBooleanFilters = (columns: ITableColumn[]) => {
+      columns.forEach(column => {
+        if (column.type !== 'boolean' || column.filtrable === false || filters.value[column.code])
+          return
+        filters.value[column.code] = ''
+      })
+    }
+
     //   #endregion
 
     const setInitTableData = (
@@ -135,6 +143,8 @@ export const useInfoDataTableStore = defineStore(
       maxPageRef.value = response.maxPage
       totalRef.value = response.total
       pageRef.value = response.page
+
+      initBooleanFilters(response.columns)
     }
 
     const setPage = async (page: number) => {
