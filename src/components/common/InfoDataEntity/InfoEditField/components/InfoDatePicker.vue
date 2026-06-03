@@ -5,7 +5,5 @@
 <script setup lang="ts">
   import { NDatePicker } from 'naive-ui'
 
-  const localValue = defineModel<number>('value', {
-    required: true,
-  })
+  const localValue = defineModel<number | null>('value')
 </script>

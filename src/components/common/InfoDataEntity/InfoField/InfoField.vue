@@ -59,18 +59,15 @@
     const fieldType = props.field?.type ?? props.type
 
     if (fieldType === 'datetime') {
-      const dateTime = DateTime.fromISO(value as string, {
-        zone: 'utc',
-        locale: 'ru',
-      }).setLocale('ru')
+      if (typeof value === 'number') {
+        return DateTime.fromMillis(value, { zone: 'utc' }).toISO() || ''
+      }
+
+      const dateTime = DateTime.fromISO(String(value), { zone: 'utc' })
 
       if (!dateTime.isValid) return ''
 
-      const time = dateTime
-        .toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
-        .replace(' г.,', ' г.')
-
-      return time || ''
+      return dateTime.toISO() || ''
     }
 
     if (fieldType === 'number') {

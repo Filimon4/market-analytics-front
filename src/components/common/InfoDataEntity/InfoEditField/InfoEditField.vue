@@ -14,11 +14,7 @@
     :select-url="field.selectUrl || ''"
   />
 
-  <InfoDatePicker
-    v-else-if="field.type === 'datetime'"
-    v-model:value="localValue"
-    value-format="yyyy-MM-dd HH:mm:ss"
-  />
+  <InfoDatePicker v-else-if="field.type === 'datetime'" v-model:value="localValue" />
 
   <div class="actions">
     <n-button type="info" color="#2f9acc" @click="onSave" size="tiny">
@@ -41,14 +37,14 @@
 <script setup lang="ts">
   import acceptIcon from '/icons/accept.svg'
   import cancelIcon from '/icons/cancel.svg'
-  import { ref } from 'vue'
+  import { DateTime } from 'luxon'
+  import { onMounted, ref, watch } from 'vue'
   import InfoInput from './components/InfoInput.vue'
   import InfoInputNumber from './components/InfoInputNumber.vue'
   import InfoBooleanSelect from './components/InfoBooleanSelect.vue'
   import InfoSelect from './components/InfoSelect.vue'
   import InfoDatePicker from './components/InfoDatePicker.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import { watch } from 'vue'
   import type { IField } from '@/src/utils/api/models/infoEntiyt.base'
 
   const props = withDefaults(defineProps<{ field: IField }>(), {})
@@ -61,7 +57,12 @@
   const emits = defineEmits(['exist-editing'])
 
   const onSave = () => {
-    infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, localValue.value)
+    const valueToSave =
+      props.field.type === 'datetime' && typeof localValue.value === 'number'
+        ? DateTime.fromMillis(localValue.value, { zone: 'utc' }).toISO()
+        : localValue.value
+
+    infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, valueToSave)
     emits('exist-editing')
   }
 
@@ -69,6 +70,13 @@
     infoDataEntityStore.resetFieldValue(props.field)
     emits('exist-editing')
   }
+
+  onMounted(() => {
+    if (props.field.type === 'datetime' && typeof localValue.value === 'string') {
+      const dateTime = DateTime.fromISO(localValue.value, { zone: 'utc' })
+      localValue.value = dateTime.isValid ? dateTime.toMillis() : null
+    }
+  })
 
   watch(
     () => infoDataEntityStore.getCancelationToken(),
