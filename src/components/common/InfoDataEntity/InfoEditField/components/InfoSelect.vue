@@ -1,4 +1,3 @@
-<!-- TODO: Поправить сохранение селекта и сброс обратно -->
 <template>
   <n-select
     v-model:value="selectedValue"
@@ -11,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import { NSelect, type SelectOption } from 'naive-ui'
+  import { NSelect } from 'naive-ui'
   import type { SelectOptionWithPayload } from '../InfoEditField.types'
   import { onMounted, ref, watch } from 'vue'
   import api from '@/src/utils/api'
@@ -32,8 +31,8 @@
   const loading = ref<boolean>(false)
   const options = ref<SelectOptionWithPayload[]>([])
 
-  const handleSelectUpdate = (newValue: number, option: SelectOption) => {
-    selectedValue.value = option.value as number
+  const handleSelectUpdate = (newValue: number) => {
+    selectedValue.value = newValue
   }
 
   const fetchDataForSelect = async () => {
@@ -67,16 +66,31 @@
   onMounted(async () => {
     await fetchDataForSelect()
 
-    selectedValue.value = Number(options.value.find(opt => opt.label === localValue.value)?.value)
+    const matchedOption = options.value.find(opt => opt.label === localValue.value)
+    const initialOption = matchedOption ?? options.value[0]
+
+    if (!initialOption) {
+      selectedValue.value = undefined
+      return
+    }
+
+    selectedValue.value = initialOption.value as number
+
+    if (!matchedOption) {
+      localValue.value = String(initialOption.label)
+    }
   })
 
   watch(
     () => selectedValue.value,
     () => {
-      const optionNewValue = String(
-        options.value.find(opt => opt.value === selectedValue.value)?.label
-      )
-      localValue.value = optionNewValue
+      const selectedOption = options.value.find(opt => opt.value === selectedValue.value)
+
+      if (!selectedOption) {
+        return
+      }
+
+      localValue.value = String(selectedOption.label)
     }
   )
 </script>
