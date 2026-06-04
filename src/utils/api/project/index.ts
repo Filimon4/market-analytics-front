@@ -27,7 +27,7 @@ class ProjectApi {
       data: { result },
     } = await api.get<{
       result: IRole & { rolePermission: (IRolePermission & { persmission: IPermission })[] }
-    }>('/v1/project/role')
+    }>('/v1/project/roles')
     return {
       role: {
         id: result.id,
