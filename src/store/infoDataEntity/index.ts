@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch, type Ref } from 'vue'
+import { isProxy, ref, toRaw, watch, type Ref } from 'vue'
 import { cloneData } from '@/src/utils/cloneData'
 import { v4 as uuidv4 } from 'uuid'
 import type {
@@ -24,7 +24,8 @@ interface IInfoDataEntityStore {
 
   // work with currentData
   setData: (data: IEntity['data']) => void
-  getValueOfField: (field: IField, isInit?: boolean) => unknown
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getValueOfField: (field: IField, isInit?: boolean) => any
   canEditField: (field: IField) => boolean
   isFieldDisabled: (field: IField) => boolean
   setBlocks: (blocks: IEntity['blocks']) => void
@@ -124,11 +125,13 @@ export const useInfoDataEntityStore = defineStore(
     }
 
     const getValueOfField = (field: IField, isInit = false) => {
-      return field.path.split('.').reduce(
+      const value = field.path.split('.').reduce(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (obj: any, key: string) => obj?.[key],
         !isInit ? currentData.value : initialData.value
       ) as unknown
+
+      return isProxy(value) ? toRaw(value) : value
     }
 
     const canEditField = (field: IField) => {
@@ -169,7 +172,8 @@ export const useInfoDataEntityStore = defineStore(
     const isFieldDiffFromDefault = (field: IField) => {
       const initKey = field.path.split('.')[0]
       if (!initKey) throw new Error(`There is no init key in field: ${JSON.stringify(field)}`)
-      if (getValueOfField(field) != getValueOfField(field, true)) return true
+      if (JSON.stringify(getValueOfField(field)) != JSON.stringify(getValueOfField(field, true)))
+        return true
       return false
     }
 

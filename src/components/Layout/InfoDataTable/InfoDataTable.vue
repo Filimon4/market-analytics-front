@@ -81,8 +81,8 @@
   import { useRouter } from 'vue-router'
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
   import type { ITableColumn, ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import InfoTableField from '../../common/InfoDataEntity/InfoField/InfoTableField.vue'
   import type { Action } from '../CustomDataTable/CustomDataTable.type'
-  import InfoTableField from '../../common/InfoDataEntity/InfoTableField/InfoTableField.vue'
   import api from '@/src/utils/api'
 
   const infoDataTableStore = useInfoDataTableStore()

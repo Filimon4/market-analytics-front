@@ -1,5 +1,21 @@
 <template>
-  {{ formatFieldValue }}
+  <InfoFieldDatetime
+    v-if="props.field.type === 'datetime'"
+    :value="infoDataEntityStore.getValueOfField(props.field)"
+  />
+  <InfoFieldNumber
+    v-else-if="props.field.type === 'number'"
+    :value="infoDataEntityStore.getValueOfField(props.field)"
+  />
+  <InfoFieldBoolean
+    v-else-if="props.field.type === 'boolean'"
+    :value="infoDataEntityStore.getValueOfField(props.field)"
+  />
+  <InfoFieldSelect
+    v-else-if="props.field.type === 'select'"
+    :value="infoDataEntityStore.getValueOfField(props.field)"
+  />
+  <InfoFieldDefault v-else :value="infoDataEntityStore.getValueOfField(props.field)" />
   <span
     class="editable-cursor"
     v-if="
@@ -23,8 +39,11 @@
 </template>
 
 <script setup lang="ts">
-  import { DateTime } from 'luxon'
-  import { computed } from 'vue'
+  import InfoFieldBoolean from './components/InfoFieldBoolean.vue'
+  import InfoFieldDatetime from './components/InfoFieldDatetime.vue'
+  import InfoFieldDefault from './components/InfoFieldDefault.vue'
+  import InfoFieldNumber from './components/InfoFieldNumber.vue'
+  import InfoFieldSelect from './components/InfoFieldSelect.vue'
   import undo from '/icons/undo.png'
   import pencil from '/icons/pencil.png'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
@@ -40,39 +59,6 @@
   const props = defineProps<{
     field: IField
   }>()
-
-  const formatFieldValue = computed(() => {
-    const value = infoDataEntityStore.getValueOfField(props.field)
-    if (value === null || value === undefined) return ''
-
-    const fieldType = props.field.type
-
-    if (fieldType === 'datetime') {
-      if (typeof value === 'number') {
-        return DateTime.fromMillis(value, { zone: 'utc' }).toISO() || ''
-      }
-
-      const dateTime = DateTime.fromISO(String(value), { zone: 'utc' })
-
-      if (!dateTime.isValid) return ''
-
-      return dateTime.toISO() || ''
-    }
-
-    if (fieldType === 'number') {
-      return Number(value)
-    }
-
-    if (fieldType === 'boolean') {
-      return value ? 'Да' : 'Нет'
-    }
-
-    if (fieldType === 'select') {
-      return value
-    }
-
-    return value
-  })
 </script>
 
 <style scoped>
