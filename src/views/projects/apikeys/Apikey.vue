@@ -1,6 +1,9 @@
 <!-- TOOD: Доделать сохранение -->
 <template>
-  <InfoDataEntity :fetch-data-req="async () => apiKeysApi.getTableById(apiKeyId)" />
+  <InfoDataEntity
+    :fetch-data-req="async () => apiKeysApi.getTableById(apiKeyId)"
+    :save-data-req="apiKeysApi.saveApiKey"
+  />
 </template>
 
 <script setup lang="ts">

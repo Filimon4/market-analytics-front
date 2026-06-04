@@ -15,7 +15,7 @@
   import { onMounted, ref, watch } from 'vue'
   import api from '@/src/utils/api'
 
-  const localValue = defineModel<string>('value', {
+  const localValue = defineModel<{ id: number; code: string }>('value', {
     required: true,
   })
 
@@ -66,7 +66,7 @@
   onMounted(async () => {
     await fetchDataForSelect()
 
-    const matchedOption = options.value.find(opt => opt.label === localValue.value)
+    const matchedOption = options.value.find(opt => opt.label === localValue.value.code)
     const initialOption = matchedOption ?? options.value[0]
 
     if (!initialOption) {
@@ -76,9 +76,7 @@
 
     selectedValue.value = initialOption.value as number
 
-    if (!matchedOption) {
-      localValue.value = String(initialOption.label)
-    }
+    localValue.value = initialOption.payload
   })
 
   watch(
@@ -90,7 +88,7 @@
         return
       }
 
-      localValue.value = String(selectedOption.label)
+      localValue.value = selectedOption.payload
     }
   )
 </script>

@@ -1,4 +1,5 @@
 import api from '..'
+import type { IEntity } from '../models/infoEntiyt.base'
 
 class ApiKeysApi {
   async getTableList(page: number, size: number, filter: Record<string, string | number>) {
@@ -24,6 +25,12 @@ class ApiKeysApi {
   async createEntity(dto: object) {
     const data = await api.post<{ result: { id: string } }>('/v1/project/api-keys', dto)
     return data.data.result
+  }
+
+  async saveApiKey(data: IEntity['data']) {
+    const response = await api.patch<{ result: boolean }>('/v1/project/api-keys', data)
+
+    return response.data.result
   }
 }
 

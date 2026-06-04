@@ -79,6 +79,7 @@
     }
 
     if (fieldType === 'select') {
+      console.log(value)
       return value
     }
 

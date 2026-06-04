@@ -57,13 +57,26 @@
   const emits = defineEmits(['exist-editing'])
 
   const onSave = () => {
-    const valueToSave =
-      props.field.type === 'datetime' && typeof localValue.value === 'number'
-        ? DateTime.fromMillis(localValue.value, { zone: 'utc' }).toISO()
-        : localValue.value
+    if (
+      props.field.type === 'select' &&
+      typeof localValue.value === 'object' &&
+      localValue.value !== null
+    ) {
+      const selectValue = localValue.value as { id: number; code: string }
 
-    infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, valueToSave)
+      infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, selectValue)
+    } else if (props.field.type === 'datetime' && typeof localValue.value === 'number') {
+      const valueToSave = DateTime.fromMillis(localValue.value, { zone: 'utc' }).toISO()
+
+      infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, valueToSave)
+    } else {
+      infoDataEntityStore.updateFieldValue(
+        props.field.editPath || props.field.path,
+        localValue.value
+      )
+    }
     emits('exist-editing')
+    return
   }
 
   const onCancel = () => {
