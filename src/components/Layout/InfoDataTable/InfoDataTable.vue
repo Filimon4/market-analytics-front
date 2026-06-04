@@ -26,7 +26,7 @@
               placeholder=""
               size="small"
               :bordered="false"
-              @update:value="updateValue($event)"
+              @update:value="updateValue"
             />
 
             <n-input-number
@@ -35,7 +35,7 @@
               placeholder=""
               size="small"
               :bordered="false"
-              @update:value="updateValue($event)"
+              @update:value="updateValue"
             />
 
             <n-select
@@ -54,13 +54,15 @@
 
             <n-select
               v-else-if="column.type === 'select'"
-              :value="infoDataTableStore.filters[column.code]"
-              remote
+              v-model:value="infoDataTableStore.filters[column.code]"
+              :options="selectOptions[column.code] || []"
+              :loading="selectLoading[column.code]"
+              clearable
               size="small"
               :bordered="false"
               placeholder=""
               @update:value="updateValue"
-              @update:show="(opened: boolean) => opened"
+              @update:show="(opened: boolean) => opened && fetchSelectOptions(column)"
             />
           </template>
         </div>
@@ -78,9 +80,10 @@
   import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
   import { useRouter } from 'vue-router'
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
-  import type { ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import type { ITableColumn, ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
   import type { Action } from '../CustomDataTable/CustomDataTable.type'
   import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
+  import api from '@/src/utils/api'
 
   const infoDataTableStore = useInfoDataTableStore()
 
@@ -116,6 +119,28 @@
   })
 
   const pageLoading = ref<boolean>(false)
+
+  const selectOptions = ref<Record<string, { label: string; value: number }[]>>({})
+  const selectLoading = ref<Record<string, boolean>>({})
+
+  const fetchSelectOptions = async (column: ITableColumn) => {
+    if (!column.selectUrl || selectOptions.value[column.code]?.length) return
+
+    selectLoading.value[column.code] = true
+
+    const response = await api
+      .get<{ result: { code: string; id: number }[] }>(column.selectUrl)
+      .catch(() => null)
+
+    if (response?.data.result) {
+      selectOptions.value[column.code] = response.data.result.map(item => ({
+        label: item.code,
+        value: item.id,
+      }))
+    }
+
+    selectLoading.value[column.code] = false
+  }
 
   const resolveFieldValue = (field: string, row: ITableRow) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

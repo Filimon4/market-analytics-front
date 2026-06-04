@@ -9,7 +9,7 @@
                 name="header"
                 :column="col"
                 :value="props.filters[col.code]"
-                :update-value="(v: any) => updateFilter(col.code, v)"
+                :update-value="updateFilter"
               >
                 <div class="default-header">
                   <p class="title">{{ col.name }}</p>
@@ -69,7 +69,7 @@
     }
   )
 
-  const emit = defineEmits(['update:filters', 'click:entity', 'click:action'])
+  const emit = defineEmits(['click:entity', 'click:action'])
 
   const applyFilters = () => {
     void infoDataTableStore.resetPage()
@@ -82,18 +82,11 @@
 
   // #region Filter timeout
   let filterTimeout: number | undefined
-  const updateFilter = (key: string, value: string | number) => {
-    emit('update:filters', {
-      ...props.filters,
-      [key]: value,
-    })
-
-    if (filterTimeout !== undefined) {
-      clearTimeout(filterTimeout)
-    }
-
+  const updateFilter = () => {
+    if (filterTimeout !== undefined) clearTimeout(filterTimeout)
     filterTimeout = setTimeout(() => {
       applyFilters()
+      clearTimeout(filterTimeout)
     }, 400)
   }
 

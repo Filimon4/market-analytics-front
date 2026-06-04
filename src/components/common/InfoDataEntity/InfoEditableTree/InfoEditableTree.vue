@@ -8,14 +8,11 @@
 </template>
 
 <script setup lang="ts">
-  import type {
-    IBlock,
-    IBlockTreeDetail,
-  } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import { onMounted, ref, watch } from 'vue'
   import Tree from '@/src/components/Ui/Tree/Tree.vue'
   import type { TreeNodes } from '@/src/components/Ui/Tree/types'
+  import type { IBlock, IBlockTreeDetail } from '@/src/utils/api/models/infoEntiyt.base'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 
