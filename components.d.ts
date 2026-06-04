@@ -35,6 +35,7 @@ declare module 'vue' {
     InfoInputNumber: typeof import('./src/components/common/InfoDataEntity/InfoEditField/components/InfoInputNumber.vue')['default']
     InfoSelect: typeof import('./src/components/common/InfoDataEntity/InfoEditField/components/InfoSelect.vue')['default']
     InfoTable: typeof import('./src/components/Layout/ProjectDataTable/InfoTable.vue')['default']
+    InfoTableField: typeof import('./src/components/common/InfoDataEntity/InfoTableField/InfoTableField.vue')['default']
     InviteModal: typeof import('./src/components/Ui/InviteModal/InviteModal.vue')['default']
     NAffix: typeof import('naive-ui')['NAffix']
     NButton: typeof import('naive-ui')['NButton']

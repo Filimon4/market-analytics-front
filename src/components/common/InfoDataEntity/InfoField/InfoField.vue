@@ -3,7 +3,6 @@
   <span
     class="editable-cursor"
     v-if="
-      props.field &&
       infoDataEntityStore.canEditField(props.field) &&
       !infoDataEntityStore.isFieldDisabled(props.field)
     "
@@ -14,7 +13,6 @@
   <span
     class="editable-cursor"
     v-if="
-      props.field &&
       infoDataEntityStore.isFieldDiffFromDefault(props.field) &&
       !infoDataEntityStore.isFieldDisabled(props.field)
     "
@@ -39,24 +37,15 @@
     (e: 'click:reset'): void
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      field?: IField
-      value?: unknown
-      type?: IField['type']
-    }>(),
-    {
-      field: undefined,
-      value: undefined,
-      type: 'string',
-    }
-  )
+  const props = defineProps<{
+    field: IField
+  }>()
 
   const formatFieldValue = computed(() => {
-    const value = props.field ? infoDataEntityStore.getValueOfField(props.field) : props.value
+    const value = infoDataEntityStore.getValueOfField(props.field)
     if (value === null || value === undefined) return ''
 
-    const fieldType = props.field?.type ?? props.type
+    const fieldType = props.field.type
 
     if (fieldType === 'datetime') {
       if (typeof value === 'number') {
@@ -79,7 +68,6 @@
     }
 
     if (fieldType === 'select') {
-      console.log(value)
       return value
     }
 

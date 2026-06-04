@@ -69,7 +69,7 @@
       </template>
 
       <template #row="{ row, col }">
-        <InfoField :value="resolveFieldValue(col?.path ?? col.code, row)" :type="col.type" />
+        <InfoTableField :value="resolveFieldValue(col?.path ?? col.code, row)" :type="col.type" />
       </template>
     </CustomDataTable>
   </div>
@@ -82,7 +82,7 @@
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
   import type { ITableColumn, ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
   import type { Action } from '../CustomDataTable/CustomDataTable.type'
-  import InfoField from '../../common/InfoDataEntity/InfoField/InfoField.vue'
+  import InfoTableField from '../../common/InfoDataEntity/InfoTableField/InfoTableField.vue'
   import api from '@/src/utils/api'
 
   const infoDataTableStore = useInfoDataTableStore()
