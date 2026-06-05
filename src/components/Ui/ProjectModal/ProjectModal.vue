@@ -34,7 +34,7 @@
                 class="edit-project-button"
                 quaternary
                 circle
-                @click.stop="goToProjectEdit(item.id)"
+                @click.stop="goToProjectEdit(item.projectId)"
               >
                 <img :src="pencil" alt="Edit project" class="edit-project-icon" />
               </n-button>
