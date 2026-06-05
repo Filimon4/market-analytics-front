@@ -22,11 +22,22 @@
             :class="{ selected: selectedId === item.id }"
             @click="selectItem(item)"
           >
-            <div class="item-content">
-              <div class="item-main">{{ item.name }}</div>
-              <div class="item-sub" v-if="item.description">
-                {{ item.description }}
+            <div class="item-row">
+              <div class="item-content">
+                <div class="item-main">{{ item.name }}</div>
+                <div class="item-sub" v-if="item.description">
+                  {{ item.description }}
+                </div>
               </div>
+              <n-button
+                v-if="item.isOwner"
+                class="edit-project-button"
+                quaternary
+                circle
+                @click.stop="goToProjectEdit(item.id)"
+              >
+                <img :src="pencil" alt="Edit project" class="edit-project-icon" />
+              </n-button>
             </div>
           </n-list-item>
 
@@ -48,7 +59,9 @@
 
 <script setup lang="ts">
   import { ref, computed, watch, type PropType } from 'vue'
+  import { useRouter } from 'vue-router'
   import { NModal, NList, NListItem, NInput, NButton, NSpin } from 'naive-ui'
+  import pencil from '/icons/pencil.png'
   import type { IProjectModalItem } from './ProjectModal.types'
 
   const show = defineModel<boolean>('show')
@@ -74,6 +87,7 @@
   })
 
   const emit = defineEmits(['confirm'])
+  const router = useRouter()
 
   const searchText = ref('')
   const selectedId = ref<string | null>(props.initialSelectedId as string | null)
@@ -102,6 +116,11 @@
 
   function cancel() {
     close()
+  }
+
+  function goToProjectEdit(projectId: string) {
+    close()
+    router.push(`/projects/${projectId}`)
   }
 
   function close() {
@@ -163,10 +182,35 @@
     border-radius: 6px;
   }
 
+  .item-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
   .item-content {
     display: flex;
     flex-direction: column;
     padding: 2px 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .edit-project-button {
+    border: none;
+    background: transparent;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .edit-project-icon {
+    width: 16px;
+    height: 16px;
   }
 
   .item-main {

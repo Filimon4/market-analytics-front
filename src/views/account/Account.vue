@@ -97,9 +97,10 @@
   const loadProjects = async (): Promise<IProjectModalItem[]> => {
     const connectecProjects = await projectApi.getConnectedProjects()
     return connectecProjects.map(conn => ({
-      id: conn.id,
+      id: conn.project.id,
       name: conn.project.name,
       description: conn.project.description,
+      isOwner: conn.isOwner,
     }))
   }
 

@@ -45,10 +45,14 @@ class ProjectApi {
   }
 
   async getConnectedProjects(): Promise<
-    Array<IUserToProject & { project: IProjectPick<'description' | 'id' | 'name'> }>
+    Array<
+      IUserToProject & { project: IProjectPick<'description' | 'id' | 'name'>; isOwner: boolean }
+    >
   > {
     const { data } = await api.get<{
-      result: Array<IUserToProject & { project: IProjectPick<'description' | 'id' | 'name'> }>
+      result: Array<
+        IUserToProject & { project: IProjectPick<'description' | 'id' | 'name'>; isOwner: boolean }
+      >
     }>('/v1/global/project/all')
     return data.result
   }
