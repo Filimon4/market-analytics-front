@@ -28,6 +28,9 @@
   import { ref } from 'vue'
   import authApi from '@/src/utils/api/auth'
   import ProjectModal from '@/src/components/Ui/ProjectModal/ProjectModal.vue'
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
 
   const actions = ref<Action[]>([
     {
@@ -73,6 +76,8 @@
       userStore.accessToken = null
       userStore.user = null
       window.location.href = '/auth/signin'
+    } else if (actionCode === 'addProject') {
+      router.push('projects/create')
     }
   }
 
@@ -83,7 +88,7 @@
     selectedProject.value = item
 
     const project = await projectApi.getProject(item.id)
-    userStore.tenantId = Number(project.id)
+    userStore.tenantId = BigInt(project.projectId)
 
     projectStore.updateUserProjectInfo()
     triggerTableUpdate.value = true

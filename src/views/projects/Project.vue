@@ -1,17 +1,17 @@
 <template>
   <InfoDataEntity
-    :fetch-data-req="async () => apiKeysApi.getTableById(apiKeyId)"
-    :save-data-req="apiKeysApi.saveApiKey"
+    :fetch-data-req="async () => projectApi.getTableById(projectId)"
+    :save-data-req="projectApi.updateProject"
   />
 </template>
 
 <script setup lang="ts">
   import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
-  import apiKeysApi from '@/src/utils/api/apikeys'
+  import projectApi from '@/src/utils/api/project'
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'
 
   const route = useRoute()
 
-  const apiKeyId = computed(() => Number(route.params.id))
+  const projectId = computed(() => Number(route.params.id))
 </script>

@@ -9,7 +9,7 @@ import type {
   IBlockTreeDetail,
   IBlockDetail,
   Tree,
-} from '@/src/utils/api/models/infoEntiyt.base'
+} from '@/src/utils/api/models/infoEntity.base'
 
 interface IInfoDataEntityStore {
   initialData: Ref<Data>

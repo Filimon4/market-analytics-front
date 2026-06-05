@@ -10,7 +10,7 @@
   import InfoFieldDatetime from './components/InfoFieldDatetime.vue'
   import InfoFieldNumber from './components/InfoFieldNumber.vue'
   import InfoFieldDefault from './components/InfoFieldDefault.vue'
-  import type { IField } from '@/src/utils/api/models/infoEntiyt.base'
+  import type { IField } from '@/src/utils/api/models/infoEntity.base.ts'
 
   const props = withDefaults(
     defineProps<{

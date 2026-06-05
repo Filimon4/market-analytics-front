@@ -25,7 +25,7 @@
     IBlockDetail,
     IEntity,
     IField,
-  } from '@/src/utils/api/models/infoEntiyt.base.ts'
+  } from '@/src/utils/api/models/infoEntity.base.ts'
 
   const infoDataEntityStore = useInfoDataEntityStore()
   const router = useRouter()

@@ -1,4 +1,5 @@
 import api from '..'
+import type { IEntity } from '../models/infoEntity.base'
 import type { IPanelElement } from '../models/panelElement'
 import type { IPermission } from '../models/permission'
 import type { IProject, IProjectPick } from '../models/project'
@@ -52,10 +53,10 @@ class ProjectApi {
     return data.result
   }
 
-  async getProject(conntectedToProjectId: string): Promise<IProject> {
+  async getProject(conntectedToProjectId: string): Promise<IProject & { projectId: string }> {
     const {
       data: { result },
-    } = await api.get<{ result: IProject }>('/v1/global/project', {
+    } = await api.get<{ result: IProject & { projectId: string } }>('/v1/global/project', {
       params: {
         userToProjectId: conntectedToProjectId,
       },
@@ -74,6 +75,26 @@ class ProjectApi {
     })
 
     return result
+  }
+
+  async getTableById(projectId: number) {
+    const data = await api.get<{ result: IEntity }>(`/v1/global/project/table/${projectId}`)
+    return data.data.result
+  }
+
+  async getCreateTable() {
+    const data = await api.get(`/v1/global/project/table/create`)
+    return data.data.result
+  }
+
+  async createProject(dto: IEntity['data']) {
+    const data = await api.post<{ result: IProject }>('/v1/global/project', dto)
+    return data.data.result
+  }
+
+  async updateProject(dto: IEntity['data']) {
+    await api.patch<{ result: IProject }>(`/v1/project/${dto.id}`, dto)
+    return true
   }
 }
 

@@ -45,7 +45,7 @@
   import InfoSelect from './components/InfoSelect.vue'
   import InfoDatePicker from './components/InfoDatePicker.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import type { IField } from '@/src/utils/api/models/infoEntiyt.base'
+  import type { IField } from '@/src/utils/api/models/infoEntity.base.ts'
 
   const props = withDefaults(defineProps<{ field: IField }>(), {})
 

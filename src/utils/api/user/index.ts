@@ -1,5 +1,5 @@
 import api from '..'
-import type { IEntity } from '../models/infoEntiyt.base'
+import type { IEntity } from '../models/infoEntity.base'
 import type { IUser } from '../models/user'
 import type { IUserToProject } from '../models/userToProject'
 

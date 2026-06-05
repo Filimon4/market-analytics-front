@@ -47,7 +47,7 @@
   import undo from '/icons/undo.png'
   import pencil from '/icons/pencil.png'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import type { IField } from '@/src/utils/api/models/infoEntiyt.base'
+  import type { IField } from '@/src/utils/api/models/infoEntity.base.ts'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 

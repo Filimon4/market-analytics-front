@@ -12,7 +12,7 @@
   import { onMounted, ref, watch } from 'vue'
   import Tree from '@/src/components/Ui/Tree/Tree.vue'
   import type { TreeNodes } from '@/src/components/Ui/Tree/types'
-  import type { IBlock, IBlockTreeDetail } from '@/src/utils/api/models/infoEntiyt.base'
+  import type { IBlock, IBlockTreeDetail } from '@/src/utils/api/models/infoEntity.base'
 
   const infoDataEntityStore = useInfoDataEntityStore()
 

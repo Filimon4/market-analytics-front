@@ -1,5 +1,5 @@
 import api from '..'
-import type { IEntity } from '../models/infoEntiyt.base'
+import type { IEntity } from '../models/infoEntity.base'
 
 class ApiKeysApi {
   async getTableList(page: number, size: number, filter: Record<string, string | number>) {

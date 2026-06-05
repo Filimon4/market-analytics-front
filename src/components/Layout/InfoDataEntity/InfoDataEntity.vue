@@ -32,7 +32,7 @@
   import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import InfoEditableTree from '@/src/components/common/InfoDataEntity/InfoEditableTree/InfoEditableTree.vue'
-  import type { IBlockTreeDetail, IEntity } from '@/src/utils/api/models/infoEntiyt.base'
+  import type { IBlockTreeDetail, IEntity } from '@/src/utils/api/models/infoEntity.base.ts'
 
   const loading = ref<boolean>(true)
   const infoDataEntityStore = useInfoDataEntityStore()

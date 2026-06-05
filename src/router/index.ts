@@ -20,6 +20,8 @@ import Role from '../views/projects/roles/Role.vue'
 import CreateRole from '../views/projects/roles/CreateRole.vue'
 import CreateApiKey from '../views/projects/apikeys/CreateApiKey.vue'
 import Invite from '../views/invite/Invite.vue'
+import CreateProject from '../views/projects/CreateProject.vue'
+import Project from '../views/projects/Project.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -59,6 +61,9 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'projects',
         children: [
+          { path: 'create', component: CreateProject },
+          { path: ':id', component: Project },
+
           { path: 'developer', component: Developer },
 
           { path: 'apikeys', component: Apikeys },
