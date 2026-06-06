@@ -40,6 +40,16 @@ class ChannelSourceApi {
     const data = await api.post<{ result: { id: string } }>('/v1/channel-sources', entity)
     return data.data.result
   }
+
+  async deleteEntity(id: number) {
+    const data = await api.delete<{ result: boolean }>(`/v1/channel-sources/${id}`)
+    return data.data.result
+  }
+
+  async restoreEntity(id: number) {
+    const data = await api.patch<{ result: boolean }>(`/v1/channel-sources/${id}/restore`)
+    return data.data.result
+  }
 }
 
 const channelSrouceApi = new ChannelSourceApi()

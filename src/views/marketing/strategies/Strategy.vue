@@ -1,8 +1,7 @@
 <template>
   <InfoDataEntity
-    v-model="triggerUpdate"
-    :fetch-data-req="async () => channelSrouceApi.getTableEntity(channelSourceId)"
-    :save-data-req="channelSrouceApi.saveChannelSource"
+    :fetch-data-req="async () => strategyApi.getTableEntity(strategyId)"
+    :save-data-req="strategyApi.updateStrategy"
     :actions="actions"
     @click:action="handleClickAction"
   />
@@ -11,36 +10,40 @@
 <script setup lang="ts">
   import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
-  import channelSrouceApi from '@/src/utils/api/channelSource'
+  import strategyApi from '@/src/utils/api/strategy'
   import { useDialog } from 'naive-ui'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  const dialog = useDialog()
   const router = useRouter()
   const route = useRoute()
-  const dialog = useDialog()
-
-  const channelSourceId = computed(() => Number(route.params.id))
-
-  const triggerUpdate = ref(false)
 
   const actions = ref<Action[]>([
-    {
-      title: 'Архивировать',
-      blockCode: 'main',
-      code: 'archive',
-      size: 'medium',
-    },
     {
       title: 'Востановить',
       blockCode: 'main',
       code: 'restore',
       size: 'medium',
     },
+    {
+      title: 'Удалить',
+      blockCode: 'main',
+      code: 'delete',
+      size: 'medium',
+    },
+    {
+      title: 'Добавить отчёт',
+      blockCode: 'analytics',
+      code: 'addReport',
+      size: 'medium',
+    },
   ])
 
+  const strategyId = computed(() => Number(route.params.id))
+
   const handleClickAction = async (action: string) => {
-    if (action == 'archive') {
+    if (action == 'delete') {
       const react = await new Promise(res =>
         dialog.warning({
           title: 'Подтверждение',
@@ -59,7 +62,7 @@
 
       if (!react) return
 
-      const response = await channelSrouceApi.deleteEntity(channelSourceId.value)
+      const response = await strategyApi.deleteStrategy(strategyId.value)
       if (response) {
         router.back()
       }
@@ -67,7 +70,7 @@
       const react = await new Promise(res =>
         dialog.warning({
           title: 'Подтверждение',
-          content: 'Хотите востановить источник?',
+          content: 'Хотите востановить стратегию',
           positiveText: 'Да',
           negativeText: 'Нет',
           draggable: true,
@@ -82,8 +85,9 @@
 
       if (!react) return
 
-      await channelSrouceApi.restoreEntity(channelSourceId.value)
-      triggerUpdate.value = true
+      await strategyApi.restoreStrategy(strategyId.value)
+    } else if (action === 'addReport') {
+      // TODO: Drawer
     }
   }
 </script>

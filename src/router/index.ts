@@ -7,7 +7,6 @@ import Dashboard from '../views/dashboard/Dashboard.vue'
 import NotFound from '../views/notFound/NotFound.vue'
 import Account from '../views/account/Account.vue'
 import { useUserStore } from '../store/user'
-import Strategy from '../views/marketing/strategy/Strategy.vue'
 import Channels from '../views/marketing/channels/Channels.vue'
 import Performance from '../views/marketing/performance/Performance.vue'
 import Developer from '../views/projects/developer/Developer.vue'
@@ -27,6 +26,9 @@ import ChannelSource from '../views/projects/channelSources/ChannelSource.vue'
 import Invitations from '../views/projects/Invitations/Invitations.vue'
 import Invitation from '../views/projects/Invitations/Invitation.vue'
 import ChannelSourcesCreate from '../views/projects/channelSources/ChannelSourcesCreate.vue'
+import Strategies from '../views/marketing/strategies/Strategies.vue'
+import CreateStrategy from '../views/marketing/strategies/CreateStrategy.vue'
+import Strategy from '../views/marketing/strategies/Strategy.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -53,7 +55,9 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'marketing',
         children: [
-          { path: 'strategy', component: Strategy },
+          { path: 'strategies', component: Strategies },
+          { path: 'strategies/:id', component: Strategy },
+          { path: 'strategies/create', component: CreateStrategy },
           {
             path: 'channels',
             children: [
