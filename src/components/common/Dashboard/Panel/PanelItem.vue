@@ -1,5 +1,8 @@
 <template>
-  <div class="panel-item-container panel-item-container--opened">
+  <div
+    class="panel-item-container panel-item-container--opened"
+    :class="{ 'panel-item-container--active': isActive }"
+  >
     <div
       class="panel-item"
       @click="$emit('click')"
@@ -16,6 +19,7 @@
   defineProps({
     item: { type: Object, required: true },
     labelVisible: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: false },
   })
   defineEmits(['click', 'mouseenter', 'mouseleave'])
 </script>

@@ -1,6 +1,5 @@
-<!-- TODO BUG: Если я нажимаю на иконка на которой открыта панель то она закрывается -->
 <template>
-  <div class="panels-wrapper">
+  <div ref="panelsWrapperRef" class="panels-wrapper">
     <div class="panel-container" :style="{ width: panelOpened ? '220px' : '50px' }">
       <div
         class="panel-item"
@@ -15,27 +14,22 @@
             v-for="item in block.items"
             :key="item.id"
             :item="item"
-            :is-hover="hoverId === item.id"
             :label-visible="panelOpened"
-            @click="onItemClick(item)"
-            @mouseenter="hoverId = item.id"
-            @mouseleave="hoverId = null"
+            :is-active="selectedMainPanelItem === item"
+            @click="onMainItemClick(item)"
           />
         </div>
       </div>
     </div>
-    <div v-if="subPanelItem" ref="subPanelRef" class="panel-container" :style="{ width: '220px' }">
+    <div v-if="selectedMainPanelItem" class="panel-container" :style="{ width: '220px' }">
       <div class="panel-content panel-content-opened">
         <div class="panel-content-block">
           <PanelItem
-            v-for="sub in subPanelItem.children"
+            v-for="sub in selectedMainPanelItem.children"
             :key="sub.id"
             :item="sub"
-            :is-hover="subHoverId === sub.id"
             :label-visible="true"
-            @click="onItemClick(sub)"
-            @mouseenter="subHoverId = sub.id"
-            @mouseleave="subHoverId = null"
+            @click="onSubItemClick(sub)"
           />
         </div>
       </div>
@@ -47,16 +41,23 @@
   import { onClickOutside } from '@vueuse/core'
   import PanelItem from './PanelItem.vue'
   import accountIcon from '/icons/account.png'
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed } from 'vue'
   import { useRouter } from 'vue-router'
   import { useProjectStore } from '@/src/store/project'
 
+  type TPanelItem = {
+    id: number
+    code?: number | string
+    name: string
+    icon?: string
+    url?: string
+    children?: TPanelItem[]
+  }
+
   const router = useRouter()
   const panelOpened = ref(false)
-  const subPanelRef = ref(null)
-  const subPanelItem = ref(null)
-  const hoverId = ref(null)
-  const subHoverId = ref(null)
+  const panelsWrapperRef = ref(null)
+  const selectedMainPanelItem = ref<TPanelItem | null>(null)
 
   const project = useProjectStore()
 
@@ -70,22 +71,39 @@
     ]
   })
 
-  function onItemClick(item) {
+  const onMainItemClick = (item: TPanelItem) => {
+    const isSelectedItem = selectedMainPanelItem.value === item
+
+    if (isSelectedItem) {
+      closePanel()
+      return
+    }
+
+    if (item?.children?.length) {
+      selectedMainPanelItem.value = item
+      return
+    }
+
     if (item.url) {
       router.push(item.url)
-      subPanelItem.value = null
-    } else if (item?.children?.length) {
-      subPanelItem.value = item
+      closePanel()
     }
   }
 
-  watch(panelOpened, open => {
-    if (!open) subPanelItem.value = null
+  const onSubItemClick = (item: TPanelItem) => {
+    if (item.url) {
+      router.push(item.url)
+      closePanel()
+    }
+  }
+
+  onClickOutside(panelsWrapperRef, () => {
+    closePanel()
   })
 
-  onClickOutside(subPanelRef, () => {
-    subPanelItem.value = null
-  })
+  const closePanel = () => {
+    selectedMainPanelItem.value = null
+  }
 </script>
 
 <style lang="css">

@@ -1,3 +1,4 @@
+import type { ITableRow } from './infoTable.base'
 import type { IProject } from './project'
 
 export const invitationStatus = {
@@ -8,8 +9,7 @@ export const invitationStatus = {
   DECLINED: 'DECLINED',
 }
 
-export interface IInvitation {
-  id: string
+export interface IInvitation extends ITableRow {
   email: string
   token: string
   invitedById: string

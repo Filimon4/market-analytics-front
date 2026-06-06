@@ -1,3 +1,4 @@
+<!-- TOOD BUG: Панель нужно обнавлять чаще. Сейчас только при смене проекта, то есть при изминении панель не будет изминятся -->
 <template>
   <n-config-provider :locale="ruLocale" :date-locale="dateRuRU" :theme-overrides="theme">
     <n-modal-provider>

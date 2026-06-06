@@ -1,4 +1,6 @@
 import api from '..'
+import type { IEntity } from '../models/infoEntity.base'
+import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
 import type { IInvitation, InvitationWithProject } from '../models/invitation'
 
 class InvitationApi {
@@ -50,6 +52,30 @@ class InvitationApi {
     const response = await api.get<{ result: InvitationWithProject }>(`/v1/invitations/${token}`)
 
     return response.data.result
+  }
+
+  async getTableList(
+    page: number,
+    size: number,
+    filter: Record<string, ITableFilterValue>
+  ): Promise<ITableList<IInvitation>> {
+    const data = await api.post<{ result: ITableList<IInvitation> }>('/v1/invitations/table/list', {
+      page,
+      size,
+      filter,
+    })
+
+    return data.data.result
+  }
+
+  async getTableEntity(id: number) {
+    const data = await api.get<{ result: IEntity }>(`/v1/invitations/table/${id}`)
+    return data.data.result
+  }
+
+  async getCreateTable() {
+    const data = await api.get(`/v1/invitations/table/create`)
+    return data.data.result
   }
 }
 
