@@ -1,13 +1,13 @@
 import api from '..'
 import type { IEntity } from '../models/infoEntity.base'
-import type { ITableList } from '../models/infoTable.base'
+import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
 import type { IRole } from '../models/role'
 
 class RoleApi {
   async getTableList(
     page: number,
     size: number,
-    filter: Record<string, string | number>
+    filter: Record<string, ITableFilterValue>
   ): Promise<ITableList<IRole>> {
     const data = await api.post<{ result: ITableList<IRole> }>('/v1/project/roles/table/list', {
       page,

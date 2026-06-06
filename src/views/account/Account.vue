@@ -47,7 +47,7 @@
     },
     {
       title: 'Добавить новый',
-      code: 'addProject', // TODO: Добавить лоигку на кнопку
+      code: 'addProject',
       size: 'medium',
       blockCode: 'project',
     },

@@ -6,7 +6,20 @@ export interface ITableColumn {
   selectUrl?: string // for select
   constantList?: string[] // for constant
   path?: string
+  /**
+   * Фильтрафия
+   *
+   * Вид фильтра datetime типа
+   */
+  dateTimeFilterType?: 'period' | 'exact'
 }
+
+export interface IDateTimePeriodFilter {
+  from?: string
+  to?: string
+}
+
+export type ITableFilterValue = string | number | IDateTimePeriodFilter
 
 export interface ITableRow {
   id: string | number

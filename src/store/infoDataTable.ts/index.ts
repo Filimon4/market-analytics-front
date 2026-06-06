@@ -1,9 +1,14 @@
-import type { ITableColumn, ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+import type {
+  ITableColumn,
+  ITableFilterValue,
+  ITableList,
+  ITableRow,
+} from '@/src/utils/api/models/infoTable.base'
 import { defineStore } from 'pinia'
 import { ref, type Ref } from 'vue'
 
 interface IInfoDataTableStore {
-  filters: Ref<Record<string, string | number>>
+  filters: Ref<Record<string, ITableFilterValue>>
   setInitTableData: (
     redirectUrl: string,
     pageSize: number,
@@ -11,7 +16,7 @@ interface IInfoDataTableStore {
     fetchCallback: (
       page: number,
       size: number,
-      filters: Record<string, string | number>
+      filters: Record<string, ITableFilterValue>
     ) => Promise<ITableList<ITableRow>>
   ) => void
   getEntityRedirectUrl: (entity: ITableRow) => string
@@ -42,7 +47,7 @@ export const useInfoDataTableStore = defineStore(
         (
           page: number,
           size: number,
-          filters: Record<string, string | number>
+          filters: Record<string, ITableFilterValue>
         ) => Promise<ITableList<ITableRow>>
       >()
     const entityRedirectUrlRef = ref<string>()
@@ -89,7 +94,7 @@ export const useInfoDataTableStore = defineStore(
       fetchCallback: (
         page: number,
         size: number,
-        filters: Record<string, string | number>
+        filters: Record<string, ITableFilterValue>
       ) => Promise<ITableList<ITableRow>>
     ) => {
       resetTableData()

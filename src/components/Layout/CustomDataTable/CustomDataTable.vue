@@ -56,13 +56,13 @@
 <script setup lang="ts">
   import { onUnmounted } from 'vue'
   import { NPagination } from 'naive-ui'
-  import type { ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import type { ITableFilterValue, ITableRow } from '@/src/utils/api/models/infoTable.base'
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
 
   const infoDataTableStore = useInfoDataTableStore()
 
   const props = withDefaults(
-    defineProps<{ loading: boolean; filters: Record<string, string | number> }>(),
+    defineProps<{ loading: boolean; filters: Record<string, ITableFilterValue> }>(),
     {
       loading: false,
       filters: () => ({}),

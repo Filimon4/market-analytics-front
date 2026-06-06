@@ -1,5 +1,6 @@
 import api from '..'
 import type { IEntity } from '../models/infoEntity.base'
+import type { ITableFilterValue } from '../models/infoTable.base'
 import type { IUser } from '../models/user'
 import type { IUserToProject } from '../models/userToProject'
 
@@ -21,7 +22,7 @@ class UserApi {
     return result
   }
 
-  async getTableList(page: number, size: number, filter: Record<string, string | number>) {
+  async getTableList(page: number, size: number, filter: Record<string, ITableFilterValue>) {
     const data = await api.post('/v1/project/user/table/list', {
       page,
       size,

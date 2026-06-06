@@ -64,6 +64,26 @@
               @update:value="updateValue"
               @update:show="(opened: boolean) => opened && fetchSelectOptions(column)"
             />
+
+            <n-date-picker
+              v-else-if="column.type === 'datetime' && column.dateTimeFilterType === 'period'"
+              type="datetimerange"
+              clearable
+              size="small"
+              :bordered="false"
+              @update:value="handleDateTimePeriodChange(column.code, $event, updateValue)"
+              :value="getDateTimePeriodValue(column.code)"
+            />
+
+            <n-date-picker
+              v-else-if="column.type === 'datetime'"
+              type="datetime"
+              clearable
+              size="small"
+              :bordered="false"
+              @update:value="handleDateTimeExactChange(column.code, $event, updateValue)"
+              :value="getDateTimeExactValue(column.code)"
+            />
           </template>
         </div>
       </template>
@@ -76,11 +96,18 @@
 </template>
 
 <script setup lang="ts">
+  import { DateTime } from 'luxon'
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
   import { useRouter } from 'vue-router'
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
-  import type { ITableColumn, ITableList, ITableRow } from '@/src/utils/api/models/infoTable.base'
+  import type {
+    IDateTimePeriodFilter,
+    ITableColumn,
+    ITableFilterValue,
+    ITableList,
+    ITableRow,
+  } from '@/src/utils/api/models/infoTable.base'
   import InfoTableField from '../../common/InfoDataEntity/InfoField/InfoTableField.vue'
   import type { Action } from '../CustomDataTable/CustomDataTable.type'
   import api from '@/src/utils/api'
@@ -99,11 +126,11 @@
     fetchDataReq: {
       required: true,
       type: Function as PropType<
-        <T extends ITableRow>(
+        (
           page: number,
           size: number,
-          filters: Record<string, string | number>
-        ) => Promise<ITableList<T>>
+          filters: Record<string, ITableFilterValue>
+        ) => Promise<ITableList<ITableRow>>
       >,
     },
     defaultPageSize: {
@@ -122,6 +149,60 @@
 
   const selectOptions = ref<Record<string, { label: string; value: number }[]>>({})
   const selectLoading = ref<Record<string, boolean>>({})
+
+  // #region DateTime logic
+
+  const toISOValue = (value: number) => DateTime.fromMillis(value, { zone: 'utc' }).toISO()
+
+  const getDateTimeExactValue = (columnCode: string): number | null => {
+    const filterValue = infoDataTableStore.filters[columnCode]
+
+    if (typeof filterValue === 'number') return filterValue
+    if (typeof filterValue !== 'string' || !filterValue) return null
+
+    const dateTime = DateTime.fromISO(filterValue, { zone: 'utc' })
+    return dateTime.isValid ? dateTime.toMillis() : null
+  }
+
+  const getDateTimePeriodValue = (columnCode: string): [number, number] | null => {
+    const filterValue = infoDataTableStore.filters[columnCode]
+    if (!filterValue || typeof filterValue !== 'object') return null
+
+    const periodValue = filterValue as IDateTimePeriodFilter
+    if (!periodValue.from || !periodValue.to) return null
+
+    const fromDateTime = DateTime.fromISO(periodValue.from, { zone: 'utc' })
+    const toDateTime = DateTime.fromISO(periodValue.to, { zone: 'utc' })
+
+    if (!fromDateTime.isValid || !toDateTime.isValid) return null
+
+    return [fromDateTime.toMillis(), toDateTime.toMillis()]
+  }
+
+  const handleDateTimeExactChange = (
+    columnCode: string,
+    value: number | null,
+    updateValue: () => void
+  ) => {
+    infoDataTableStore.filters[columnCode] = value === null ? '' : (toISOValue(value) ?? '')
+    updateValue()
+  }
+
+  const handleDateTimePeriodChange = (
+    columnCode: string,
+    value: [number, number] | null,
+    updateValue: () => void
+  ) => {
+    infoDataTableStore.filters[columnCode] = value
+      ? {
+          from: toISOValue(value[0]) ?? undefined,
+          to: toISOValue(value[1]) ?? undefined,
+        }
+      : {}
+    updateValue()
+  }
+
+  // #endregion
 
   const fetchSelectOptions = async (column: ITableColumn) => {
     if (!column.selectUrl || selectOptions.value[column.code]?.length) return
