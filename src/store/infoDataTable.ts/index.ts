@@ -132,6 +132,18 @@ export const useInfoDataTableStore = defineStore(
       return `${entityRedirectUrlRef.value}/${entity.id}`
     }
 
+    const sanitizeFilters = (
+      raw: Record<string, ITableFilterValue>
+    ): Record<string, ITableFilterValue> => {
+      return Object.fromEntries(
+        Object.entries(raw).filter(([, value]) => {
+          if (value === null || value === undefined || value === '') return false
+          if (typeof value === 'object' && Object.keys(value).length === 0) return false
+          return true
+        })
+      )
+    }
+
     const fetchPage = async () => {
       const isValid = isValidPageForFetch()
 
@@ -140,7 +152,7 @@ export const useInfoDataTableStore = defineStore(
       const response = await fetchCallbackRef.value!(
         pageRef.value,
         pageSizeRef.value,
-        filters.value
+        sanitizeFilters(filters.value)
       )
 
       tableDataRef.value = response.data
