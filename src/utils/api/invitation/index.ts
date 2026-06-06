@@ -4,8 +4,8 @@ import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
 import type { IInvitation, InvitationWithProject } from '../models/invitation'
 
 class InvitationApi {
-  async resend(token: string) {
-    const response = await api.patch<{ result: boolean }>(`/v1/invitations/${token}/resend`)
+  async resend(id: number) {
+    const response = await api.post<{ result: boolean }>(`/v1/invitations/${id}/resend`)
 
     return response.data.result
   }
@@ -22,8 +22,8 @@ class InvitationApi {
     return response.data.result
   }
 
-  async cancel(token: string) {
-    const response = await api.patch<{ result: boolean }>(`/v1/invitations/${token}/cancel`)
+  async cancel(id: number) {
+    const response = await api.patch<{ result: boolean }>(`/v1/invitations/${id}/cancel`)
 
     return response.data.result
   }
@@ -76,6 +76,11 @@ class InvitationApi {
   async getCreateTable() {
     const data = await api.get(`/v1/invitations/table/create`)
     return data.data.result
+  }
+
+  async getAvailableActions(id: number) {
+    const data = await api.get<{ result: { actions: string[] } }>(`/v1/invitations/actions/${id}`)
+    return data.data.result.actions
   }
 }
 
