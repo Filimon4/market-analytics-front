@@ -29,6 +29,8 @@ import ChannelSourcesCreate from '../views/projects/channelSources/ChannelSource
 import Strategies from '../views/marketing/strategies/Strategies.vue'
 import CreateStrategy from '../views/marketing/strategies/CreateStrategy.vue'
 import Strategy from '../views/marketing/strategies/Strategy.vue'
+import CreateChannel from '../views/marketing/channels/CreateChannel.vue'
+import Channel from '../views/marketing/channels/Channel.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -56,15 +58,17 @@ const routes: RouteRecordRaw[] = [
         path: 'marketing',
         children: [
           { path: 'strategies', component: Strategies },
-          { path: 'strategies/:id', component: Strategy },
           { path: 'strategies/create', component: CreateStrategy },
+          { path: 'strategies/:id', component: Strategy },
           {
             path: 'channels',
             children: [
               { path: '', component: Channels },
-              { path: 'performance', component: Performance },
+              { path: 'performances', children: [{ path: '', component: Performance }] },
             ],
           },
+          { path: 'channels/create', component: CreateChannel },
+          { path: 'channels/:id', component: Channel },
         ],
       },
       {
@@ -87,8 +91,8 @@ const routes: RouteRecordRaw[] = [
           { path: 'roles/:id', component: Role },
 
           { path: 'channelsources', component: ChannelSources },
-          { path: 'channelsources/:id', component: ChannelSource },
           { path: 'channelsources/create', component: ChannelSourcesCreate },
+          { path: 'channelsources/:id', component: ChannelSource },
 
           { path: 'invitations', component: Invitations },
           { path: 'invitations/:id', component: Invitation },
