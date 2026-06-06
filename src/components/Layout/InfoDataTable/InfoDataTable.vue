@@ -65,6 +65,17 @@
               @update:show="(opened: boolean) => opened && fetchSelectOptions(column)"
             />
 
+            <n-select
+              v-else-if="column.type === 'constants'"
+              v-model:value="infoDataTableStore.filters[column.code]"
+              :options="getConstantOptions(column)"
+              clearable
+              size="small"
+              :bordered="false"
+              placeholder=""
+              @update:value="updateValue"
+            />
+
             <n-date-picker
               v-else-if="column.type === 'datetime' && column.dateTimeFilterType === 'period'"
               type="datetimerange"
@@ -221,6 +232,13 @@
     }
 
     selectLoading.value[column.code] = false
+  }
+
+  const getConstantOptions = (column: ITableColumn) => {
+    return (column.constantList ?? []).map(item => ({
+      label: item,
+      value: item,
+    }))
   }
 
   const resolveFieldValue = (field: string, row: ITableRow) => {
