@@ -1,3 +1,4 @@
+<!-- TODO BUG: В проекте назнваие неправильно отображается -->
 <template>
   <InfoDataEntity
     :fetch-data-req="userApi.getTable"

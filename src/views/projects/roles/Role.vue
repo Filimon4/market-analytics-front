@@ -1,16 +1,23 @@
-<!-- TODO: Permissions могут добалвтья, поэтому нужно придумать добавление доступов динамическое -->
 <template>
   <InfoDataEntity
+    v-model="triggerUpdate"
     :fetch-data-req="async () => roleApi.getTableById(roleId)"
     :save-data-req="roleApi.saveRole"
     :actions="actions"
     @click:action="handleClickAction"
+  />
+
+  <AddPermissionsModal
+    v-model:show="showAddPermissionsModal"
+    :role-id="roleId"
+    @added="onPermissionsAdded"
   />
 </template>
 
 <script setup lang="ts">
   import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
+  import AddPermissionsModal from '@/src/components/Ui/AddPermissionsModal/AddPermissionsModal.vue'
   import roleApi from '@/src/utils/api/role'
   import { useDialog } from 'naive-ui'
   import { computed, ref } from 'vue'
@@ -22,6 +29,8 @@
   const route = useRoute()
 
   const roleId = computed(() => Number(route.params.id))
+  const showAddPermissionsModal = ref(false)
+  const triggerUpdate = ref(false)
 
   const actions = ref<Action[]>([
     {
@@ -34,6 +43,12 @@
       title: 'Удалить',
       blockCode: 'main',
       code: 'delete',
+      size: 'medium',
+    },
+    {
+      title: 'Добавить доступы',
+      blockCode: 'permissions',
+      code: 'addPermission',
       size: 'medium',
     },
   ])
@@ -82,6 +97,12 @@
       if (!react) return
 
       await roleApi.restoreRole(roleId.value)
+    } else if (action === 'addPermission') {
+      showAddPermissionsModal.value = true
     }
+  }
+
+  function onPermissionsAdded() {
+    triggerUpdate.value = true
   }
 </script>

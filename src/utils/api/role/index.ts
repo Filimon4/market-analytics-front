@@ -9,7 +9,7 @@ class RoleApi {
     size: number,
     filter: Record<string, ITableFilterValue>
   ): Promise<ITableList<IRole>> {
-    const data = await api.post<{ result: ITableList<IRole> }>('/v1/project/roles/table/list', {
+    const data = await api.post<{ result: ITableList<IRole> }>('/v1/roles/table/list', {
       page,
       size,
       filter,
@@ -19,34 +19,48 @@ class RoleApi {
   }
 
   async getTableById(roleId: number) {
-    const data = await api.get<{ result: IEntity }>(`/v1/project/roles/table/${roleId}`)
+    const data = await api.get<{ result: IEntity }>(`/v1/roles/table/${roleId}`)
     return data.data.result
   }
 
   async getCreateTable() {
-    const data = await api.get(`/v1/project/roles/table/create`)
+    const data = await api.get(`/v1/roles/table/create`)
     return data.data.result
   }
 
   async createEntity(dto: object) {
-    const data = await api.post<{ result: { id: string; code: string } }>('/v1/project/roles', dto)
+    const data = await api.post<{ result: { id: string; code: string } }>('/v1/roles', dto)
     return data.data.result
   }
 
   async deleteRole(id: number) {
-    const data = await api.delete<{ result: boolean }>(`/v1/project/roles/${id}`)
+    const data = await api.delete<{ result: boolean }>(`/v1/roles/${id}`)
     return data.data.result
   }
 
   async restoreRole(id: number) {
-    const data = await api.patch<{ result: boolean }>(`/v1/project/roles/restore/${id}`)
+    const data = await api.patch<{ result: boolean }>(`/v1/roles/${id}/restore`)
     return data.data.result
   }
 
   async saveRole(data: IEntity['data']) {
-    const response = await api.patch<{ result: boolean }>('/v1/project/roles', data)
+    const response = await api.patch<{ result: boolean }>('/v1/roles', data)
 
     return response.data.result
+  }
+
+  async getNewPermissionsForRole(id: number) {
+    const data = await api.get<{
+      result: { id: number; name: string; description: string | null }[]
+    }>(`/v1/roles/${id}/permissions/new`)
+    return data.data.result
+  }
+
+  async addNewPermissionsToRole(id: number, permissionIds: number[]) {
+    const data = await api.post(`/v1/roles/${id}/permissions`, {
+      permissionIds,
+    })
+    return data.data.result
   }
 }
 

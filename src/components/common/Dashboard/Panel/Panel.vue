@@ -1,3 +1,4 @@
+<!-- TODO BUG: Если я нажимаю на иконка на которой открыта панель то она закрывается -->
 <template>
   <div class="panels-wrapper">
     <div class="panel-container" :style="{ width: panelOpened ? '220px' : '50px' }">

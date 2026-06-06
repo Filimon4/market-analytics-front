@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddPermissionsModal: typeof import('./src/components/Ui/AddPermissionsModal/AddPermissionsModal.vue')['default']
     Affix: typeof import('./src/components/common/Affix/Affix.vue')['default']
     BlockTableContent: typeof import('./src/components/Layout/CustomDataEntity/DataContentType/BlockTableContent.vue')['default']
     BlockTreeContent: typeof import('./src/components/Layout/CustomDataEntity/DataContentType/BlockTreeContent.vue')['default']
