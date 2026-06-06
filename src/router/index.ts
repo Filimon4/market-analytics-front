@@ -26,6 +26,7 @@ import ChannelSources from '../views/projects/channelSources/ChannelSources.vue'
 import ChannelSource from '../views/projects/channelSources/ChannelSource.vue'
 import Invitations from '../views/projects/Invitations/Invitations.vue'
 import Invitation from '../views/projects/Invitations/Invitation.vue'
+import ChannelSourcesCreate from '../views/projects/channelSources/ChannelSourcesCreate.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -81,9 +82,10 @@ const routes: RouteRecordRaw[] = [
           { path: 'roles/create', component: CreateRole },
           { path: 'roles/:id', component: Role },
 
-          // TODO: Доделать
           { path: 'channelsources', component: ChannelSources },
           { path: 'channelsources/:id', component: ChannelSource },
+          { path: 'channelsources/create', component: ChannelSourcesCreate },
+
           { path: 'invitations', component: Invitations },
           { path: 'invitations/:id', component: Invitation },
         ],
