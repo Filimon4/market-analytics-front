@@ -55,6 +55,6 @@ class ChannelPerformanceApi {
   }
 }
 
-const channelApi = new ChannelPerformanceApi()
+const channelPerformanceApi = new ChannelPerformanceApi()
 
-export default channelApi
+export default channelPerformanceApi
