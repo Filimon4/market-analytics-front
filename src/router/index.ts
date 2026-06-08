@@ -8,7 +8,6 @@ import NotFound from '../views/notFound/NotFound.vue'
 import Account from '../views/account/Account.vue'
 import { useUserStore } from '../store/user'
 import Channels from '../views/marketing/channels/Channels.vue'
-import Performance from '../views/marketing/performance/Performance.vue'
 import Developer from '../views/projects/developer/Developer.vue'
 import Apikeys from '../views/projects/apikeys/Apikeys.vue'
 import Apikey from '../views/projects/apikeys/Apikey.vue'
@@ -31,6 +30,9 @@ import CreateStrategy from '../views/marketing/strategies/CreateStrategy.vue'
 import Strategy from '../views/marketing/strategies/Strategy.vue'
 import CreateChannel from '../views/marketing/channels/CreateChannel.vue'
 import Channel from '../views/marketing/channels/Channel.vue'
+import Performances from '../views/marketing/performances/Performances.vue'
+import CreatePerformance from '../views/marketing/performances/CreatePerformance.vue'
+import Performance from '../views/marketing/performances/Performance.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -64,7 +66,14 @@ const routes: RouteRecordRaw[] = [
             path: 'channels',
             children: [
               { path: '', component: Channels },
-              { path: 'performances', children: [{ path: '', component: Performance }] },
+              {
+                path: 'performances',
+                children: [
+                  { path: '', component: Performances },
+                  { path: 'create', component: CreatePerformance },
+                  { path: ':id', component: Performance },
+                ],
+              },
             ],
           },
           { path: 'channels/create', component: CreateChannel },

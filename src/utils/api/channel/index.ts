@@ -29,7 +29,7 @@ class ChannelApi {
   }
 
   async saveEntity(entity: IEntity['data']) {
-    const data = await api.patch<{ result: boolean }>('/v1/channels', entity)
+    const data = await api.patch<{ result: boolean }>(`/v1/channels/${entity.id}`, entity)
     return data.data.result
   }
 
