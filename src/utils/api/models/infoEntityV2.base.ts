@@ -1,19 +1,38 @@
 import type { TreeNodes } from '@/src/components/Ui/Tree/types'
 
-export interface IBlockIndentifier {
-  blockCode: string
+// #region Blocks
+export interface ITreeBlock extends IBlock {
+  blockType: 'tree'
+}
+
+export interface ITableBlock extends IBlock {
+  columnCapacity: number
+  maxColumns: number
+  blockType: 'table'
+}
+
+export interface IAnalyticBlock extends IBlock {
+  blockType: 'analytics'
+}
+
+export interface IMetricBlock extends IBlock {
+  blockType: 'metrics'
 }
 
 export interface IBlock {
-  name: string
   code: string
-  columnCapacity: number
-  maxColumns: number
-  blockType: 'table' | 'tree' | 'analytics' | 'metrics'
-
-  // Поля для добавления
-  createHide?: true // При добавлениии блок будет скрыт
+  name: string
+  actions?: { title: string; code: string; size: 'small' | 'medium' | 'large'; blockCode: string }[]
+  /**
+   * Добавление
+   *
+   * При добавлениии блок будет скрыт
+   */
+  createHide?: true
 }
+
+export type TEntityBlock = ITreeBlock | ITableBlock | IAnalyticBlock | IMetricBlock
+// #endregion
 
 export interface IField {
   title: string
@@ -27,6 +46,10 @@ export interface IField {
   required?: true // Обязательно заполнение при добавлении
   createEditable?: boolean // При добавлении можно ли менять. Перекрывает editable
   createDefault?: boolean | string | number // При добавлении дефолтное значение. Если поле только для отображение (editable: false) то можно добавить дефолтное значение
+}
+
+export interface IBlockIndentifier {
+  blockCode: string
 }
 
 export interface IBlockDetail extends IBlockIndentifier {
@@ -48,7 +71,7 @@ export interface Tree {
 }
 
 export interface IEntity {
-  blocks: IBlock[]
+  blocks: TEntityBlock[]
   blockDetails: (IBlockDetail | IBlockTreeDetail)[]
   data: Data
 }

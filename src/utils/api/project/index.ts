@@ -27,7 +27,7 @@ class ProjectApi {
     const {
       data: { result },
     } = await api.get<{
-      result: IRole & { rolePermission: (IRolePermission & { persmission: IPermission })[] }
+      result: IRole & { rolePermission: (IRolePermission & { permission: IPermission })[] }
     }>('/v1/roles/current')
     return {
       role: {
@@ -39,7 +39,7 @@ class ProjectApi {
       permissions: result.rolePermission.map(rolePerm => ({
         granted: rolePerm.granted,
         permissionId: rolePerm.permissionId,
-        code: rolePerm.persmission.code,
+        code: rolePerm.permission.code,
       })),
     }
   }

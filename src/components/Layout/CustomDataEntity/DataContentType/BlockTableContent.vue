@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import type { IBlock } from '../CustomDataEntity.type'
+  import type { IBlock } from '@/src/utils/api/models/infoEntity.base'
   import { computed } from 'vue'
 
   const infoDataEntityStore = useInfoDataEntityStore()

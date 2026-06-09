@@ -71,7 +71,7 @@
       const react = await new Promise(res =>
         dialog.warning({
           title: 'Подтверждение',
-          content: 'Хотите востановить источник?',
+          content: 'Хотите востановить ?',
           positiveText: 'Да',
           negativeText: 'Нет',
           draggable: true,

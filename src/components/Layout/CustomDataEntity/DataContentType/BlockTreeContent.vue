@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { IBlock } from '../CustomDataEntity.type'
+  import type { IBlock } from '@/src/utils/api/models/infoEntity.base'
 
   defineProps<{
     block: IBlock

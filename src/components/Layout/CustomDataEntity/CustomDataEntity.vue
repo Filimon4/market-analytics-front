@@ -5,7 +5,13 @@
   </Affix>
   <div class="blocks">
     <div v-for="block in infoDataEntityStore.blocksData" :key="block.code" class="block">
-      <slot name="block-header" :block="block" :title="block.name" :code="block.code">
+      <slot
+        name="block-header"
+        :block="block"
+        :title="block.name"
+        :code="block.code"
+        v-if="!block.blockType || block.blockType === 'table' || block.blockType === 'tree'"
+      >
         <div class="block-header">
           <p>{{ block.name }}</p>
         </div>
@@ -51,6 +57,7 @@
 
   const props = withDefaults(
     defineProps<{
+      // Bypass for actions
       actions?: Action[]
       loading: boolean
     }>(),

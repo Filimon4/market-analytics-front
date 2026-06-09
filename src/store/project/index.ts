@@ -88,7 +88,7 @@ export const useProjectStore = defineStore('useProjectStore', (): IProjectStore 
     role.value = dataRole.role
     permissions.value = dataRole.permissions
 
-    panel.value = await projectApi.getPanel(role.value.id)
+    panel.value = await projectApi.getPanel(Number(role.value.id))
   }
 
   return {
