@@ -14,12 +14,18 @@
       <template v-if="block.blockType === 'metrics'">
         <slot name="metrics" :block="block"></slot>
       </template>
+      <template v-else-if="block.blockType === 'table'">
+        <slot name="table" :block="block"></slot>
+      </template>
+      <template v-else-if="block.blockType === 'tree'">
+        <slot name="tree" :block="block"></slot>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
+  import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2'
   import Affix from '../../common/Affix/Affix.vue'
 
   const props = withDefaults(
@@ -27,28 +33,31 @@
       loading: boolean
     }>(),
     {
-      loading: false,
+      loading: true,
     }
   )
 
-  const infoDataEntityStore = useInfoDataEntityStore()
+  const infoDataEntityStore = useInfoDataEntityStoreV2()
 </script>
 
-<style>
+<style scoped>
   /* Parent */
   .blocks {
     display: flex;
     flex-direction: column;
     gap: 30px;
     width: 100%;
+    height: 100%;
     padding: 24px;
   }
 
   .block {
-    background: #fff;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff8c;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    overflow: hidden;
+    min-height: 450px;
   }
 
   /* Childrens */
@@ -63,6 +72,22 @@
     margin: 0;
     font-size: 1.15em;
     color: #1a1a1a;
+  }
+
+  :deep(.block-content) {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    padding: 16px 20px;
+    height: 100%;
+  }
+
+  :deep(.block-content-thin) {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding: 8px 10px;
+    height: 100%;
   }
 
   /* Action buttons area */

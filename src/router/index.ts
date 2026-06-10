@@ -29,10 +29,11 @@ import Strategies from '../views/marketing/strategies/Strategies.vue'
 import CreateStrategy from '../views/marketing/strategies/CreateStrategy.vue'
 import Strategy from '../views/marketing/strategies/Strategy.vue'
 import CreateChannel from '../views/marketing/channels/CreateChannel.vue'
-import Channel from '../views/marketing/channels/Channel.vue'
+// import Channel from '../views/marketing/channels/Channel.vue'
 import Performances from '../views/marketing/performances/Performances.vue'
 import CreatePerformance from '../views/marketing/performances/CreatePerformance.vue'
 import Performance from '../views/marketing/performances/Performance.vue'
+import ChannelV2 from '../views/marketing/channels/ChannelV2.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -77,7 +78,7 @@ const routes: RouteRecordRaw[] = [
             ],
           },
           { path: 'channels/create', component: CreateChannel },
-          { path: 'channels/:id', component: Channel },
+          { path: 'channels/:id', component: ChannelV2 },
         ],
       },
       {

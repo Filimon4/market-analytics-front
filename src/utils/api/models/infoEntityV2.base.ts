@@ -1,5 +1,25 @@
 import type { TreeNodes } from '@/src/components/Ui/Tree/types'
 
+// #region Actions
+export interface IActionButton {
+  title: string
+  code: string
+  size: 'small' | 'medium' | 'large'
+}
+
+export interface IActionLogicButton extends IActionButton {
+  type: 'logic'
+}
+
+export interface IActionDirectButton extends IActionButton {
+  type: 'directRequest'
+  requestUrl: string
+}
+
+export type IBlockAction = IActionLogicButton | IActionDirectButton
+
+// #endregion
+
 // #region Blocks
 export interface ITreeBlock extends IBlock {
   blockType: 'tree'
@@ -17,6 +37,14 @@ export interface IAnalyticBlock extends IBlock {
 
 export interface IMetricBlock extends IBlock {
   blockType: 'metrics'
+  tableUrl: string
+  tableColumns: {
+    key: string
+    title: string
+    path: string
+  }[]
+  entityUrl: string
+  entityActions?: IBlockAction[]
 }
 
 export interface IBlock {
