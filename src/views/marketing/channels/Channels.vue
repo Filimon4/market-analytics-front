@@ -5,7 +5,7 @@
     :default-page-size="10"
     :actions="[
       {
-        code: 'compareChannels', // TODO: Доделать кнопу
+        code: 'compareChannels', // TODO: Добавить логику
         size: 'medium',
         title: 'Сравнить каналы трафика',
       },

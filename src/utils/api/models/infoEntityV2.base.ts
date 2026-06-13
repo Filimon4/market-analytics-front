@@ -37,14 +37,21 @@ export interface IAnalyticBlock extends IBlock {
 
 export interface IMetricBlock extends IBlock {
   blockType: 'metrics'
-  tableUrl: string
   tableColumns: {
     key: string
     title: string
     path: string
   }[]
-  entityUrl: string
   entityActions?: IBlockAction[]
+  baseEntityUrl: string
+  metricUrls: {
+    tableUrl: string // Список объектов
+    entityUrl: string // Получение ифны по объекту
+    createUrl: string // Получение инфы для создания объекта
+    saveUrl: string // Сохарнение объекта
+    updateUrl: string // Обновление объета
+    deleteUrl: string // Удаление объекта
+  }
 }
 
 export interface IBlock {
@@ -80,17 +87,19 @@ export interface IBlockIndentifier {
   blockCode: string
 }
 
-export interface IBlockDetail extends IBlockIndentifier {
+export interface ITableBlockDetail extends IBlockIndentifier {
   fields: IField[]
 }
 
-export interface IBlockTreeDetail extends IBlockIndentifier {
+export interface ITreeBlockDetail extends IBlockIndentifier {
   treePath: string
 }
 
-export interface Data {
-  [key: string]: unknown
+export interface IMetricsBlockDetail {
+  fields: IField[]
 }
+
+export type TEntityBlockDetail = (ITableBlockDetail | ITreeBlockDetail)[] | IMetricsBlockDetail
 
 export interface Tree {
   nodes: TreeNodes
@@ -100,6 +109,15 @@ export interface Tree {
 
 export interface IEntity {
   blocks: TEntityBlock[]
-  blockDetails: (IBlockDetail | IBlockTreeDetail)[]
+  blockDetails: TEntityBlockDetail
   data: Data
+}
+
+export interface IMetrics {
+  details: IMetricsBlockDetail
+  data: Data
+}
+
+export interface Data {
+  [key: string]: unknown
 }

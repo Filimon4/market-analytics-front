@@ -15,6 +15,7 @@
           resizable: true,
         }))
       "
+      :row-props="tableRowProps"
     />
   </div>
   <div class="block-actions" v-if="getBlockActions()">
@@ -23,7 +24,7 @@
       :key="action.code"
       class="action-btn"
       :class="`size-${action.size}`"
-      @click="emit('click:action', action.code)"
+      @click="() => handleAction(action.code)"
     >
       {{ action.title }}
     </button>
@@ -39,8 +40,11 @@
   import { buildUrl } from '@/src/utils/buildUrl'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2'
   import type { IMetricsTableList, ITableRow } from '@/src/utils/api/models/infoTableV2.base'
+  import { useRouter } from 'vue-router'
 
   const infoDataEntityStore = useInfoDataEntityStoreV2()
+
+  const router = useRouter()
 
   const props = defineProps<{
     block: IMetricBlock
@@ -59,6 +63,16 @@
     defaultPage: 1,
     defaultPageSize: 10,
   })
+  const tableRowProps = (row: ITableRow) => {
+    return {
+      style: 'cursor: pointer;',
+      onClick: () => {
+        router.push(
+          `${infoDataEntityStore.initialData['id']}/${props.block.baseEntityUrl}/${row['id']}`
+        )
+      },
+    }
+  }
 
   const getBlockActions = (): Action[] | null => {
     if (!props.block.actions?.length) return null
@@ -71,7 +85,7 @@
     const {
       data: { result },
     } = await api.post<{ result: IMetricsTableList<{ id: number }> }>(
-      `${import.meta.env.VITE_API_BASE_URL_API}/${buildUrl(props.block.tableUrl, {
+      `${import.meta.env.VITE_API_BASE_URL_API}/${buildUrl(props.block.metricUrls.tableUrl, {
         parentId: infoDataEntityStore.initialData['id'],
       })}`
     )
@@ -84,7 +98,24 @@
     loadingRef.value = false
   }
 
+  const handleAction = async (acion: string) => {
+    if (acion === 'new') {
+      router.push(`${infoDataEntityStore.initialData['id']}/${props.block.baseEntityUrl}/create`)
+    } else {
+      emit('click:action', acion)
+    }
+  }
+
   onMounted(() => {
     fetchData()
   })
 </script>
+
+<style>
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 9999;
+  }
+</style>

@@ -38,7 +38,7 @@
     {
       title: 'Обновить метрики',
       blockCode: 'metrics',
-      code: 'updateMetrics', // TODO: Обновить метрики
+      code: 'updateMetrics', // TODO: Добавить логику
       size: 'medium',
     },
   ])

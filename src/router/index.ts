@@ -34,6 +34,8 @@ import Performances from '../views/marketing/performances/Performances.vue'
 import CreatePerformance from '../views/marketing/performances/CreatePerformance.vue'
 import Performance from '../views/marketing/performances/Performance.vue'
 import ChannelV2 from '../views/marketing/channels/ChannelV2.vue'
+import CreateChannelMetric from '../views/marketing/channelMetrics/CreateChannelMetric.vue'
+import ChannelMetric from '../views/marketing/channelMetrics/ChannelMetric.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -78,7 +80,19 @@ const routes: RouteRecordRaw[] = [
             ],
           },
           { path: 'channels/create', component: CreateChannel },
-          { path: 'channels/:id', component: ChannelV2 },
+          {
+            path: 'channels/:id',
+            children: [
+              { path: '', component: ChannelV2 },
+              {
+                path: 'metrics',
+                children: [
+                  { path: 'create', component: CreateChannelMetric },
+                  { path: ':metricId', component: ChannelMetric },
+                ],
+              },
+            ],
+          },
         ],
       },
       {

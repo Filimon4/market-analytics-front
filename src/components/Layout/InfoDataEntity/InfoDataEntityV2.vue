@@ -2,7 +2,10 @@
   <div class="entity-wrapper">
     <CustomDataEntityV2 :loading="loading">
       <template #table="{ block }">
-        <BlockTableContent :block="block" @click:action="(...args) => emit('click:action', args)">
+        <BlockTableContent
+          :block="block"
+          @click:action="(...args) => emit('click:action', ...args)"
+        >
           <template #field="{ field }">
             <InfoEditableField
               :field="field"
@@ -15,7 +18,7 @@
       <template #metrics="{ block }">
         <BlockMetricContent
           :block="block"
-          @click:action="(...args) => emit('click:action', args)"
+          @click:action="(...args) => emit('click:action', ...args)"
         />
       </template>
     </CustomDataEntityV2>
@@ -89,7 +92,7 @@
 
 <style>
   .entity-wrapper {
-    height: 100%;
+    height: max-content;
     width: 100%;
     position: relative;
   }

@@ -80,6 +80,7 @@
     gap: 24px;
     padding: 16px 20px;
     height: 100%;
+    flex-grow: 1;
   }
 
   :deep(.block-content-thin) {
@@ -88,6 +89,7 @@
     gap: 12px;
     padding: 8px 10px;
     height: 100%;
+    flex-grow: 1;
   }
 
   /* Action buttons area */
