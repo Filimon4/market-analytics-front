@@ -33,8 +33,7 @@
 
 <script setup lang="ts">
   import { NDataTable, type PaginationProps } from 'naive-ui'
-  import type { IMetricBlock } from '@/src/utils/api/models/infoEntityV2.base'
-  import type { Action } from '../CustomDataEntityV2.type'
+  import type { IBlockAction, IMetricBlock } from '@/src/utils/api/models/infoEntityV2.base'
   import { onMounted, reactive, ref } from 'vue'
   import api from '@/src/utils/api'
   import { buildUrl } from '@/src/utils/buildUrl'
@@ -74,7 +73,7 @@
     }
   }
 
-  const getBlockActions = (): Action[] | null => {
+  const getBlockActions = (): IBlockAction[] | null => {
     if (!props.block.actions?.length) return null
     const blockActions = props.block.actions
     return blockActions.length ? blockActions : null
@@ -98,11 +97,11 @@
     loadingRef.value = false
   }
 
-  const handleAction = async (acion: string) => {
-    if (acion === 'new') {
+  const handleAction = async (action: string) => {
+    if (action === 'new') {
       router.push(`${infoDataEntityStore.initialData['id']}/${props.block.baseEntityUrl}/create`)
     } else {
-      emit('click:action', acion)
+      emit('click:action', action)
     }
   }
 

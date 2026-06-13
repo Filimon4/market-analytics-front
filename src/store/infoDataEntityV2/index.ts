@@ -6,10 +6,10 @@ import type {
   Data,
   IEntity,
   IField,
-  IBlockTreeDetail,
-  IBlockDetail,
   Tree,
-  IBlock,
+  ITreeBlockDetail,
+  ITableBlockDetail,
+  IMetricsBlockDetail,
 } from '@/src/utils/api/models/infoEntityV2.base'
 
 interface IInfoDataEntityStore {
@@ -32,11 +32,13 @@ interface IInfoDataEntityStore {
   setBlocks: (blocks: IEntity['blocks']) => void
   getColumnsForBlock: (blockCode: string, capacity: number, max: number) => IField[][]
   setBlockDetails: (blockDetails: IEntity['blockDetails']) => void
-  getBlockDetails: <T extends IBlock>(blockCode: string) => T
+  getBlockDetails: <T extends ITableBlockDetail | IMetricsBlockDetail | ITreeBlockDetail>(
+    blockCode: string
+  ) => T
   updateFieldValue: (path: string, value: Data[string]) => void
 
   // work with tree
-  getTreeNodes: (blockTree: IBlockTreeDetail) => Tree
+  getTreeNodes: (blockTree: ITreeBlockDetail) => Tree
 
   // work with initData
   clearEntityData: () => void
@@ -82,7 +84,7 @@ export const useInfoDataEntityStoreV2 = defineStore(
     }
 
     const getColumnsForBlock = (blockCode: string, capacity: number, max: number) => {
-      const fields = getBlockDetails<IBlockDetail>(blockCode).fields
+      const fields = getBlockDetails<ITableBlockDetail | IMetricsBlockDetail>(blockCode).fields
       if (!fields.length) return []
 
       const columns: Array<typeof fields> = []
@@ -147,7 +149,9 @@ export const useInfoDataEntityStoreV2 = defineStore(
       return field?.editable === false && !field?.createEditable
     }
 
-    const getBlockDetails = <T extends IBlockTreeDetail | IBlockDetail>(blockCode: string): T => {
+    const getBlockDetails = <T extends ITableBlockDetail | IMetricsBlockDetail | ITreeBlockDetail>(
+      blockCode: string
+    ): T => {
       return blockDetailsData.value.find(block => block.blockCode === blockCode) as T
     }
 
@@ -178,7 +182,7 @@ export const useInfoDataEntityStoreV2 = defineStore(
       return false
     }
 
-    const getTreeNodes = (blockTree: IBlockTreeDetail) => {
+    const getTreeNodes = (blockTree: ITreeBlockDetail) => {
       return blockTree.treePath.split('.').reduce(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (obj: any, key: string) => obj?.[key],
@@ -192,7 +196,7 @@ export const useInfoDataEntityStoreV2 = defineStore(
       const treeBlockType = blocksData.value.find(block => block.blockType === 'tree')
 
       if (treeBlockType) {
-        const block = getBlockDetails<IBlockTreeDetail>(treeBlockType.code)
+        const block = getBlockDetails<ITreeBlockDetail>(treeBlockType.code)
 
         saveData[block.treePath] = getTreeNodes(block).nodes
       }

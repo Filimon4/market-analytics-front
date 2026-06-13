@@ -5,6 +5,7 @@ export interface IActionButton {
   title: string
   code: string
   size: 'small' | 'medium' | 'large'
+  type: 'logic' | 'directRequest'
 }
 
 export interface IActionLogicButton extends IActionButton {
@@ -57,7 +58,7 @@ export interface IMetricBlock extends IBlock {
 export interface IBlock {
   code: string
   name: string
-  actions?: { title: string; code: string; size: 'small' | 'medium' | 'large'; blockCode: string }[]
+  actions?: IBlockAction[]
   /**
    * Добавление
    *
@@ -95,11 +96,11 @@ export interface ITreeBlockDetail extends IBlockIndentifier {
   treePath: string
 }
 
-export interface IMetricsBlockDetail {
+export interface IMetricsBlockDetail extends IBlockIndentifier {
   fields: IField[]
 }
 
-export type TEntityBlockDetail = (ITableBlockDetail | ITreeBlockDetail)[] | IMetricsBlockDetail
+export type TEntityBlockDetail = (ITableBlockDetail | ITreeBlockDetail | IMetricsBlockDetail)[]
 
 export interface Tree {
   nodes: TreeNodes

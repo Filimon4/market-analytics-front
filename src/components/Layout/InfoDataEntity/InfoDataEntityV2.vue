@@ -16,10 +16,7 @@
         </BlockTableContent>
       </template>
       <template #metrics="{ block }">
-        <BlockMetricContent
-          :block="block"
-          @click:action="(...args) => emit('click:action', ...args)"
-        />
+        <BlockMetricContent :block="block" @click:action="handleAction" />
       </template>
     </CustomDataEntityV2>
 
@@ -36,6 +33,8 @@
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
   import type { IEntity } from '@/src/utils/api/models/infoEntityV2.base.ts'
   import SaveAffix from '../../common/Affix/SaveAffix.vue'
+  import api from '@/src/utils/api/index.ts'
+  import { buildUrl } from '@/src/utils/buildUrl.ts'
 
   const loading = ref<boolean>(true)
 
@@ -88,6 +87,22 @@
   onBeforeUnmount(() => {
     infoDataEntityStore.clearEntityData()
   })
+
+  const handleAction = (action: string) => {
+    const blockActions = infoDataEntityStore.blocksData.flatMap(block => block?.actions || [])
+    const actionData = blockActions.find(blckAction => blckAction.code == action)
+
+    if (actionData?.type === 'directRequest') {
+      api.put(
+        buildUrl(actionData.requestUrl, {
+          entityId: infoDataEntityStore.initialData['id'],
+        })
+      )
+      return
+    } else {
+      emit('click:action', action)
+    }
+  }
 </script>
 
 <style>
