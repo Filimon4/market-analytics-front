@@ -3,6 +3,7 @@
     <p class="block-header-title">{{ props.block.name }}</p>
   </div>
   <div class="block-content-thin">
+    <!-- TODO BUG: Добавить потджерку boolean -->
     <n-data-table
       remote
       :loading="loadingRef"

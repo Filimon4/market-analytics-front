@@ -135,7 +135,7 @@ export const useInfoDataEntityStore = defineStore(
     }
 
     const canEditField = (field: IField) => {
-      if (field?.createEditable) {
+      if (field?.createEditable !== undefined && typeof field?.createEditable === 'boolean') {
         return field?.createEditable
       }
 

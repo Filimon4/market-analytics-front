@@ -35,6 +35,8 @@ import Performance from '../views/marketing/performances/Performance.vue'
 import ChannelV2 from '../views/marketing/channels/ChannelV2.vue'
 import CreateChannelMetric from '../views/marketing/channelMetrics/CreateChannelMetric.vue'
 import ChannelMetric from '../views/marketing/channelMetrics/ChannelMetric.vue'
+import CreateUfChannels from '../views/marketing/ufChannels/CreateUfChannels.vue'
+import UfChannel from '../views/marketing/ufChannels/ufChannel.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -88,6 +90,13 @@ const routes: RouteRecordRaw[] = [
                 children: [
                   { path: 'create', component: CreateChannelMetric },
                   { path: ':metricId', component: ChannelMetric },
+                ],
+              },
+              {
+                path: 'uf-channels',
+                children: [
+                  { path: 'create', component: CreateUfChannels },
+                  { path: ':propertyId', component: UfChannel },
                 ],
               },
             ],

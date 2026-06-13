@@ -3,10 +3,7 @@
 
   <InfoInputNumber v-else-if="field.type === 'number'" v-model:value="localValue" />
 
-  <InfoBooleanSelect
-    v-else-if="field.type === 'boolean' && (localValue === 1 || localValue === 0)"
-    v-model:value="localValue"
-  />
+  <InfoBooleanSelect v-else-if="field.type === 'boolean'" v-model:value="localValue" />
 
   <InfoSelect
     v-else-if="field.type === 'select'"
