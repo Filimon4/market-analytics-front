@@ -22,6 +22,22 @@ export type IBlockAction = IActionLogicButton | IActionDirectButton
 // #endregion
 
 // #region Blocks
+export interface IBlock {
+  code: string
+  name: string
+  actions?: IBlockAction[]
+  /**
+   * Добавление
+   *
+   * При добавлениии блок будет скрыт
+   */
+  createHide?: true
+}
+
+export interface IListEntityBlock extends IBlock {
+  blockType: 'listEntity'
+}
+
 export interface ITreeBlock extends IBlock {
   blockType: 'tree'
 }
@@ -36,35 +52,17 @@ export interface IAnalyticBlock extends IBlock {
   blockType: 'analytics'
 }
 
-export interface IMetricBlock extends IBlock {
-  blockType: 'metrics'
+export interface IMetricBlock extends IListEntityBlock {
   tableColumns: {
     key: string
     title: string
     path: string
   }[]
   entityActions?: IBlockAction[]
-  baseEntityUrl: string
   metricUrls: {
     tableUrl: string // Список объектов
-    entityUrl: string // Получение ифны по объекту
-    createUrl: string // Получение инфы для создания объекта
-    saveUrl: string // Сохарнение объекта
-    updateUrl: string // Обновление объета
-    deleteUrl: string // Удаление объекта
   }
-}
-
-export interface IBlock {
-  code: string
-  name: string
-  actions?: IBlockAction[]
-  /**
-   * Добавление
-   *
-   * При добавлениии блок будет скрыт
-   */
-  createHide?: true
+  baseEntityUrl: string
 }
 
 export type TEntityBlock = ITreeBlock | ITableBlock | IAnalyticBlock | IMetricBlock

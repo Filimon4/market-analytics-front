@@ -11,7 +11,7 @@
   </Affix>
   <div class="blocks">
     <div v-for="block in infoDataEntityStore.blocksData" :key="block.code" class="block">
-      <template v-if="block.blockType === 'metrics'">
+      <template v-if="block.blockType === 'listEntity'">
         <slot name="metrics" :block="block"></slot>
       </template>
       <template v-else-if="block.blockType === 'table'">

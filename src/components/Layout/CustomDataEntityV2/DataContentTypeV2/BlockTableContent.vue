@@ -33,8 +33,7 @@
 <script setup lang="ts">
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2'
   import { computed } from 'vue'
-  import type { Action } from '../CustomDataEntityV2.type'
-  import type { ITableBlock } from '@/src/utils/api/models/infoEntityV2.base'
+  import type { IBlockAction, ITableBlock } from '@/src/utils/api/models/infoEntityV2.base'
 
   const infoDataEntityStore = useInfoDataEntityStoreV2()
 
@@ -52,7 +51,7 @@
     )
   })
 
-  const getBlockActions = (): Action[] | null => {
+  const getBlockActions = (): IBlockAction[] | null => {
     if (!props.block.actions?.length) return null
     const blockActions = props.block.actions
     return blockActions.length ? blockActions : null
