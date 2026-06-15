@@ -80,7 +80,7 @@
     flex-wrap: nowrap;
     gap: 10px;
     min-width: 200px;
-    max-width: 50%;
+    width: 100%;
   }
 
   .edit-mode input {

@@ -6,10 +6,21 @@
         :key="index"
         size="small"
         closable
+        :color="op.color ? { textColor: op.color } : undefined"
         @close="removeAt(index)"
       >
         {{ op.label }}
       </n-tag>
+    </div>
+    <div class="info-formula__number-row">
+      <n-input-number
+        v-model:value="numberInput"
+        size="small"
+        :placeholder="'Number...'"
+        :show-button="false"
+        @keydown.enter="addNumber"
+      />
+      <n-button size="small" @click="addNumber" :disabled="numberInput === null"> + </n-button>
     </div>
     <n-select
       :value="null"
@@ -24,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-  import { NSelect, NTag } from 'naive-ui'
+  import { NSelect, NTag, NInputNumber, NButton } from 'naive-ui'
   import type { SelectGroupOption, SelectOption } from 'naive-ui'
   import { onMounted, ref } from 'vue'
   import api from '@/src/utils/api'
@@ -34,17 +45,19 @@
   interface FormulaOperator {
     label: number
     value: string
+    color?: string
   }
 
   interface FormulaOperatorGroup {
     label: string
     key: string
+    color: string
     children: FormulaOperator[]
   }
 
   const infoDataEntityStore = useInfoDataEntityStoreV2()
 
-  const localValue = defineModel<{ label: number; value: string }[]>('value', {
+  const localValue = defineModel<{ label: number; value: string; color?: string }[]>('value', {
     required: true,
   })
 
@@ -53,13 +66,26 @@
   }>()
 
   const loading = ref(false)
+  const numberInput = ref<number | null>(null)
+
+  const addNumber = () => {
+    if (numberInput.value === null) return
+    localValue.value = [
+      ...(localValue.value ?? []),
+      { label: numberInput.value, value: String(numberInput.value), color: '#FF4D85' },
+    ]
+    numberInput.value = null
+  }
   const groupedOptions = ref<Array<SelectOption | SelectGroupOption>>([])
   const allOperators = ref<FormulaOperator[]>([])
 
   const addOperator = (val: string) => {
     const op = allOperators.value.find((o: FormulaOperator) => o.value === val)
     if (!op) return
-    localValue.value = [...(localValue.value ?? []), { label: op.label, value: op.value }]
+    localValue.value = [
+      ...(localValue.value ?? []),
+      { label: op.label, value: op.value, color: op.color },
+    ]
   }
 
   const removeAt = (index: number) => {
@@ -86,7 +112,9 @@
 
     if (!response?.data.result) return
 
-    allOperators.value = response.data.result.flatMap(group => group.children)
+    allOperators.value = response.data.result.flatMap(group =>
+      group.children.map(child => ({ ...child, color: group.color }))
+    )
 
     groupedOptions.value = response.data.result.map(group => ({
       type: 'group' as const,
@@ -107,6 +135,7 @@
 
 <style scoped>
   .info-formula {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -116,5 +145,15 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+  }
+
+  .info-formula__number-row {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .info-formula__number-row .n-input-number {
+    flex: 1;
   }
 </style>
