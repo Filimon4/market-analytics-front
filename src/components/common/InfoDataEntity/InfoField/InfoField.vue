@@ -15,6 +15,10 @@
     v-else-if="props.field.type === 'select'"
     :value="infoDataEntityStore.getValueOfField(props.field)"
   />
+  <InfoFieldFormula
+    v-else-if="props.field.type === 'formula'"
+    :value="infoDataEntityStore.getValueOfField(props.field)"
+  />
   <InfoFieldDefault v-else :value="infoDataEntityStore.getValueOfField(props.field)" />
   <span
     class="editable-cursor"
@@ -42,6 +46,7 @@
   import InfoFieldBoolean from './components/InfoFieldBoolean.vue'
   import InfoFieldDatetime from './components/InfoFieldDatetime.vue'
   import InfoFieldDefault from './components/InfoFieldDefault.vue'
+  import InfoFieldFormula from './components/InfoFieldFormula.vue'
   import InfoFieldNumber from './components/InfoFieldNumber.vue'
   import InfoFieldSelect from './components/InfoFieldSelect.vue'
   import undo from '/icons/undo.png'

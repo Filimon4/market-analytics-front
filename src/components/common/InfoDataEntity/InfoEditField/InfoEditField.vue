@@ -13,6 +13,12 @@
 
   <InfoDatePicker v-else-if="field.type === 'datetime'" v-model:value="localValue" />
 
+  <InfoFormula
+    v-else-if="field.type === 'formula'"
+    v-model:value="localValue"
+    :formula-operators-url="field.formulaOperatorsUrl || ''"
+  />
+
   <div class="actions">
     <n-button type="info" color="#2f9acc" @click="onSave" size="tiny">
       <template #icon>
@@ -41,6 +47,7 @@
   import InfoBooleanSelect from './components/InfoBooleanSelect.vue'
   import InfoSelect from './components/InfoSelect.vue'
   import InfoDatePicker from './components/InfoDatePicker.vue'
+  import InfoFormula from './components/InfoFormula.vue'
   import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import type { IField } from '@/src/utils/api/models/infoEntity.base.ts'
 
@@ -62,6 +69,11 @@
       const selectValue = localValue.value as { id: number; code: string }
 
       infoDataEntityStore.updateFieldValue(props.field.editPath || props.field.path, selectValue)
+    } else if (props.field.type === 'formula' && Array.isArray(localValue.value)) {
+      infoDataEntityStore.updateFieldValue(
+        props.field.editPath || props.field.path,
+        localValue.value
+      )
     } else if (props.field.type === 'datetime' && typeof localValue.value === 'number') {
       const valueToSave = DateTime.fromMillis(localValue.value, { zone: 'utc' }).toISO()
 

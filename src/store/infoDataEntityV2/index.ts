@@ -48,6 +48,9 @@ interface IInfoDataEntityStore {
 
   // save logic
   prebuiltSaveData: () => IEntity['data']
+
+  // mode
+  setMode: (mode: 'create' | 'edit') => void
 }
 
 export const useInfoDataEntityStoreV2 = defineStore(
@@ -57,6 +60,11 @@ export const useInfoDataEntityStoreV2 = defineStore(
     const currentData = ref<Data>({})
     const blocksData = ref<IEntity['blocks']>([])
     const blockDetailsData = ref<IEntity['blockDetails']>([])
+    const modeRef = ref<'create' | 'edit'>('edit')
+
+    const setMode = (mode: 'create' | 'edit') => {
+      modeRef.value = mode
+    }
 
     const hasChanges = ref<boolean>(false)
 
@@ -138,7 +146,11 @@ export const useInfoDataEntityStoreV2 = defineStore(
     }
 
     const canEditField = (field: IField) => {
-      if (field?.createEditable !== undefined && typeof field?.createEditable === 'boolean') {
+      if (
+        modeRef.value === 'create' &&
+        field?.createEditable !== undefined &&
+        typeof field?.createEditable === 'boolean'
+      ) {
         return field?.createEditable
       }
 
@@ -162,6 +174,7 @@ export const useInfoDataEntityStoreV2 = defineStore(
       blockDetailsData.value = []
       hasChanges.value = false
       cancelationToken.value = uuidv4()
+      modeRef.value = 'edit'
     }
 
     const resetData = () => {
@@ -227,6 +240,7 @@ export const useInfoDataEntityStoreV2 = defineStore(
       isFieldDiffFromDefault,
       getTreeNodes,
       prebuiltSaveData,
+      setMode,
     }
   }
 )

@@ -71,15 +71,41 @@ export type TEntityBlock = ITreeBlock | ITableBlock | IAnalyticBlock | IMetricBl
 export interface IField {
   title: string
   editable: boolean
-  type: 'string' | 'number' | 'boolean' | 'date' | 'datetime' | 'select' | 'constants'
+  type: 'string' | 'number' | 'boolean' | 'date' | 'datetime' | 'select' | 'constants' | 'formula'
   path: string
   editPath?: string
+
+  /**
+   * Поле для formula
+   *
+   * Получение данных для формулы
+   */
+  formulaOperatorsUrl?: string
+  /**
+   * Поле для select
+   *
+   * Получение данных для выбора
+   */
   selectUrl?: string
 
-  // Поля для добаления
-  required?: true // Обязательно заполнение при добавлении
-  createEditable?: boolean // При добавлении можно ли менять. Перекрывает editable
-  createDefault?: boolean | string | number // При добавлении дефолтное значение. Если поле только для отображение (editable: false) то можно добавить дефолтное значение
+  /**
+   * Поле для добаления
+   *
+   * Обязательно заполнение при добавлении
+   */
+  required?: true
+  /**
+   * Поле для добаления
+   *
+   * При добавлении можно ли менять. Перекрывает editable
+   */
+  createEditable?: boolean
+  /**
+   * Поле для добаления
+   *
+   * При добавлении дефолтное значение. Если поле только для отображение (editable: false) то можно добавить дефолтное значение
+   * */
+  createDefault?: boolean | string | number
 }
 
 export interface IBlockIndentifier {
