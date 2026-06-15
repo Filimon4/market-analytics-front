@@ -16,17 +16,17 @@
       <n-input-number
         v-model:value="numberInput"
         size="small"
-        :placeholder="'Number...'"
+        :placeholder="'Произвольное число'"
         :show-button="false"
         @keydown.enter="addNumber"
       />
-      <n-button size="small" @click="addNumber" :disabled="numberInput === null"> + </n-button>
+      <n-button size="small" @click="addNumber" :disabled="numberInput === null">+</n-button>
     </div>
     <n-select
       :value="null"
       filterable
       size="small"
-      :placeholder="'Add operator...'"
+      :placeholder="'Добавить'"
       :loading="loading"
       :options="groupedOptions"
       @update:value="addOperator"
@@ -72,7 +72,7 @@
     if (numberInput.value === null) return
     localValue.value = [
       ...(localValue.value ?? []),
-      { label: numberInput.value, value: String(numberInput.value), color: '#FF4D85' },
+      { label: numberInput.value, value: `uf-number-${numberInput.value}`, color: '#FF4D85' },
     ]
     numberInput.value = null
   }
