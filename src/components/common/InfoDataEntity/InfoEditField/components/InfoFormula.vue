@@ -1,16 +1,25 @@
 <template>
   <div class="info-formula">
     <div v-if="localValue && localValue.length > 0" class="info-formula__tags">
-      <n-tag
+      <div
         v-for="(op, index) in localValue"
         :key="index"
-        size="small"
-        closable
-        :color="op.color ? { textColor: op.color } : undefined"
-        @close="removeAt(index)"
+        draggable="true"
+        :class="['info-formula__tag-wrap', { 'is-drag-over': dragOverIndex === index }]"
+        @dragstart="onDragStart(index)"
+        @dragover.prevent="onDragOver(index)"
+        @dragleave="onDragLeave"
+        @drop.prevent="onDrop(index)"
       >
-        {{ op.label }}
-      </n-tag>
+        <n-tag
+          size="small"
+          closable
+          :color="op.color ? { textColor: op.color } : undefined"
+          @close="removeAt(index)"
+        >
+          {{ op.label }}
+        </n-tag>
+      </div>
     </div>
     <div class="info-formula__number-row">
       <n-input-number
@@ -67,6 +76,39 @@
 
   const loading = ref(false)
   const numberInput = ref<number | null>(null)
+
+  // #region drag logic
+  const dragFromIndex = ref<number | null>(null)
+  const dragOverIndex = ref<number | null>(null)
+
+  const onDragStart = (index: number) => {
+    dragFromIndex.value = index
+  }
+
+  const onDragOver = (index: number) => {
+    if (dragFromIndex.value === null || dragFromIndex.value === index) return
+    dragOverIndex.value = index
+  }
+
+  const onDragLeave = () => {
+    dragOverIndex.value = null
+  }
+
+  const onDrop = (toIndex: number) => {
+    dragOverIndex.value = null
+    if (dragFromIndex.value === null || dragFromIndex.value === toIndex) {
+      dragFromIndex.value = null
+      return
+    }
+    const arr = [...localValue.value]
+    const [item] = arr.splice(dragFromIndex.value, 1) as [
+      { label: number; value: string; color?: string },
+    ]
+    arr.splice(toIndex, 0, item)
+    localValue.value = arr
+    dragFromIndex.value = null
+  }
+  //   #endregion
 
   const addNumber = () => {
     if (numberInput.value === null) return
@@ -146,6 +188,21 @@
     flex-wrap: wrap;
     gap: 4px;
   }
+
+  /* #region draw css */
+  .info-formula__tag-wrap {
+    cursor: grab;
+  }
+
+  .info-formula__tag-wrap:active {
+    cursor: grabbing;
+  }
+
+  .info-formula__tag-wrap.is-drag-over {
+    outline: 2px solid #2f9acc;
+    border-radius: 4px;
+  }
+  /* #endregion */
 
   .info-formula__number-row {
     display: flex;
