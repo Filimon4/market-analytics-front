@@ -19,7 +19,11 @@
         <BlockMetricContent :block="block" @click:action="handleAction" />
       </template>
       <template #viewListEntity="{ block }">
-        <BlockViewListEntityContent :block="block" @click:action="handleAction" />
+        <BlockViewListEntityContent
+          :block="block"
+          :refresh-trigger="refreshTriggers[block.code]"
+          @click:action="handleAction"
+        />
       </template>
     </CustomDataEntityV2>
 
@@ -28,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeUnmount, onMounted, ref, type PropType } from 'vue'
+  import { onBeforeUnmount, onMounted, reactive, ref, type PropType } from 'vue'
   import CustomDataEntityV2 from '../CustomDataEntityV2/CustomDataEntityV2.vue'
   import BlockMetricContent from '../CustomDataEntityV2/DataContentTypeV2/BlockMetricContent.vue'
   import BlockViewListEntityContent from '../CustomDataEntityV2/DataContentTypeV2/BlockViewListEntityContent.vue'
@@ -92,16 +96,26 @@
     infoDataEntityStore.clearEntityData()
   })
 
+  const refreshTriggers = reactive<Record<string, number>>({})
+
   const handleAction = (action: string) => {
-    const blockActions = infoDataEntityStore.blocksData.flatMap(block => block?.actions || [])
-    const actionData = blockActions.find(blckAction => blckAction.code == action)
+    const ownerBlock = infoDataEntityStore.blocksData.find(block =>
+      block?.actions?.some(a => a.code === action)
+    )
+    const actionData = ownerBlock?.actions?.find(a => a.code === action)
 
     if (actionData?.type === 'directRequest') {
-      api.put(
-        buildUrl(actionData.requestUrl, {
-          entityId: infoDataEntityStore.initialData['id'],
+      api
+        .put(
+          buildUrl(actionData.requestUrl, {
+            entityId: infoDataEntityStore.initialData['id'],
+          })
+        )
+        .then(() => {
+          if (actionData.refreshTable && ownerBlock) {
+            refreshTriggers[ownerBlock.code] = (refreshTriggers[ownerBlock.code] ?? 0) + 1
+          }
         })
-      )
       return
     } else {
       emit('click:action', action)
