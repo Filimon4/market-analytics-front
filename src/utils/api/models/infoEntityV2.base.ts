@@ -36,7 +36,7 @@ export interface IBlock {
 }
 
 export interface IListEntityBlock extends IBlock {
-  blockType: 'listEntity' | 'viewListEntity' | 'simpleListEntity'
+  blockType: 'listEntity' | 'viewListEntity'
 }
 
 export interface ITreeBlock extends IBlock {
