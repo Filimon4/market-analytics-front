@@ -1,5 +1,5 @@
 <template>
-  <InfoDataEntity
+  <InfoDataEntityV2
     v-model="triggerUpdate"
     :fetch-data-req="async () => channelPerformanceApi.getTableEntity(channelPerformanceId)"
     :save-data-req="channelPerformanceApi.saveEntity"
@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
   import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
-  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
+  import InfoDataEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataEntityV2.vue'
   import channelPerformanceApi from '@/src/utils/api/channelPerformance'
   import { useDialog } from 'naive-ui'
   import { computed, ref } from 'vue'

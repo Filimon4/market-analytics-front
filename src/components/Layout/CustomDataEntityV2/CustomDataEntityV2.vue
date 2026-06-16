@@ -20,6 +20,9 @@
       <template v-else-if="block.blockType === 'tree'">
         <slot name="tree" :block="block"></slot>
       </template>
+      <template v-else-if="block.blockType === 'viewListEntity'">
+        <slot name="viewListEntity" :block="block"></slot>
+      </template>
     </div>
   </div>
 </template>

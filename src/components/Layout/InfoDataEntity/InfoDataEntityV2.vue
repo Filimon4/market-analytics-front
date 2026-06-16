@@ -18,6 +18,9 @@
       <template #metrics="{ block }">
         <BlockMetricContent :block="block" @click:action="handleAction" />
       </template>
+      <template #viewListEntity="{ block }">
+        <BlockViewListEntityContent :block="block" @click:action="handleAction" />
+      </template>
     </CustomDataEntityV2>
 
     <SaveAffix v-show="infoDataEntityStore.hasChanges" @save="saveAll" @cancel="cancelAll" />
@@ -28,6 +31,7 @@
   import { onBeforeUnmount, onMounted, ref, type PropType } from 'vue'
   import CustomDataEntityV2 from '../CustomDataEntityV2/CustomDataEntityV2.vue'
   import BlockMetricContent from '../CustomDataEntityV2/DataContentTypeV2/BlockMetricContent.vue'
+  import BlockViewListEntityContent from '../CustomDataEntityV2/DataContentTypeV2/BlockViewListEntityContent.vue'
   import BlockTableContent from '../CustomDataEntityV2/DataContentTypeV2/BlockTableContent.vue'
   import InfoEditableField from '../../common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
@@ -109,6 +113,7 @@
   .entity-wrapper {
     height: max-content;
     width: 100%;
+    height: 100%;
     position: relative;
   }
 </style>

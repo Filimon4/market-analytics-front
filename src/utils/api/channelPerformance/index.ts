@@ -1,7 +1,7 @@
 import api from '..'
 import type { IChannelPerformance } from '../models/channelPerformance'
-import type { IEntity } from '../models/infoEntity.base'
-import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
+import type { IEntity } from '../models/infoEntityV2.base'
+import type { ITableFilterValue, ITableList } from '../models/infoTableV2.base'
 
 class ChannelPerformanceApi {
   async getTableList(

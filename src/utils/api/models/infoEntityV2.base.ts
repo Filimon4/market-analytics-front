@@ -15,6 +15,7 @@ export interface IActionLogicButton extends IActionButton {
 export interface IActionDirectButton extends IActionButton {
   type: 'directRequest'
   requestUrl: string
+  refreshTable?: boolean
 }
 
 export type IBlockAction = IActionLogicButton | IActionDirectButton
@@ -35,7 +36,7 @@ export interface IBlock {
 }
 
 export interface IListEntityBlock extends IBlock {
-  blockType: 'listEntity'
+  blockType: 'listEntity' | 'viewListEntity' | 'simpleListEntity'
 }
 
 export interface ITreeBlock extends IBlock {

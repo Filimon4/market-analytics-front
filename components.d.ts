@@ -17,6 +17,7 @@ declare module 'vue' {
     BlockMetricsContent: typeof import('./src/components/Layout/CustomDataEntity/DataContentType/BlockMetricsContent.vue')['default']
     BlockTableContent: typeof import('./src/components/Layout/CustomDataEntity/DataContentType/BlockTableContent.vue')['default']
     BlockTreeContent: typeof import('./src/components/Layout/CustomDataEntity/DataContentType/BlockTreeContent.vue')['default']
+    BlockViewListEntityContent: typeof import('./src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockViewListEntityContent.vue')['default']
     copy: typeof import('./src/components/Layout/InfoDataEntity/InfoDataCreateEntity copy.vue')['default']
     CustomDataCreateEntity: typeof import('./src/components/Layout/CustomDataEntity/CustomDataCreateEntity.vue')['default']
     CustomDataEntity: typeof import('./src/components/Layout/CustomDataEntity/CustomDataEntity.vue')['default']
