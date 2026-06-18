@@ -55,6 +55,7 @@
     label: number
     value: string
     color?: string
+    fType: string
   }
 
   interface FormulaOperatorGroup {
@@ -66,9 +67,12 @@
 
   const infoDataEntityStore = useInfoDataEntityStoreV2()
 
-  const localValue = defineModel<{ label: number; value: string; color?: string }[]>('value', {
-    required: true,
-  })
+  const localValue = defineModel<{ label: number; value: string; color?: string; fType: string }[]>(
+    'value',
+    {
+      required: true,
+    }
+  )
 
   const props = defineProps<{
     formulaOperatorsUrl: string
@@ -101,10 +105,8 @@
       return
     }
     const arr = [...localValue.value]
-    const [item] = arr.splice(dragFromIndex.value, 1) as [
-      { label: number; value: string; color?: string },
-    ]
-    arr.splice(toIndex, 0, item)
+    const [item] = arr.splice(dragFromIndex.value, 1) as FormulaOperator[]
+    arr.splice(toIndex, 0, item as FormulaOperator)
     localValue.value = arr
     dragFromIndex.value = null
   }
@@ -114,7 +116,12 @@
     if (numberInput.value === null) return
     localValue.value = [
       ...(localValue.value ?? []),
-      { label: numberInput.value, value: `uf-number-${numberInput.value}`, color: '#FF4D85' },
+      {
+        label: numberInput.value,
+        value: `uf-number-${numberInput.value}`,
+        color: '#FF4D85',
+        fType: 'uf-number',
+      },
     ]
     numberInput.value = null
   }
@@ -124,10 +131,7 @@
   const addOperator = (val: string) => {
     const op = allOperators.value.find((o: FormulaOperator) => o.value === val)
     if (!op) return
-    localValue.value = [
-      ...(localValue.value ?? []),
-      { label: op.label, value: op.value, color: op.color },
-    ]
+    localValue.value = [...(localValue.value ?? []), { ...op }]
   }
 
   const removeAt = (index: number) => {
