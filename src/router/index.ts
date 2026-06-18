@@ -37,6 +37,7 @@ import CreateChannelMetric from '../views/marketing/channelMetrics/CreateChannel
 import ChannelMetric from '../views/marketing/channelMetrics/ChannelMetric.vue'
 import CreateUfChannels from '../views/marketing/ufChannels/CreateUfChannels.vue'
 import UfChannel from '../views/marketing/ufChannels/ufChannel.vue'
+import PerformanceProperty from '../views/marketing/performances/properties/PerformanceProperty.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -67,36 +68,45 @@ const routes: RouteRecordRaw[] = [
           { path: 'strategies/create', component: CreateStrategy },
           { path: 'strategies/:id', component: Strategy },
           {
-            path: 'channels',
+            path: 'performances',
             children: [
-              { path: '', component: Channels },
+              { path: '', component: Performances },
+              { path: 'create', component: CreatePerformance },
               {
-                path: 'performances',
+                path: ':id',
                 children: [
-                  { path: '', component: Performances },
-                  { path: 'create', component: CreatePerformance },
-                  { path: ':id', component: Performance },
+                  { path: '', component: Performance },
+                  {
+                    path: 'properties',
+                    children: [{ path: ':id', component: PerformanceProperty }],
+                  },
                 ],
               },
             ],
           },
-          { path: 'channels/create', component: CreateChannel },
           {
-            path: 'channels/:id',
+            path: 'channels',
             children: [
-              { path: '', component: ChannelV2 },
+              { path: '', component: Channels },
+              { path: 'create', component: CreateChannel },
               {
-                path: 'metrics',
+                path: ':id',
                 children: [
-                  { path: 'create', component: CreateChannelMetric },
-                  { path: ':metricId', component: ChannelMetric },
-                ],
-              },
-              {
-                path: 'uf-channels',
-                children: [
-                  { path: 'create', component: CreateUfChannels },
-                  { path: ':propertyId', component: UfChannel },
+                  { path: '', component: ChannelV2 },
+                  {
+                    path: 'metrics',
+                    children: [
+                      { path: 'create', component: CreateChannelMetric },
+                      { path: ':metricId', component: ChannelMetric },
+                    ],
+                  },
+                  {
+                    path: 'uf-channels',
+                    children: [
+                      { path: 'create', component: CreateUfChannels },
+                      { path: ':propertyId', component: UfChannel },
+                    ],
+                  },
                 ],
               },
             ],

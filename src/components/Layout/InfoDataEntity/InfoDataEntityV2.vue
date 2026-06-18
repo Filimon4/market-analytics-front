@@ -15,7 +15,7 @@
           </template>
         </BlockTableContent>
       </template>
-      <template #metrics="{ block }">
+      <template #listEntity="{ block }">
         <BlockMetricContent :block="block" @click:action="handleAction" />
       </template>
       <template #viewListEntity="{ block }">
