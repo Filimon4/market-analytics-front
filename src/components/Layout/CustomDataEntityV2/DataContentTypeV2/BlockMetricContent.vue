@@ -35,7 +35,7 @@
 <script setup lang="ts">
   import { NDataTable, type PaginationProps } from 'naive-ui'
   import type { IBlockAction, IMetricBlock } from '@/src/utils/api/models/infoEntityV2.base'
-  import { onMounted, reactive, ref } from 'vue'
+  import { onMounted, reactive, ref, watch } from 'vue'
   import api from '@/src/utils/api'
   import { buildUrl } from '@/src/utils/buildUrl'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2'
@@ -48,6 +48,7 @@
 
   const props = defineProps<{
     block: IMetricBlock
+    refreshTrigger?: number
   }>()
 
   const emit = defineEmits(['click:action'])
@@ -109,6 +110,13 @@
   onMounted(() => {
     fetchData()
   })
+
+  watch(
+    () => props.refreshTrigger,
+    (val, old) => {
+      if (val !== undefined && val !== old) fetchData()
+    }
+  )
 </script>
 
 <style>

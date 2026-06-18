@@ -78,7 +78,7 @@ const routes: RouteRecordRaw[] = [
                   { path: '', component: Performance },
                   {
                     path: 'properties',
-                    children: [{ path: ':id', component: PerformanceProperty }],
+                    children: [{ path: ':propertyId', component: PerformanceProperty }],
                   },
                 ],
               },

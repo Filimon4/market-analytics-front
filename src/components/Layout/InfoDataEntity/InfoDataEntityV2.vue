@@ -16,7 +16,11 @@
         </BlockTableContent>
       </template>
       <template #listEntity="{ block }">
-        <BlockMetricContent :block="block" @click:action="handleAction" />
+        <BlockMetricContent
+          :block="block"
+          @click:action="handleAction"
+          :refresh-trigger="refreshTriggers[block.code]"
+        />
       </template>
       <template #viewListEntity="{ block }">
         <BlockViewListEntityContent

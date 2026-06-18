@@ -1,7 +1,11 @@
 <template>
   <InfoDataEntityV2
-    :fetch-data-req="async () => channelPerformancePropertyApi.getTableEntity(channelPerformanceId)"
-    :save-data-req="channelPerformancePropertyApi.saveEntity"
+    :fetch-data-req="
+      async () => channelPerformancePropertyApi.getTableEntity(channelPerformanceId, propertyId)
+    "
+    :save-data-req="
+      async data => channelPerformancePropertyApi.saveEntity(channelPerformanceId, data)
+    "
   />
 </template>
 
@@ -13,5 +17,8 @@
 
   const route = useRoute()
 
+  console.log(route.params)
+
   const channelPerformanceId = computed(() => Number(route.params.id))
+  const propertyId = computed(() => Number(route.params.propertyId))
 </script>
