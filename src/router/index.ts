@@ -38,6 +38,12 @@ import ChannelMetric from '../views/marketing/channelMetrics/ChannelMetric.vue'
 import CreateUfChannels from '../views/marketing/ufChannels/CreateUfChannels.vue'
 import UfChannel from '../views/marketing/ufChannels/ufChannel.vue'
 import PerformanceProperty from '../views/marketing/performances/properties/PerformanceProperty.vue'
+import Report from '@/src/views/report/Report.vue'
+import Reports from '@/src/views/report/Reports.vue'
+import CreateReport from '@/src/views/report/CreateReport.vue'
+import ReportTypes from '@/src/views/reportType/ReportTypes.vue'
+import ReportType from '@/src/views/reportType/ReportType.vue'
+import CreateReportType from '@/src/views/reportType/CreateReportType.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -64,9 +70,14 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'marketing',
         children: [
-          { path: 'strategies', component: Strategies },
-          { path: 'strategies/create', component: CreateStrategy },
-          { path: 'strategies/:id', component: Strategy },
+          {
+            path: 'strategies',
+            children: [
+              { path: '', component: Strategies },
+              { path: 'create', component: CreateStrategy },
+              { path: ':id', component: Strategy },
+            ],
+          },
           {
             path: 'performances',
             children: [
@@ -111,6 +122,22 @@ const routes: RouteRecordRaw[] = [
               },
             ],
           },
+          {
+            path: 'analytics',
+            children: [
+              { path: '', component: Reports },
+              { path: 'create', component: CreateReport },
+              { path: ':id', component: Report },
+            ],
+          },
+          {
+            path: 'report-types',
+            children: [
+              { path: '', component: ReportTypes },
+              { path: 'create', component: CreateReportType },
+              { path: ':id', component: ReportType },
+            ],
+          },
         ],
       },
       {
@@ -121,23 +148,57 @@ const routes: RouteRecordRaw[] = [
 
           { path: 'developer', component: Developer },
 
-          { path: 'apikeys', component: Apikeys },
-          { path: 'apikeys/create', component: CreateApiKey },
-          { path: 'apikeys/:id', component: Apikey },
+          {
+            path: 'apikeys',
+            children: [
+              { path: '', component: Apikeys },
+              { path: 'create', component: CreateApiKey },
+              { path: ':id', component: Apikey },
+            ],
+          },
 
-          { path: 'users', component: Users },
-          { path: 'users/:id', component: User },
+          {
+            path: 'users',
+            children: [
+              { path: '', component: Users },
+              { path: ':id', component: User },
+            ],
+          },
 
-          { path: 'roles', component: Roles },
-          { path: 'roles/create', component: CreateRole },
-          { path: 'roles/:id', component: Role },
+          {
+            path: 'roles',
+            children: [
+              { path: '', component: Roles },
+              { path: 'create', component: CreateRole },
+              { path: ':id', component: Role },
+            ],
+          },
 
-          { path: 'channelsources', component: ChannelSources },
-          { path: 'channelsources/create', component: ChannelSourcesCreate },
-          { path: 'channelsources/:id', component: ChannelSource },
+          {
+            path: 'channelsources',
+            children: [
+              { path: '', component: ChannelSources },
+              { path: 'create', component: ChannelSourcesCreate },
+              { path: ':id', component: ChannelSource },
+            ],
+          },
 
-          { path: 'invitations', component: Invitations },
-          { path: 'invitations/:id', component: Invitation },
+          {
+            path: 'invitations',
+            children: [
+              { path: '', component: Invitations },
+              { path: ':id', component: Invitation },
+            ],
+          },
+
+          {
+            path: 'report-types',
+            children: [
+              { path: '', component: ReportTypes },
+              { path: 'create', component: CreateReportType },
+              { path: ':id', component: ReportType },
+            ],
+          },
         ],
       },
     ],

@@ -1,27 +1,44 @@
 <template>
   <div class="entity-wrapper">
-    <CustomDataEntity :loading="loading">
-      <template #field="{ field }">
-        <InfoEditableField
-          :field="field"
-          :value="infoDataEntityStore.getValueOfField(field)"
-          @update="handleFieldUpdate"
+    <CustomDataEntityV2 :loading="loading">
+      <template #table="{ block }">
+        <BlockTableContent
+          :block="block"
+          @click:action="(...args) => emit('click:action', ...args)"
+        >
+          <template #field="{ field }">
+            <InfoEditableField
+              :field="field"
+              :editable="field.editable"
+              :value="infoDataEntityStore.getValueOfField(field)"
+            />
+          </template>
+        </BlockTableContent>
+      </template>
+      <template #reportBuilder="{ block }">
+        <BlockReportBuilder
+          :block="block"
+          @click:action="(...args) => emit('click:action', ...args)"
         />
       </template>
-    </CustomDataEntity>
+    </CustomDataEntityV2>
     <SaveAffix v-model:saving="saving" @cancel="handleCancel" @save="handleSave" />
   </div>
 </template>
 
 <script setup lang="ts">
   import { onBeforeUnmount, onMounted, ref, type PropType } from 'vue'
-  import CustomDataEntity from '../CustomDataEntity/CustomDataEntity.vue'
   import InfoEditableField from '@/src/components/common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useRouter } from 'vue-router'
   import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
-  import type { Data, IEntity, IField } from '@/src/utils/api/models/infoEntityV2.base.ts'
+  import type { Data, IEntity } from '@/src/utils/api/models/infoEntityV2.base.ts'
   import type { IBlockDetail } from '@/src/utils/api/models/infoEntity.base.ts'
+  import CustomDataEntityV2 from '@/src/components/Layout/CustomDataEntityV2/CustomDataEntityV2.vue'
+  import BlockTableContent from '@/src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockTableContent.vue'
+  import BlockReportBuilder from '@/src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockReportBuilder.vue'
+
+  const emit = defineEmits(['click:action'])
 
   const infoDataEntityStore = useInfoDataEntityStoreV2()
   const router = useRouter()
@@ -68,10 +85,6 @@
     // Keep defaults as the initial state for create mode.
     infoDataEntityStore.setData(infoDataEntityStore.prebuiltSaveData() as Data)
     loading.value = false
-  }
-
-  function handleFieldUpdate({ field, value }: { field: IField; value: Data[string] }) {
-    infoDataEntityStore.updateFieldValue(field.path, value)
   }
 
   async function handleSave() {

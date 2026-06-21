@@ -23,6 +23,9 @@
       <template v-else-if="block.blockType === 'viewListEntity'">
         <slot name="viewListEntity" :block="block"></slot>
       </template>
+      <template v-else-if="block.blockType === 'reportBuilder'">
+        <slot name="reportBuilder" :block="block"></slot>
+      </template>
     </div>
   </div>
 </template>
