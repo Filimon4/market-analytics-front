@@ -14,7 +14,7 @@ declare module 'vue' {
     AddPermissionsModal: typeof import('./src/components/Ui/AddPermissionsModal/AddPermissionsModal.vue')['default']
     Affix: typeof import('./src/components/common/Affix/Affix.vue')['default']
     BlockMetricContent: typeof import('./src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockMetricContent.vue')['default']
-    BlockTableContent: typeof import('./src/components/Layout/CustomDataEntity/DataContentType/BlockTableContent.vue')['default']
+    BlockTableContent: typeof import('./src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockTableContent.vue')['default']
     BlockTreeContent: typeof import('./src/components/Layout/CustomDataEntity/DataContentType/BlockTreeContent.vue')['default']
     BlockViewListEntityContent: typeof import('./src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockViewListEntityContent.vue')['default']
     CustomDataEntity: typeof import('./src/components/Layout/CustomDataEntity/CustomDataEntity.vue')['default']

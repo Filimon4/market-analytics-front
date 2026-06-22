@@ -1,11 +1,11 @@
 <template>
-  <InfoDataCreateEntity
+  <InfoDataCreateEntityV2
     :fetch-data-req="channelApi.getCreateTable"
     :save-data-req="channelApi.createEntity"
   />
 </template>
 
 <script setup lang="ts">
-  import InfoDataCreateEntity from '@/src/components/Layout/InfoDataEntity/InfoDataCreateEntity.vue'
+  import InfoDataCreateEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataCreateEntityV2.vue'
   import channelApi from '@/src/utils/api/channel'
 </script>
