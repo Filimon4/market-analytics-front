@@ -15,12 +15,6 @@
           </template>
         </BlockTableContent>
       </template>
-      <template #reportBuilder="{ block }">
-        <BlockReportBuilder
-          :block="block"
-          @click:action="(...args) => emit('click:action', ...args)"
-        />
-      </template>
     </CustomDataEntityV2>
     <SaveAffix v-model:saving="saving" @cancel="handleCancel" @save="handleSave" />
   </div>
@@ -36,7 +30,6 @@
   import type { IBlockDetail } from '@/src/utils/api/models/infoEntity.base.ts'
   import CustomDataEntityV2 from '@/src/components/Layout/CustomDataEntityV2/CustomDataEntityV2.vue'
   import BlockTableContent from '@/src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockTableContent.vue'
-  import BlockReportBuilder from '@/src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockReportBuilder.vue'
 
   const emit = defineEmits(['click:action'])
 

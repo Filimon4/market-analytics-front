@@ -30,6 +30,7 @@
     if (code == 'addStrategy') {
       router.push('strategies/create')
     } else if (code === 'compareStrategy') {
+      router.push('strategies/compare/create')
     }
   }
 </script>

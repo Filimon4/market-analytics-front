@@ -92,7 +92,6 @@
   :deep(.block-content-thin) {
     display: flex;
     flex-direction: row;
-    gap: 12px;
     padding: 8px 10px;
     height: 100%;
     flex-grow: 1;

@@ -79,8 +79,7 @@
 
     try {
       invitation.value = await invitationApi.getByToken(token.value)
-    } catch (err) {
-      console.log(err)
+    } catch {
       status.value = 'error'
     } finally {
       loading.value = false
@@ -94,7 +93,6 @@
     const result = await invitationApi
       .accept(token.value)
       .catch((err: unknown) => {
-        console.log(err)
         status.value = 'error'
         throw err
       })
@@ -111,7 +109,6 @@
     const result = await invitationApi
       .decline(token.value)
       .catch((err: unknown) => {
-        console.log(err)
         status.value = 'error'
         throw err
       })

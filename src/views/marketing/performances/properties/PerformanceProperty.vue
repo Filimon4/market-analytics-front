@@ -17,8 +17,6 @@
 
   const route = useRoute()
 
-  console.log(route.params)
-
   const channelPerformanceId = computed(() => Number(route.params.id))
   const propertyId = computed(() => Number(route.params.propertyId))
 </script>

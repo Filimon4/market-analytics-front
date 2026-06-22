@@ -41,9 +41,8 @@ import PerformanceProperty from '../views/marketing/performances/properties/Perf
 import Report from '@/src/views/report/Report.vue'
 import Reports from '@/src/views/report/Reports.vue'
 import CreateReport from '@/src/views/report/CreateReport.vue'
-import ReportTypes from '@/src/views/reportType/ReportTypes.vue'
-import ReportType from '@/src/views/reportType/ReportType.vue'
-import CreateReportType from '@/src/views/reportType/CreateReportType.vue'
+import CreateCompareStrategy from '@/src/views/marketing/strategies/CreateCompareStrategy.vue'
+import CreateComparePerformance from '@/src/views/marketing/performances/CreateComparePerformance.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -75,6 +74,7 @@ const routes: RouteRecordRaw[] = [
             children: [
               { path: '', component: Strategies },
               { path: 'create', component: CreateStrategy },
+              { path: 'compare/create', component: CreateCompareStrategy },
               { path: ':id', component: Strategy },
             ],
           },
@@ -83,6 +83,7 @@ const routes: RouteRecordRaw[] = [
             children: [
               { path: '', component: Performances },
               { path: 'create', component: CreatePerformance },
+              { path: 'compare/create', component: CreateComparePerformance },
               {
                 path: ':id',
                 children: [
@@ -128,14 +129,6 @@ const routes: RouteRecordRaw[] = [
               { path: '', component: Reports },
               { path: 'create', component: CreateReport },
               { path: ':id', component: Report },
-            ],
-          },
-          {
-            path: 'report-types',
-            children: [
-              { path: '', component: ReportTypes },
-              { path: 'create', component: CreateReportType },
-              { path: ':id', component: ReportType },
             ],
           },
         ],
@@ -188,15 +181,6 @@ const routes: RouteRecordRaw[] = [
             children: [
               { path: '', component: Invitations },
               { path: ':id', component: Invitation },
-            ],
-          },
-
-          {
-            path: 'report-types',
-            children: [
-              { path: '', component: ReportTypes },
-              { path: 'create', component: CreateReportType },
-              { path: ':id', component: ReportType },
             ],
           },
         ],
