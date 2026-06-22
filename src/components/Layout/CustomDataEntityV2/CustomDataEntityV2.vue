@@ -47,6 +47,8 @@
 </script>
 
 <style scoped lang="scss">
+  @use './styles/custom-data-entity-v2.mixins' as *;
+
   /* Parent */
   .blocks {
     display: flex;
@@ -66,71 +68,5 @@
     min-height: 450px;
   }
 
-  /* Childrens */
-
-  :deep(.block-header) {
-    padding: 12px 24px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  :deep(.block-header-title) {
-    margin: 0;
-    font-size: 1.15em;
-    color: #1a1a1a;
-  }
-
-  :deep(.block-content) {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-    padding: 16px 20px;
-    height: 100%;
-    flex-grow: 1;
-  }
-
-  :deep(.block-content-thin) {
-    display: flex;
-    flex-direction: row;
-    padding: 8px 10px;
-    height: 100%;
-    flex-grow: 1;
-  }
-
-  /* Action buttons area */
-  :deep(.block-actions) {
-    padding: 0.75rem 1.25rem;
-    border-top: 1px solid #e2e8f0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    background: #f8fafc;
-  }
-
-  :deep(.action-btn) {
-    border: 1px solid #cbd5e1;
-    border-radius: 0.375rem;
-    background: white;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.12s;
-  }
-
-  :deep(.action-btn:hover) {
-    background: #f1f5f9;
-  }
-
-  /* Size variants */
-  :deep(.size-small) {
-    padding: 0.35rem 0.75rem;
-    font-size: 0.875rem;
-  }
-  :deep(.size-medium) {
-    padding: 0.5rem 1rem;
-    font-size: 0.95rem;
-  }
-  :deep(.size-large) {
-    padding: 0.65rem 1.35rem;
-    font-size: 1.05rem;
-  }
+  @include custom-data-entity-v2-children;
 </style>
