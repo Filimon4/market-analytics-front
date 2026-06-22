@@ -1,10 +1,15 @@
 <template>
-  <Tree
-    v-if="loaded"
-    v-model:value="localValue"
-    :cascade="options.cascade"
-    :checkable="options.checkable"
-  />
+  <div class="block-header">
+    <p class="block-header-title">{{ props.block.name }}</p>
+  </div>
+  <div class="block-content-thin">
+    <Tree
+      v-if="loaded"
+      v-model:value="localValue"
+      :cascade="options.cascade"
+      :checkable="options.checkable"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -18,28 +23,34 @@
 
   const props = defineProps<{
     block: ITreeBlock
-    blockDetails: ITreeBlockDetail
   }>()
 
   const loaded = ref<boolean>(false)
   const localValue = ref<TreeNodes>([])
   const options = ref<{ cascade?: boolean; checkable?: boolean }>({})
 
-  onMounted(() => {
-    const nodes = infoDataEntityStore.getTreeNodes(props.blockDetails)
-    localValue.value = nodes['nodes']
+  const getBlockTreeDetails = () => {
+    return infoDataEntityStore.getBlockDetails<ITreeBlockDetail>(props.block.code)
+  }
+
+  const setTreeNodes = () => {
+    const nodes = infoDataEntityStore.getTreeNodes(getBlockTreeDetails())
+    localValue.value = nodes.nodes
     options.value = {
       cascade: nodes.cascade,
       checkable: nodes.checkable,
     }
+  }
+
+  onMounted(() => {
+    setTreeNodes()
     loaded.value = true
   })
 
   watch(
     () => infoDataEntityStore.getCancelationToken(),
     () => {
-      const nodes = infoDataEntityStore.getTreeNodes(props.blockDetails)
-      localValue.value = nodes['nodes']
+      setTreeNodes()
     }
   )
 </script>
