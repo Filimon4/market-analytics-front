@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
   import { ruRU, dateRuRU, NConfigProvider, type GlobalThemeOverrides } from 'naive-ui'
-  import './style.css'
+  import './style.scss'
 
   const theme: GlobalThemeOverrides = {
     Input: {

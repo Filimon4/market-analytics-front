@@ -46,7 +46,7 @@
   const infoDataEntityStore = useInfoDataEntityStoreV2()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   /* Parent */
   .blocks {
     display: flex;

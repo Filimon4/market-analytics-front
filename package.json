@@ -45,6 +45,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "naive-ui": "^2.43.2",
     "prettier": "^3.8.1",
+    "sass": "^1.101.0",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^31.0.0",
