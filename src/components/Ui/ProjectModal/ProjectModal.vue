@@ -42,9 +42,7 @@
           </n-list-item>
 
           <n-list-item v-if="!itemsLoading && filteredItems.length === 0">
-            <div style="text-align: center; color: #999; padding: 20px 0">
-              Не найдено совпадений
-            </div>
+            <div class="empty-text">Не найдено совпадений</div>
           </n-list-item>
         </n-list>
       </n-spin>
@@ -170,7 +168,7 @@
   )
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .modal-content {
     padding: 8px 0 16px;
   }
@@ -200,7 +198,7 @@
 
   .edit-project-button {
     border: none;
-    background: transparent;
+    background: $color-transparent;
     padding: 4px;
     display: inline-flex;
     align-items: center;
@@ -219,8 +217,14 @@
 
   .item-sub {
     font-size: 0.86em;
-    color: #888;
+    color: $color-text-subtle;
     margin-top: 2px;
+  }
+
+  .empty-text {
+    text-align: center;
+    color: $color-text-placeholder;
+    padding: 20px 0;
   }
 
   .selected {

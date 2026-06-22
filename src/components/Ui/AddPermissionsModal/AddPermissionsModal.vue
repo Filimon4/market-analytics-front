@@ -147,7 +147,7 @@
   })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .modal-content {
     padding: 8px 0 16px;
   }
@@ -180,7 +180,7 @@
 
   .item-sub {
     font-size: 0.86em;
-    color: #888;
+    color: $color-text-subtle;
     margin-top: 2px;
   }
 
@@ -190,7 +190,7 @@
 
   .empty-text {
     text-align: center;
-    color: #999;
+    color: $color-text-placeholder;
     padding: 20px 0;
   }
 

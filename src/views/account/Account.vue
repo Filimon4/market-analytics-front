@@ -108,7 +108,7 @@
   // #endregion
 </script>
 
-<style>
+<style lang="scss">
   .layout-container {
     height: 100%;
     width: 100%;
@@ -124,15 +124,15 @@
   }
 
   .info-label {
-    background-color: black;
-    color: white;
+    background-color: $color-black;
+    color: $color-white;
     display: inline;
     border-radius: 5px;
     padding: 5px;
   }
 
   .info-content {
-    background-color: rgba(177, 177, 177, 0.315);
+    background-color: $color-surface-info-content;
     height: fit-content;
     width: 100%;
     padding: 7px;
@@ -154,7 +154,7 @@
 
   .action {
     padding: 5px 10px;
-    background-color: rgba(128, 128, 128, 0.212);
+    background-color: $color-surface-action-muted;
     border-radius: 7px;
     cursor: pointer;
   }

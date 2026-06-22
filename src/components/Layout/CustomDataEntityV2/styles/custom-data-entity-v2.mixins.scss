@@ -1,15 +1,17 @@
+@use '@/src/assets/styles/variables.scss' as *;
+
 @mixin custom-data-entity-v2-children {
   // #region Header
   :deep(.block-header) {
     padding: 12px 24px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e0e0e0;
+    background: $color-surface-header;
+    border-bottom: 1px solid $color-border-default;
   }
 
   :deep(.block-header-title) {
     margin: 0;
     font-size: 1.15em;
-    color: #1a1a1a;
+    color: $color-text-strong;
   }
   // #endregion
 
@@ -35,24 +37,24 @@
   // #region Actions
   :deep(.block-actions) {
     padding: 0.75rem 1.25rem;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid $color-border-light;
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
-    background: #f8fafc;
+    background: $color-surface-action;
   }
 
   :deep(.action-btn) {
-    border: 1px solid #cbd5e1;
+    border: 1px solid $color-border-action;
     border-radius: 0.375rem;
-    background: white;
+    background: $color-white;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.12s;
   }
 
   :deep(.action-btn:hover) {
-    background: #f1f5f9;
+    background: $color-surface-hover;
   }
 
   :deep(.size-small) {

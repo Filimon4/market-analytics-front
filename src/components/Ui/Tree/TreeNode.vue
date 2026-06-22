@@ -77,7 +77,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .node-row {
     display: flex;
     align-items: center;
@@ -87,7 +87,7 @@
   }
 
   .node-row:hover {
-    background-color: #f3f4f6;
+    background-color: $color-surface-muted;
   }
 
   .expand-icon,
@@ -96,12 +96,12 @@
   }
 
   .expand-icon {
-    color: #6b7280;
+    color: $color-text-disabled;
     user-select: none;
   }
 
   .node-checkbox {
-    accent-color: #2563eb;
+    accent-color: $color-accent-blue;
   }
 
   .node-icon {
@@ -114,13 +114,13 @@
   }
 
   .node-label.is-disabled {
-    color: #9ca3af;
+    color: $color-text-disabled-light;
     text-decoration: line-through;
   }
 
   .children {
     margin-left: 1.5rem;
     padding-left: 0.5rem;
-    border-left: 1px solid #e5e7eb;
+    border-left: 1px solid $color-border-muted;
   }
 </style>

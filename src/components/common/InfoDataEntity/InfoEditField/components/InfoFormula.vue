@@ -179,7 +179,7 @@
   })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .info-formula {
     width: 100%;
     display: flex;
@@ -203,7 +203,7 @@
   }
 
   .info-formula__tag-wrap.is-drag-over {
-    outline: 2px solid #2f9acc;
+    outline: 2px solid $color-primary;
     border-radius: 4px;
   }
   /* #endregion */

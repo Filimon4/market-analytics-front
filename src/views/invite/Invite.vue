@@ -127,7 +127,7 @@
   })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .invite-page {
     min-height: 100vh;
     display: flex;
@@ -154,7 +154,7 @@
 
   .invite-summary {
     white-space: pre-line;
-    color: #333;
+    color: $color-text-body;
     margin: 0 0 24px;
     line-height: 1.5;
   }
@@ -166,7 +166,7 @@
   }
 
   .invite-muted {
-    color: #666;
+    color: $color-text-muted;
     margin: 0 0 24px;
     line-height: 1.5;
   }
@@ -174,11 +174,11 @@
   .invite-hint {
     margin-top: 16px;
     text-align: center;
-    color: #666;
+    color: $color-text-muted;
   }
 
   .invite-hint a {
-    color: #18a058;
+    color: $color-success;
     text-decoration: none;
   }
 

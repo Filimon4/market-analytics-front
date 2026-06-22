@@ -119,11 +119,11 @@
   )
 </script>
 
-<style>
+<style lang="scss">
   .loading-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.6);
+    background: $color-surface-overlay;
     z-index: 9999;
   }
 </style>

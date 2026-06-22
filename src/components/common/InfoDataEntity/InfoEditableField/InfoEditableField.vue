@@ -53,14 +53,14 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .editable:hover {
-    background: #f0f8ff;
+    background: $color-surface-blue-hover;
     cursor: pointer;
   }
 
   .disabled {
-    color: #888;
+    color: $color-text-subtle;
     cursor: not-allowed;
   }
 
@@ -71,7 +71,11 @@
   }
 
   .resetable-field {
-    background: linear-gradient(260deg, rgba(47, 154, 204, 0.22) 0%, rgba(47, 154, 204, 0) 100%);
+    background: linear-gradient(
+      260deg,
+      $color-reset-gradient-start 0%,
+      $color-reset-gradient-end 100%
+    );
   }
 
   .edit-mode {
@@ -87,7 +91,7 @@
     background: none;
     outline: none;
 
-    border: 1px solid rgba(0, 0, 0, 0.13);
+    border: 1px solid $color-border-input;
     border-radius: 3px;
     padding: 5px;
   }

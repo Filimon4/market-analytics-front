@@ -24,21 +24,21 @@
   defineEmits(['click', 'mouseenter', 'mouseleave'])
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
   .panel-item-container {
     width: 100%;
   }
   .panel-item-container:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: $color-surface-panel-hover;
   }
   .panel-item-container--active {
-    background: rgba(255, 255, 255, 0.2);
+    background: $color-surface-panel-active;
   }
   .panel-item-container--opened {
     .panel-item {
       justify-content: start;
       gap: 10px;
-      color: white;
+      color: $color-white;
       font-size: 20px;
       padding-left: 10px;
     }

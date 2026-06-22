@@ -34,7 +34,7 @@
   })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .column {
     flex: 1;
     min-width: 260px;
@@ -74,20 +74,20 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 12px;
-    border-bottom: 1px solid #d1d1d1;
+    border-bottom: 1px solid $color-border-table;
   }
 
   .detail-label {
     align-self: center;
     font-weight: 500;
-    color: #555;
+    color: $color-text-secondary;
     padding: 5px;
     width: max-content;
   }
 
   .detail-value {
     align-self: center;
-    color: #222;
+    color: $color-text-primary;
   }
 
   @media (max-width: 900px) {

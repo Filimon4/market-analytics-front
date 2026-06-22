@@ -62,8 +62,8 @@
   .block {
     display: flex;
     flex-direction: column;
-    background: #ffffff8c;
-    border: 1px solid #e0e0e0;
+    background: $color-surface-translucent;
+    border: 1px solid $color-border-default;
     border-radius: 8px;
     min-height: 450px;
   }

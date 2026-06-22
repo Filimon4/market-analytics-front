@@ -75,11 +75,11 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .loading-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.6);
+    background: $color-surface-overlay;
     z-index: 9999;
   }
 
@@ -92,22 +92,22 @@
   }
 
   .block {
-    background: #fff;
-    border: 1px solid #e0e0e0;
+    background: $color-surface;
+    border: 1px solid $color-border-default;
     border-radius: 8px;
     overflow: hidden;
   }
 
   .block-header {
     padding: 12px 24px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e0e0e0;
+    background: $color-surface-header;
+    border-bottom: 1px solid $color-border-default;
   }
 
   .block-header p {
     margin: 0;
     font-size: 1.15em;
-    color: #1a1a1a;
+    color: $color-text-strong;
   }
 
   .block-content {
@@ -120,24 +120,24 @@
   /* Action buttons area */
   .block-actions {
     padding: 0.75rem 1.25rem;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid $color-border-light;
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
-    background: #f8fafc;
+    background: $color-surface-action;
   }
 
   .action-btn {
-    border: 1px solid #cbd5e1;
+    border: 1px solid $color-border-action;
     border-radius: 0.375rem;
-    background: white;
+    background: $color-white;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.12s;
   }
 
   .action-btn:hover {
-    background: #f1f5f9;
+    background: $color-surface-hover;
   }
 
   /* Size variants */

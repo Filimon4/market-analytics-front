@@ -261,7 +261,7 @@
   })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .custom-header {
     display: flex;
     flex-direction: column;
@@ -279,16 +279,16 @@
   }
 
   .action-btn {
-    border: 1px solid #cbd5e1;
+    border: 1px solid $color-border-action;
     border-radius: 0.375rem;
-    background: white;
+    background: $color-white;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.12s;
   }
 
   .action-btn:hover {
-    background: #f1f5f9;
+    background: $color-surface-hover;
   }
 
   /* Size variants */

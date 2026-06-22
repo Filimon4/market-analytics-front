@@ -110,7 +110,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .container {
     width: 300px;
   }
@@ -133,11 +133,11 @@
 
   .hint {
     text-align: center;
-    color: #666;
+    color: $color-text-muted;
   }
 
   a {
-    color: #18a058;
+    color: $color-success;
     text-decoration: none;
   }
 

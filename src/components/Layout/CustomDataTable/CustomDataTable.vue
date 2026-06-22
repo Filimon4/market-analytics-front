@@ -98,7 +98,7 @@
   // #endregion
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .data-table-wrapper {
     display: flex;
     flex-direction: column;
@@ -112,7 +112,7 @@
   }
 
   .data-body-wrapper {
-    box-shadow: 0px 0px 6px #0000003f;
+    box-shadow: 0px 0px 6px $color-shadow-default;
     height: 100%;
 
     border-radius: 8px;
@@ -134,7 +134,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid $color-border-default;
     border-radius: 8px;
   }
 
@@ -148,17 +148,17 @@
   .data-body td {
     padding: 10px 12px;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $color-border-default;
     font-size: 1.15em;
-    color: #1a1a1a;
+    color: $color-text-strong;
   }
 
   .data-body th {
-    background: #f8f9fa;
+    background: $color-surface-header;
   }
 
   .data-body tbody tr:hover {
-    background: #f5f5f5;
+    background: $color-surface-neutral;
   }
 
   .default-header {
@@ -169,7 +169,7 @@
 
   .title {
     font-size: 1.15em;
-    color: #1a1a1a;
+    color: $color-text-strong;
   }
 
   .default-row td {
