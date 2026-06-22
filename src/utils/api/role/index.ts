@@ -1,5 +1,5 @@
+import type { IEntity } from '@/src/utils/api/models/infoEntityV2.base'
 import api from '..'
-import type { IEntity } from '../models/infoEntity.base'
 import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
 import type { IRole } from '../models/role'
 

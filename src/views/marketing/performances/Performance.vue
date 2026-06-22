@@ -3,13 +3,11 @@
     v-model="triggerUpdate"
     :fetch-data-req="async () => channelPerformanceApi.getTableEntity(channelPerformanceId)"
     :save-data-req="channelPerformanceApi.saveEntity"
-    :actions="actions"
     @click:action="handleClickAction"
   />
 </template>
 
 <script setup lang="ts">
-  import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
   import InfoDataEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataEntityV2.vue'
   import channelPerformanceApi from '@/src/utils/api/channelPerformance'
   import { useDialog } from 'naive-ui'
@@ -21,27 +19,6 @@
   const route = useRoute()
   const channelPerformanceId = computed(() => Number(route.params.id))
   const triggerUpdate = ref<boolean>(false)
-
-  const actions = ref<Action[]>([
-    {
-      title: 'Востановить',
-      blockCode: 'main',
-      code: 'restore',
-      size: 'medium',
-    },
-    {
-      title: 'Архивировать',
-      blockCode: 'main',
-      code: 'archive',
-      size: 'medium',
-    },
-    {
-      title: 'Обновить метрики',
-      blockCode: 'metrics',
-      code: 'updateMetrics', // TODO: Добавить логику
-      size: 'medium',
-    },
-  ])
 
   const handleClickAction = async (action: string) => {
     if (action == 'archive') {

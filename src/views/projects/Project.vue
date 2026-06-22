@@ -1,12 +1,12 @@
 <template>
-  <InfoDataEntity
+  <InfoDataEntityV2
     :fetch-data-req="async () => projectApi.getTableById(projectId)"
     :save-data-req="projectApi.updateProject"
   />
 </template>
 
 <script setup lang="ts">
-  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
+  import InfoDataEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataEntityV2.vue'
   import projectApi from '@/src/utils/api/project'
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'

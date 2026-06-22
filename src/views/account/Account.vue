@@ -1,7 +1,6 @@
 <template>
-  <InfoDataEntity
+  <InfoDataEntityV2
     :fetch-data-req="userApi.getTable"
-    :actions="actions"
     :save-data-req="async () => false"
     @click:action="handleAction"
     v-model="triggerTableUpdate"
@@ -22,37 +21,14 @@
   import type { IProjectModalItem } from '@/src/components/Ui/ProjectModal/ProjectModal.types'
   import { useUserStore } from '@/src/store/user'
   import { useProjectStore } from '@/src/store/project'
-  import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
-  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
   import userApi from '@/src/utils/api/user'
   import { ref } from 'vue'
   import authApi from '@/src/utils/api/auth'
   import ProjectModal from '@/src/components/Ui/ProjectModal/ProjectModal.vue'
   import { useRouter } from 'vue-router'
+  import InfoDataEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataEntityV2.vue'
 
   const router = useRouter()
-
-  const actions = ref<Action[]>([
-    {
-      title: 'Выйти',
-      code: 'logout',
-      size: 'medium',
-      blockCode: 'main',
-    },
-    {
-      title: 'Поменять проект',
-      code: 'changeProject',
-      size: 'medium',
-      blockCode: 'project',
-    },
-    {
-      title: 'Добавить новый',
-      code: 'addProject',
-      size: 'medium',
-      blockCode: 'project',
-    },
-  ])
-
   const triggerTableUpdate = ref<boolean>(false)
   const userStore = useUserStore()
   const projectStore = useProjectStore()

@@ -29,6 +29,12 @@
           @click:action="handleAction"
         />
       </template>
+      <template #tree="{ block }">
+        <InfoEditableTree
+          :block="block"
+          :blockDetails="infoDataEntityStore.getBlockDetails<ITreeBlockDetail>(block.code)"
+        />
+      </template>
     </CustomDataEntityV2>
 
     <SaveAffix v-show="infoDataEntityStore.hasChanges" @save="saveAll" @cancel="cancelAll" />
@@ -43,10 +49,11 @@
   import BlockTableContent from '../CustomDataEntityV2/DataContentTypeV2/BlockTableContent.vue'
   import InfoEditableField from '../../common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
-  import type { IEntity } from '@/src/utils/api/models/infoEntityV2.base.ts'
+  import type { IEntity, ITreeBlockDetail } from '@/src/utils/api/models/infoEntityV2.base.ts'
   import SaveAffix from '../../common/Affix/SaveAffix.vue'
   import api from '@/src/utils/api/index.ts'
   import { buildUrl } from '@/src/utils/buildUrl.ts'
+  import InfoEditableTree from '@/src/components/common/InfoDataEntity/InfoEditableTree/InfoEditableTree.vue'
 
   const loading = ref<boolean>(true)
 

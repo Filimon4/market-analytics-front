@@ -8,17 +8,17 @@
 </template>
 
 <script setup lang="ts">
-  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
   import { onMounted, ref, watch } from 'vue'
   import Tree from '@/src/components/Ui/Tree/Tree.vue'
   import type { TreeNodes } from '@/src/components/Ui/Tree/types'
-  import type { IBlock, IBlockTreeDetail } from '@/src/utils/api/models/infoEntity.base'
+  import type { ITreeBlock, ITreeBlockDetail } from '@/src/utils/api/models/infoEntityV2.base'
+  import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2'
 
-  const infoDataEntityStore = useInfoDataEntityStore()
+  const infoDataEntityStore = useInfoDataEntityStoreV2()
 
   const props = defineProps<{
-    block: IBlock
-    blockDetails: IBlockTreeDetail
+    block: ITreeBlock
+    blockDetails: ITreeBlockDetail
   }>()
 
   const loaded = ref<boolean>(false)

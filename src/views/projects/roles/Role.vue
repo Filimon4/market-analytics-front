@@ -1,9 +1,8 @@
 <template>
-  <InfoDataEntity
+  <InfoDataEntityV2
     v-model="triggerUpdate"
     :fetch-data-req="async () => roleApi.getTableById(roleId)"
     :save-data-req="roleApi.saveRole"
-    :actions="actions"
     @click:action="handleClickAction"
   />
 
@@ -15,8 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { Action } from '@/src/components/Layout/CustomDataEntity/CustomDataEntity.type'
-  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
+  import InfoDataEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataEntityV2.vue'
   import AddPermissionsModal from '@/src/components/Ui/AddPermissionsModal/AddPermissionsModal.vue'
   import roleApi from '@/src/utils/api/role'
   import { useDialog } from 'naive-ui'
@@ -31,27 +29,6 @@
   const roleId = computed(() => Number(route.params.id))
   const showAddPermissionsModal = ref(false)
   const triggerUpdate = ref(false)
-
-  const actions = ref<Action[]>([
-    {
-      title: 'Востановить',
-      blockCode: 'main',
-      code: 'restore',
-      size: 'medium',
-    },
-    {
-      title: 'Удалить',
-      blockCode: 'main',
-      code: 'delete',
-      size: 'medium',
-    },
-    {
-      title: 'Добавить доступы',
-      blockCode: 'permissions',
-      code: 'addPermission',
-      size: 'medium',
-    },
-  ])
 
   const handleClickAction = async (action: string) => {
     if (action == 'delete') {

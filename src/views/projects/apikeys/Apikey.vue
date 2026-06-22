@@ -1,12 +1,12 @@
 <template>
-  <InfoDataEntity
+  <InfoDataEntityV2
     :fetch-data-req="async () => apiKeysApi.getTableById(apiKeyId)"
     :save-data-req="apiKeysApi.saveApiKey"
   />
 </template>
 
 <script setup lang="ts">
-  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
+  import InfoDataEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataEntityV2.vue'
   import apiKeysApi from '@/src/utils/api/apikeys'
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'

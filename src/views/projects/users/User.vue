@@ -1,12 +1,12 @@
 <template>
-  <InfoDataEntity
+  <InfoDataEntityV2
     :fetch-data-req="async () => userApi.getTableById(userId)"
     :save-data-req="userApi.updateUser"
   />
 </template>
 
 <script setup lang="ts">
-  import InfoDataEntity from '@/src/components/Layout/InfoDataEntity/InfoDataEntity.vue'
+  import InfoDataEntityV2 from '@/src/components/Layout/InfoDataEntity/InfoDataEntityV2.vue'
   import userApi from '@/src/utils/api/user/index'
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'

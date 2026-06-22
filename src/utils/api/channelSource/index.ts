@@ -1,6 +1,6 @@
 import api from '..'
 import type { IChannelSource } from '../models/channelSource'
-import type { IEntity } from '../models/infoEntity.base'
+import type { IEntity } from '@/src/utils/api/models/infoEntityV2.base'
 import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
 
 class ChannelSourceApi {
