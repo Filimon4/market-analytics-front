@@ -2,15 +2,18 @@
   <div class="block">
     <Block title="Конфигурация отчёта" :actions="[]">
       <div class="block-content-thin report-configuration">
-        <div class="configuration-field">
-          <div class="configuration-label">Период отчёта</div>
-          <n-date-picker
-            type="daterange"
-            clearable
-            :value="periodValue"
-            @update:value="updatePeriod"
-          />
-        </div>
+        <n-collapse class="configuration-list">
+          <n-collapse-item title="Период отчёта" name="period">
+            <div class="configuration-property">
+              <n-date-picker
+                type="daterange"
+                clearable
+                :value="periodValue"
+                @update:value="updatePeriod"
+              />
+            </div>
+          </n-collapse-item>
+        </n-collapse>
       </div>
       <template #actions>
         <div></div>
@@ -21,7 +24,7 @@
 
 <script setup lang="ts">
   import { computed } from 'vue'
-  import { NDatePicker } from 'naive-ui'
+  import { NCollapse, NCollapseItem, NDatePicker } from 'naive-ui'
   import { DateTime } from 'luxon'
   import Block from '@/src/components/Layout/CustomDataEntityV2/Block/Block.vue'
   import type { ICompareReportConfiguration } from '../types'
@@ -53,20 +56,35 @@
 </script>
 
 <style scoped lang="scss">
+  @use '@/src/components/Layout/CustomDataEntityV2/styles/customDataEntityV2.mixins' as *;
+
   .report-configuration {
     flex-direction: column !important;
-    align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
   }
 
-  .configuration-field {
-    display: flex;
-    flex-direction: column;
-    width: 320px;
-    gap: 8px;
+  .configuration-list {
+    width: 100%;
   }
 
-  .configuration-label {
+  .configuration-list :deep(.n-collapse-item) {
+    margin: 0 0 12px;
+    padding: 0;
+    @include custom-data-entities-v2-block-borders();
+  }
+
+  .configuration-list :deep(.n-collapse-item__header) {
+    padding: 14px 16px;
     font-weight: 500;
+  }
+
+  .configuration-list :deep(.n-collapse-item__content-inner) {
+    padding: 0 16px 16px;
+  }
+
+  .configuration-property {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 </style>
