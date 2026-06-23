@@ -47,6 +47,55 @@ class StrategyApi {
     const data = await api.patch<{ result: boolean }>(`/v1/strategies/${id}/restore`)
     return data.data.result
   }
+
+  async select() {
+    const data = await api.get<{ result: { id: number; code: string }[] }>('/v1/strategies/select')
+    return data.data.result
+  }
+
+  async statistics(id: number) {
+    const data = await api.get<{
+      result: {
+        strategy: {
+          id: string
+          name: string
+          deleted: boolean
+        }
+        channels: {
+          total: number
+          active: number
+          deleted: number
+        }
+        performanceRecords: {
+          total: number
+          active: number
+          deleted: number
+          period: {
+            startDate: string
+            endDate: string
+          }
+        }
+        fields: {
+          metricChannels: {
+            total: number
+            active: number
+          }
+          ufChannels: {
+            total: number
+            active: number
+          }
+        }
+        totals: {
+          spend: number
+          impressions: number
+          clicks: number
+          conversions: number
+          leads: number
+        }
+      }
+    }>(`/v1/strategies/${id}/statistics`)
+    return data.data.result
+  }
 }
 
 const strategyApi = new StrategyApi()

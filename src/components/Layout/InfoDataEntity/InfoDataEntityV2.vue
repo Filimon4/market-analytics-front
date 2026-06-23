@@ -30,7 +30,7 @@
         />
       </template>
       <template #tree="{ block }">
-        <BlockTreeContent ntent :block="block" />
+        <BlockTreeContent ntent :block="block" @click:action="handleAction" />
       </template>
     </CustomDataEntityV2>
 
