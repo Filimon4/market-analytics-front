@@ -89,7 +89,7 @@
   }
 
   const handleLogin = () => {
-    formRef.value?.validate(async errors => {
+    formRef.value?.validate(async (errors: unknown) => {
       if (errors) return
 
       loading.value = true

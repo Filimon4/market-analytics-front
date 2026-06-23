@@ -47,26 +47,8 @@
 </script>
 
 <style scoped lang="scss">
-  @use './styles/custom-data-entity-v2.mixins' as *;
+  @use './styles/customDataEntityV2.mixins' as *;
 
-  /* Parent */
-  .blocks {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 100%;
-    height: 100%;
-    padding: 24px;
-  }
-
-  .block {
-    display: flex;
-    flex-direction: column;
-    background: $color-surface-translucent;
-    border: 1px solid $color-border-default;
-    border-radius: 8px;
-    min-height: 450px;
-  }
-
+  @include custom-data-entities-v2-blocks;
   @include custom-data-entity-v2-children;
 </style>

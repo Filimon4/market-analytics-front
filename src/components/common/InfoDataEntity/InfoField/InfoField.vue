@@ -51,10 +51,10 @@
   import InfoFieldSelect from './components/InfoFieldSelect.vue'
   import undo from '/icons/undo.png'
   import pencil from '/icons/pencil.png'
-  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import type { IField } from '@/src/utils/api/models/infoEntity.base.ts'
+  import type { IField } from '@/src/utils/api/models/infoEntityV2.base.ts'
+  import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
 
-  const infoDataEntityStore = useInfoDataEntityStore()
+  const infoDataEntityStore = useInfoDataEntityStoreV2()
 
   const emit = defineEmits<{
     (e: 'click:edit'): void

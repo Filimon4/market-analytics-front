@@ -48,12 +48,12 @@
   import InfoSelect from './components/InfoSelect.vue'
   import InfoDatePicker from './components/InfoDatePicker.vue'
   import InfoFormula from './components/InfoFormula.vue'
-  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import type { IField } from '@/src/utils/api/models/infoEntity.base.ts'
+  import type { IField } from '@/src/utils/api/models/infoEntityV2.base.ts'
+  import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
 
   const props = withDefaults(defineProps<{ field: IField }>(), {})
 
-  const infoDataEntityStore = useInfoDataEntityStore()
+  const infoDataEntityStore = useInfoDataEntityStoreV2()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const localValue = ref<any>(infoDataEntityStore.getValueOfField(props.field))

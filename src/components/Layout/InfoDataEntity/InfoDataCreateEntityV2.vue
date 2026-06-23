@@ -26,10 +26,14 @@
   import { useRouter } from 'vue-router'
   import SaveAffix from '@/src/components/common/Affix/SaveAffix.vue'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
-  import type { Data, IEntity } from '@/src/utils/api/models/infoEntityV2.base.ts'
-  import type { IBlockDetail } from '@/src/utils/api/models/infoEntity.base.ts'
+  import type {
+    Data,
+    IEntity,
+    IMetricsBlockDetail,
+    ITableBlockDetail,
+  } from '@/src/utils/api/models/infoEntityV2.base.ts'
   import CustomDataEntityV2 from '@/src/components/Layout/CustomDataEntityV2/CustomDataEntityV2.vue'
-  import BlockTableContent from '@/src/components/Layout/CustomDataEntityV2/DataContentTypeV2/BlockTableContent.vue'
+  import BlockTableContent from '@/src/components/Layout/CustomDataEntityV2/CustomContent/BlockTableContent.vue'
 
   const emit = defineEmits(['click:action'])
 
@@ -69,7 +73,7 @@
     const blockTables = blocks.filter(block => block.blockType === 'table')
     response.blockDetails
       .filter(block => blockTables.map(bt => bt.code).includes(block.blockCode))
-      .flatMap(block2 => (block2 as IBlockDetail).fields)
+      .flatMap(block2 => (block2 as ITableBlockDetail | IMetricsBlockDetail).fields)
       .filter(field => !field.editable && field.createDefault !== undefined)
       .forEach(defaultField => {
         infoDataEntityStore.updateFieldValue(defaultField.path, defaultField.createDefault)
@@ -109,10 +113,7 @@
   })
 </script>
 
-<style scoped>
-  .entity-wrapper {
-    height: 100%;
-    width: 100%;
-    position: relative;
-  }
+<style scoped lang="scss">
+  @use './styles/InfoDataEntityV2.mixins' as *;
+  @include custom-data-entity;
 </style>

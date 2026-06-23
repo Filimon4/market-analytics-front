@@ -30,7 +30,7 @@
         />
       </template>
       <template #tree="{ block }">
-        <BlockTreeContent :block="block" />
+        <BlockTreeContent ntent :block="block" />
       </template>
     </CustomDataEntityV2>
 
@@ -41,16 +41,16 @@
 <script setup lang="ts">
   import { onBeforeUnmount, onMounted, reactive, ref, type PropType } from 'vue'
   import CustomDataEntityV2 from '../CustomDataEntityV2/CustomDataEntityV2.vue'
-  import BlockMetricContent from '../CustomDataEntityV2/DataContentTypeV2/BlockMetricContent.vue'
-  import BlockViewListEntityContent from '../CustomDataEntityV2/DataContentTypeV2/BlockViewListEntityContent.vue'
-  import BlockTableContent from '../CustomDataEntityV2/DataContentTypeV2/BlockTableContent.vue'
-  import BlockTreeContent from '../CustomDataEntityV2/DataContentTypeV2/BlockTreeContent.vue'
   import InfoEditableField from '../../common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
   import type { IEntity } from '@/src/utils/api/models/infoEntityV2.base.ts'
   import SaveAffix from '../../common/Affix/SaveAffix.vue'
   import api from '@/src/utils/api/index.ts'
   import { buildUrl } from '@/src/utils/buildUrl.ts'
+  import BlockTableContent from '@/src/components/Layout/CustomDataEntityV2/CustomContent/BlockTableContent.vue'
+  import BlockMetricContent from '@/src/components/Layout/CustomDataEntityV2/CustomContent/BlockMetricContent.vue'
+  import BlockViewListEntityContent from '@/src/components/Layout/CustomDataEntityV2/CustomContent/BlockViewListEntityContent.vue'
+  import BlockTreeContent from '@/src/components/Layout/CustomDataEntityV2/CustomContent/BlockTreeContent.vue'
 
   const loading = ref<boolean>(true)
 
@@ -131,11 +131,7 @@
   }
 </script>
 
-<style>
-  .entity-wrapper {
-    height: max-content;
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
+<style lang="scss">
+  @use './styles/InfoDataEntityV2.mixins' as *;
+  @include custom-data-entity;
 </style>

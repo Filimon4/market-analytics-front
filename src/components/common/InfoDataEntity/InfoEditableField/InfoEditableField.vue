@@ -24,10 +24,10 @@
   import { ref } from 'vue'
   import InfoField from '@/src/components/common/InfoDataEntity/InfoField/InfoField.vue'
   import InfoEditField from '@/src/components/common/InfoDataEntity/InfoEditField/InfoEditField.vue'
-  import { useInfoDataEntityStore } from '@/src/store/infoDataEntity'
-  import type { IField } from '@/src/utils/api/models/infoEntity.base'
+  import type { IField } from '@/src/utils/api/models/infoEntityV2.base'
+  import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2'
 
-  const infoDataEntityStore = useInfoDataEntityStore()
+  const infoDataEntityStore = useInfoDataEntityStoreV2()
 
   const props = defineProps<{
     field: IField

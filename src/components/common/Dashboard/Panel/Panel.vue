@@ -10,14 +10,16 @@
       </div>
       <div class="panel-content" :class="{ 'panel-content-opened': panelOpened }">
         <div v-for="block in panelBlocks" :key="block.key" class="panel-content-block">
-          <PanelItem
-            v-for="item in block.items"
-            :key="item.id"
-            :item="item"
-            :label-visible="panelOpened"
-            :is-active="selectedMainPanelItem === item"
-            @click="onMainItemClick(item)"
-          />
+          <template v-if="block.items.length">
+            <PanelItem
+              v-for="item in block.items"
+              :key="item.id"
+              :item="item"
+              :label-visible="panelOpened"
+              :is-active="selectedMainPanelItem === item"
+              @click="onMainItemClick(item)"
+            />
+          </template>
         </div>
       </div>
     </div>
@@ -63,10 +65,10 @@
 
   const panelBlocks = computed(() => {
     return [
-      { key: 'first', items: project.panel },
+      { key: 'first', items: project.panel as TPanelItem[] },
       {
         key: 'second',
-        items: [{ id: 3, name: 'Аккаунт', icon: accountIcon, url: '/account' }],
+        items: [{ id: 3, name: 'Аккаунт', icon: accountIcon, url: '/account' }] as TPanelItem[],
       },
     ]
   })
