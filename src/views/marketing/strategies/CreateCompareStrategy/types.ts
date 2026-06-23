@@ -18,3 +18,7 @@ export interface IPeriod {
   startDate: string
   endDate: string
 }
+
+export interface ICompareReportConfiguration {
+  period: IPeriod | null
+}

@@ -1,6 +1,8 @@
 <template>
   <div class="entity-wrapper">
     <div class="blocks">
+      <ReportConfigurationBlock v-model:value="reportConfiguration" />
+
       <StrategySelectionBlock
         :strategies="selectedStrategies"
         :loading="strategiesDetailsLoading"
@@ -32,12 +34,16 @@
   } from '@/src/components/Ui/SelectListModal/SelectListModal.types'
   import strategyApi from '@/src/utils/api/strategy'
   import CompareTemplateBlock from './components/CompareTemplateBlock.vue'
+  import ReportConfigurationBlock from './components/ReportConfigurationBlock.vue'
   import StrategySelectionBlock from './components/StrategySelectionBlock.vue'
-  import type { ICompareStrategy } from './types'
+  import type { ICompareReportConfiguration, ICompareStrategy } from './types.ts'
 
   const showStrategyModal = ref(false)
   const strategiesDetailsLoading = ref(false)
   const selectedStrategies = ref<ICompareStrategy[]>([])
+  const reportConfiguration = ref<ICompareReportConfiguration>({
+    period: null,
+  })
 
   const selectedStrategyIds = computed(() => selectedStrategies.value.map(strategy => strategy.id))
 
