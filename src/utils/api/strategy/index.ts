@@ -53,7 +53,13 @@ class StrategyApi {
     return data.data.result
   }
 
-  async statistics(id: number) {
+  async statistics(
+    id: number,
+    options?: {
+      from?: Date
+      to?: Date
+    }
+  ) {
     const data = await api.get<{
       result: {
         strategy: {
@@ -89,11 +95,14 @@ class StrategyApi {
           spend: number
           impressions: number
           clicks: number
-          conversions: number
           leads: number
         }
       }
-    }>(`/v1/strategies/${id}/statistics`)
+    }>(`/v1/strategies/${id}/statistics`, {
+      params: {
+        ...options,
+      },
+    })
     return data.data.result
   }
 }

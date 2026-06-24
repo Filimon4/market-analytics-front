@@ -93,10 +93,6 @@
         <div class="detail-value">{{ strategy.statistics?.totals.clicks ?? '-' }}</div>
       </div>
       <div class="detail-row">
-        <div class="detail-label">Конверсия</div>
-        <div class="detail-value">{{ strategy.statistics?.totals.conversions ?? '-' }} %</div>
-      </div>
-      <div class="detail-row">
         <div class="detail-label">Лиды</div>
         <div class="detail-value">{{ strategy.statistics?.totals.leads ?? '-' }}</div>
       </div>

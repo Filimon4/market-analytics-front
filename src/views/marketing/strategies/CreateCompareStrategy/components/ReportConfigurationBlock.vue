@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <Block title="Конфигурация отчёта" :actions="[]">
+    <Block :show-actions="false" title="Конфигурация отчёта" :actions="[]">
       <div class="block-content-thin report-configuration">
         <n-collapse class="configuration-list">
           <n-collapse-item title="Период отчёта" name="period">
@@ -15,9 +15,6 @@
           </n-collapse-item>
         </n-collapse>
       </div>
-      <template #actions>
-        <div></div>
-      </template>
     </Block>
   </div>
 </template>

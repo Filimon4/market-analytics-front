@@ -5,7 +5,7 @@
     </div>
   </slot>
   <slot></slot>
-  <slot name="actions">
+  <slot v-if="showActions" name="actions">
     <div class="block-actions" v-if="props.actions">
       <button
         v-for="action in props.actions"
@@ -27,9 +27,11 @@
     defineProps<{
       title: string
       actions: IBlockAction[]
+      showActions?: boolean
     }>(),
     {
       actions: () => [],
+      showActions: true,
     }
   )
 
