@@ -6,6 +6,8 @@ import strategyApi from '@/src/utils/api/strategy'
 
 export type StrategyStatistics = Awaited<ReturnType<typeof strategyApi.statistics>>
 
+export type ICompareChannale = ISelectListItem
+
 export interface ICompareStrategy extends ISelectListItem {
   id: SelectListItemId
   code?: string

@@ -47,6 +47,16 @@ class ChannelApi {
     const data = await api.patch<{ result: boolean }>(`/v1/channels/${id}/restore`)
     return data.data.result
   }
+
+  async select(options: { strategyId?: number }) {
+    const data = await api.get<{ result: { id: number; code: string }[] }>('/v1/channels/select', {
+      params: {
+        deleted: false,
+        ...options,
+      },
+    })
+    return data.data.result
+  }
 }
 
 const channelApi = new ChannelApi()

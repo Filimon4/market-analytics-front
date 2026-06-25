@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeUnmount, onMounted, reactive, ref, type PropType } from 'vue'
+  import { onBeforeUnmount, onMounted, reactive, ref, watch, type PropType } from 'vue'
   import CustomDataEntityV2 from '../CustomDataEntityV2/CustomDataEntityV2.vue'
   import InfoEditableField from '../../common/InfoDataEntity/InfoEditableField/InfoEditableField.vue'
   import { useInfoDataEntityStoreV2 } from '@/src/store/infoDataEntityV2/index.ts'
@@ -55,6 +55,8 @@
   const loading = ref<boolean>(true)
 
   const emit = defineEmits(['click:action'])
+
+  const refreshData = defineModel<boolean>('refreshData', { default: false })
 
   const infoDataEntityStore = useInfoDataEntityStoreV2()
 
@@ -98,6 +100,12 @@
 
   onMounted(() => {
     fetchData()
+  })
+
+  watch(refreshData, async shouldRefetch => {
+    if (!shouldRefetch) return
+    await fetchData()
+    refreshData.value = false
   })
 
   onBeforeUnmount(() => {

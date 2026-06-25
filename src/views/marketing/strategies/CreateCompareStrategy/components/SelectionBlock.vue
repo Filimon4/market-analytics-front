@@ -1,14 +1,12 @@
 <template>
   <div class="block">
-    <Block title="Выбор стратегий" :show-actions="false" :actions="[]">
-      <div class="block-content-thin block-content-selection">
+    <Block :title="title" :show-actions="false" :actions="[]">
+      <div :class="{ 'block-content-thin': true, 'block-content-selection': selectionStyle }">
         <div class="content-columns">
           <slot />
         </div>
 
-        <div class="content-add">
-          <slot name="add-entity" />
-        </div>
+        <slot name="add-entity" />
       </div>
     </Block>
   </div>
@@ -16,4 +14,9 @@
 
 <script setup lang="ts">
   import Block from '@/src/components/Layout/CustomDataEntityV2/Block/Block.vue'
+
+  defineProps<{
+    selectionStyle: boolean
+    title: string
+  }>()
 </script>

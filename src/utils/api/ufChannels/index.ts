@@ -29,6 +29,20 @@ class UfChannelsApi {
     )
     return data.data.result
   }
+
+  async deleteEntity(channelId: number, id: number) {
+    const data = await api.delete<{ result: boolean }>(
+      `/v1/channels/${channelId}/uf-channels/${id}`
+    )
+    return data.data.result
+  }
+
+  async restoreEntity(channelId: number, id: number) {
+    const data = await api.patch<{ result: boolean }>(
+      `/v1/channels/${channelId}/uf-channels/${id}/restore`
+    )
+    return data.data.result
+  }
 }
 
 const ufChannelsApi = new UfChannelsApi()
