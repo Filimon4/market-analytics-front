@@ -66,7 +66,9 @@
   })
   const tableRowProps = (row: ITableRow) => {
     return {
-      style: 'cursor: pointer;',
+      style: !row?.deleted
+        ? 'cursor: pointer;'
+        : 'opacity: 0.4; text-decoration: line-through; cursor: pointer;',
       onClick: () => {
         router.push(
           `${infoDataEntityStore.initialData['id']}/${props.block.baseEntityUrl}/${row['id']}`
