@@ -1,5 +1,5 @@
 <template>
-  <Affix :bottom="'10px'" :right="'50%'" :transform="'translateX(50%)'">
+  <Affix :display="'fixed'" :bottom="'10px'" :right="'50%'" :transform="'translateX(50%)'">
     <div class="entity-submit">
       <n-button type="primary" :loading="saving" @click="emit('save')" color="#2f9acc">
         Сохранить

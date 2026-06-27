@@ -17,6 +17,7 @@
       width?: string | number
       zIndex?: number
       transform?: string
+      display: 'fixed' | 'absolute'
     }>(),
     {
       bottom: undefined,
@@ -26,12 +27,13 @@
       width: undefined,
       transform: undefined,
       zIndex: 10,
+      display: 'fixed',
     }
   )
 
   const computedStyle = computed<StyleValue>(() => {
     return {
-      position: 'absolute',
+      position: props.display,
       zIndex: props.zIndex,
       width:
         props.width !== undefined
