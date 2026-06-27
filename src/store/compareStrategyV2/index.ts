@@ -13,6 +13,14 @@ import type {
 } from '@/src/views/marketing/strategies/CreateCompareStrategy/types'
 import strategyApi from '@/src/utils/api/strategy'
 
+export type CompareMetricEntityType = 'metric' | 'uf'
+export type CompareMetricEntityKey = `${CompareMetricEntityType}:${string}`
+
+export interface ISelectedCompareMetricEntities {
+  metricIds: string[]
+  ufIds: string[]
+}
+
 interface ICompareStrategyV2Store {
   currentStage: Ref<string>
   stages: ComputedRef<StageBuilderStage[]>
@@ -20,6 +28,7 @@ interface ICompareStrategyV2Store {
   reportConfiguration: Ref<ICompareReportConfiguration>
   selectedStrategies: Ref<ICompareStrategy[]>
   selectedChannels: Ref<Record<string, ICompareChannale[]>>
+  selectedMetricEntities: Ref<Record<string, ISelectedCompareMetricEntities>>
   strategiesDetailsLoading: Ref<boolean>
   channelsDetailsLoading: Ref<boolean>
 
@@ -29,6 +38,7 @@ interface ICompareStrategyV2Store {
   removeStrategy: (strategyId: SelectListItemId) => void
   setSelectedChannels: (strategyId: SelectListItemId, channels: ICompareChannale[]) => void
   removeChannel: (strategyId: SelectListItemId, channelId: SelectListItemId) => void
+  setSelectedMetricEntityKeys: (channelId: SelectListItemId, keys: CompareMetricEntityKey[]) => void
   reset: () => void
 }
 
@@ -44,6 +54,7 @@ export const useCompareStrategyV2Store = defineStore(
     const reportConfiguration = ref<ICompareReportConfiguration>(defaultReportConfiguration())
     const selectedStrategies = ref<ICompareStrategy[]>([])
     const selectedChannels = ref<Record<string, ICompareChannale[]>>({})
+    const selectedMetricEntities = ref<Record<string, ISelectedCompareMetricEntities>>({})
     const strategiesDetailsLoading = ref(false)
     const channelsDetailsLoading = ref(false)
 
@@ -144,6 +155,7 @@ export const useCompareStrategyV2Store = defineStore(
       selectedChannels.value = Object.fromEntries(
         Object.entries(selectedChannels.value).filter(([strategyId]) => strategyIds.has(strategyId))
       )
+      pruneSelectedMetricEntities()
     }
 
     function setSelectedChannels(strategyId: SelectListItemId, channels: ICompareChannale[]) {
@@ -153,6 +165,7 @@ export const useCompareStrategyV2Store = defineStore(
           ...selectedChannels.value,
           [String(strategyId)]: channels,
         }
+        pruneSelectedMetricEntities()
       } finally {
         channelsDetailsLoading.value = false
       }
@@ -164,6 +177,47 @@ export const useCompareStrategyV2Store = defineStore(
         ...selectedChannels.value,
         [String(strategyId)]: channels.filter(channel => String(channel.id) !== String(channelId)),
       }
+      pruneSelectedMetricEntities()
+    }
+
+    function pruneSelectedMetricEntities() {
+      const channelIds = new Set(
+        Object.values(selectedChannels.value)
+          .flat()
+          .map(channel => String(channel.id))
+      )
+
+      selectedMetricEntities.value = Object.fromEntries(
+        Object.entries(selectedMetricEntities.value).filter(([channelId]) =>
+          channelIds.has(channelId)
+        )
+      )
+    }
+
+    function setSelectedMetricEntityKeys(
+      channelId: SelectListItemId,
+      keys: CompareMetricEntityKey[]
+    ) {
+      const nextValue: ISelectedCompareMetricEntities = {
+        metricIds: [],
+        ufIds: [],
+      }
+
+      for (const key of keys) {
+        const [type, id] = key.split(':') as [CompareMetricEntityType, string]
+
+        if (type === 'metric') {
+          nextValue.metricIds.push(id)
+          continue
+        }
+
+        nextValue.ufIds.push(id)
+      }
+
+      selectedMetricEntities.value = {
+        ...selectedMetricEntities.value,
+        [String(channelId)]: nextValue,
+      }
     }
 
     function reset() {
@@ -172,6 +226,7 @@ export const useCompareStrategyV2Store = defineStore(
       reportConfiguration.value = defaultReportConfiguration()
       selectedStrategies.value = []
       selectedChannels.value = {}
+      selectedMetricEntities.value = {}
       strategiesDetailsLoading.value = false
       channelsDetailsLoading.value = false
     }
@@ -183,6 +238,7 @@ export const useCompareStrategyV2Store = defineStore(
       reportConfiguration,
       selectedStrategies,
       selectedChannels,
+      selectedMetricEntities,
       strategiesDetailsLoading,
       channelsDetailsLoading,
       setReportConfiguration,
@@ -191,6 +247,7 @@ export const useCompareStrategyV2Store = defineStore(
       removeStrategy,
       setSelectedChannels,
       removeChannel,
+      setSelectedMetricEntityKeys,
       reset,
     }
   }
