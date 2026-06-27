@@ -77,25 +77,6 @@
           {{ formatPeriod(strategy.statistics?.performanceRecords.period) }}
         </div>
       </div>
-      <div class="detail-section-title">Итог</div>
-      <div class="detail-row">
-        <div class="detail-label">Потрачено</div>
-        <div class="detail-value">{{ strategy.statistics?.totals.spend ?? '-' }}</div>
-      </div>
-      <div class="detail-row">
-        <div class="detail-label">Просмотров</div>
-        <div class="detail-value">
-          {{ strategy.statistics?.totals.impressions ?? '-' }}
-        </div>
-      </div>
-      <div class="detail-row">
-        <div class="detail-label">Кликов</div>
-        <div class="detail-value">{{ strategy.statistics?.totals.clicks ?? '-' }}</div>
-      </div>
-      <div class="detail-row">
-        <div class="detail-label">Лиды</div>
-        <div class="detail-value">{{ strategy.statistics?.totals.leads ?? '-' }}</div>
-      </div>
     </div>
   </div>
 </template>

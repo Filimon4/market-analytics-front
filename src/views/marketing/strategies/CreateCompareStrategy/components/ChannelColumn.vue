@@ -22,12 +22,10 @@
   } from '@/src/views/marketing/strategies/CreateCompareStrategy/types'
   import type { SelectListItemId } from '@/src/components/Ui/SelectListModal/SelectListModal.types'
 
-  const props = defineProps<{
+  defineProps<{
     strategy: ICompareStrategy
     channels: ICompareChannale[]
   }>()
-
-  console.log(props.channels)
 
   const emit = defineEmits<{
     remove: [channelId: SelectListItemId]
@@ -63,6 +61,6 @@
     padding: 5px;
     width: 100%;
     height: 100%;
-    border-bottom: 1px solid $color-border-default;
+    @include custom-data-entities-v2-block-borders();
   }
 </style>

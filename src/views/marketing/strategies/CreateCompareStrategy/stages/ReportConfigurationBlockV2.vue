@@ -23,32 +23,34 @@
   import { computed } from 'vue'
   import { NCollapse, NCollapseItem, NDatePicker } from 'naive-ui'
   import { DateTime } from 'luxon'
+  import { storeToRefs } from 'pinia'
   import Block from '@/src/components/Layout/CustomDataEntityV2/Block/Block.vue'
-  import type { ICompareReportConfiguration } from '../types'
+  import { useCompareStrategyV2Store } from '@/src/store/compareStrategyV2'
 
   type DateRangeValue = [number, number] | null
 
-  const configuration = defineModel<ICompareReportConfiguration>('value', { required: true })
+  const compareStrategyV2Store = useCompareStrategyV2Store()
+  const { reportConfiguration } = storeToRefs(compareStrategyV2Store)
+  const { setReportPeriod } = compareStrategyV2Store
 
   const periodValue = computed<DateRangeValue>(() => {
-    if (!configuration.value.period) return null
+    if (!reportConfiguration.value.period) return null
 
     return [
-      DateTime.fromISO(configuration.value.period.startDate).toMillis(),
-      DateTime.fromISO(configuration.value.period.endDate).toMillis(),
+      DateTime.fromISO(reportConfiguration.value.period.startDate).toMillis(),
+      DateTime.fromISO(reportConfiguration.value.period.endDate).toMillis(),
     ]
   })
 
   function updatePeriod(value: DateRangeValue) {
-    configuration.value = {
-      ...configuration.value,
-      period: value
+    setReportPeriod(
+      value
         ? {
             startDate: DateTime.fromMillis(value[0]).toISODate() || '',
             endDate: DateTime.fromMillis(value[1]).toISODate() || '',
           }
-        : null,
-    }
+        : null
+    )
   }
 </script>
 

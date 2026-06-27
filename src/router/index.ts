@@ -41,8 +41,8 @@ import PerformanceProperty from '../views/marketing/performances/properties/Perf
 import Report from '@/src/views/report/Report.vue'
 import Reports from '@/src/views/report/Reports.vue'
 import CreateReport from '@/src/views/report/CreateReport.vue'
-import CreateCompareStrategy from '@/src/views/marketing/strategies/CreateCompareStrategy/CreateCompareStrategy.vue'
 import CreateComparePerformance from '@/src/views/marketing/performances/CreateComparePerformance.vue'
+import CreateCompareStrategyV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/CreateCompareStrategyV2.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -74,7 +74,7 @@ const routes: RouteRecordRaw[] = [
             children: [
               { path: '', component: Strategies },
               { path: 'create', component: CreateStrategy },
-              { path: 'compare/create', component: CreateCompareStrategy },
+              { path: 'compare/create', component: CreateCompareStrategyV2 },
               { path: ':id', component: Strategy },
             ],
           },

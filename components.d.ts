@@ -64,6 +64,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SaveAffix: typeof import('./src/components/common/Affix/SaveAffix.vue')['default']
     SelectListModal: typeof import('./src/components/Ui/SelectListModal/SelectListModal.vue')['default']
+    StageBuilder: typeof import('./src/components/Layout/StageBuilder/StageBuilder.vue')['default']
     Tree: typeof import('./src/components/Ui/Tree/Tree.vue')['default']
     TreeNode: typeof import('./src/components/Ui/Tree/TreeNode.vue')['default']
   }

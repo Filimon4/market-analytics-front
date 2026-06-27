@@ -57,6 +57,13 @@ class ChannelApi {
     })
     return data.data.result
   }
+
+  async getMetricEntities(id: string) {
+    const data = await api.get<{
+      result: { uf: { id: string; name: string }[]; metric: { id: string; name: string }[] }
+    }>(`/v1/channels/${id}/metric-entities`)
+    return data.data.result
+  }
 }
 
 const channelApi = new ChannelApi()
