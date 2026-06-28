@@ -11,7 +11,7 @@ import type {
   ICompareStrategy,
   IPeriod,
 } from '@/src/views/marketing/strategies/CreateCompareStrategy/types'
-import strategyApi from '@/src/utils/api/strategy'
+import strategyApi, { type ICreateCompareStrategyReportDto } from '@/src/utils/api/strategy'
 
 export type CompareMetricEntityType = 'metric' | 'uf'
 export type CompareMetricEntityKey = `${CompareMetricEntityType}:${string}`
@@ -31,9 +31,12 @@ interface ICompareStrategyV2Store {
   selectedMetricEntities: Ref<Record<string, ISelectedCompareMetricEntities>>
   strategiesDetailsLoading: Ref<boolean>
   channelsDetailsLoading: Ref<boolean>
+  reportCreating: Ref<boolean>
 
   setReportConfiguration: (configuration: ICompareReportConfiguration) => void
   setReportPeriod: (period: IPeriod | null) => void
+  buildCreateReportPayload: () => ICreateCompareStrategyReportDto
+  createReport: () => Promise<unknown>
   refreshSelectedStrategies: (items: ISelectListItem[]) => Promise<void>
   removeStrategy: (strategyId: SelectListItemId) => void
   setSelectedChannels: (strategyId: SelectListItemId, channels: ICompareChannale[]) => void
@@ -57,6 +60,7 @@ export const useCompareStrategyV2Store = defineStore(
     const selectedMetricEntities = ref<Record<string, ISelectedCompareMetricEntities>>({})
     const strategiesDetailsLoading = ref(false)
     const channelsDetailsLoading = ref(false)
+    const reportCreating = ref(false)
 
     const allStrategiesHaveChannels = computed(() => {
       if (selectedStrategies.value.length < 2) return false
@@ -104,6 +108,39 @@ export const useCompareStrategyV2Store = defineStore(
       reportConfiguration.value = {
         ...reportConfiguration.value,
         period,
+      }
+    }
+
+    function buildCreateReportPayload(): ICreateCompareStrategyReportDto {
+      return {
+        reportConfiguration: reportConfiguration.value,
+        strategies: selectedStrategies.value.map(strategy => {
+          const channels = selectedChannels.value[String(strategy.id)] || []
+
+          return {
+            strategyId: Number(strategy.id),
+            channelIds: channels.map(channel => Number(channel.id)),
+            channels: channels.map(channel => {
+              const selectedEntities = selectedMetricEntities.value[String(channel.id)]
+
+              return {
+                channelId: Number(channel.id),
+                metricIds: selectedEntities?.metricIds || [],
+                ufIds: selectedEntities?.ufIds || [],
+              }
+            }),
+          }
+        }),
+      }
+    }
+
+    async function createReport() {
+      reportCreating.value = true
+
+      try {
+        return await strategyApi.createCompareReport(buildCreateReportPayload())
+      } finally {
+        reportCreating.value = false
       }
     }
 
@@ -229,6 +266,7 @@ export const useCompareStrategyV2Store = defineStore(
       selectedMetricEntities.value = {}
       strategiesDetailsLoading.value = false
       channelsDetailsLoading.value = false
+      reportCreating.value = false
     }
 
     return {
@@ -241,8 +279,11 @@ export const useCompareStrategyV2Store = defineStore(
       selectedMetricEntities,
       strategiesDetailsLoading,
       channelsDetailsLoading,
+      reportCreating,
       setReportConfiguration,
       setReportPeriod,
+      buildCreateReportPayload,
+      createReport,
       refreshSelectedStrategies,
       removeStrategy,
       setSelectedChannels,

@@ -3,6 +3,24 @@ import api from '..'
 import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
 import type { IStrategy } from '../models/strategy'
 
+export interface ICreateCompareStrategyReportDto {
+  reportConfiguration: {
+    period: {
+      startDate: string
+      endDate: string
+    } | null
+  }
+  strategies: {
+    strategyId: number
+    channelIds: number[]
+    channels: {
+      channelId: number
+      metricIds: string[]
+      ufIds: string[]
+    }[]
+  }[]
+}
+
 class StrategyApi {
   async getTableList(
     page: number,
@@ -35,6 +53,12 @@ class StrategyApi {
 
   async createStrategy(dto: IEntity['data']) {
     const data = await api.post<{ result: { id: string } }>(`/v1/strategies`, dto)
+    return data.data.result
+  }
+
+  async createCompareReport(dto: ICreateCompareStrategyReportDto) {
+    // TODO: Replace with the final backend endpoint.
+    const data = await api.post<{ result: unknown }>('/v1/strategies/compare/report', dto)
     return data.data.result
   }
 

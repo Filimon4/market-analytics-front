@@ -1,6 +1,12 @@
 <template>
   <div class="entity-wrapper">
-    <StageBuilder v-model:current-stage="currentStage" :stages="stages" :show-progress="false">
+    <StageBuilder
+      v-model:current-stage="currentStage"
+      :stages="stages"
+      :show-progress="false"
+      :disable-next="reportCreating"
+      @finish="handleFinish"
+    >
       <template #config>
         <ReportConfigurationBlockV2 />
       </template>
@@ -22,6 +28,7 @@
 
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
+  import { useMessage } from 'naive-ui'
   import StageBuilder from '@/src/components/Layout/StageBuilder/StageBuilder.vue'
   import { useCompareStrategyV2Store } from '@/src/store/compareStrategyV2'
   import ChannelSelectionBlockV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/stages/ChannelSelectionBlockV2.vue'
@@ -29,8 +36,19 @@
   import StrategySelectionBlockV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/stages/StrategySelectionBlockV2.vue'
   import ReportConfigurationBlockV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/stages/ReportConfigurationBlockV2.vue'
 
+  const message = useMessage()
   const compareStrategyV2Store = useCompareStrategyV2Store()
-  const { currentStage, stages, maxColumns } = storeToRefs(compareStrategyV2Store)
+  const { currentStage, stages, maxColumns, reportCreating } = storeToRefs(compareStrategyV2Store)
+  const { createReport } = compareStrategyV2Store
+
+  async function handleFinish() {
+    try {
+      await createReport()
+      message.success('Отчёт успешно создан')
+    } catch {
+      message.error('Не удалось создать отчёт')
+    }
+  }
 </script>
 
 <style scoped lang="scss">
