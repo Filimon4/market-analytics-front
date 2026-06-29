@@ -29,26 +29,36 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
   import { useMessage } from 'naive-ui'
+  import { useRouter } from 'vue-router'
   import StageBuilder from '@/src/components/Layout/StageBuilder/StageBuilder.vue'
   import { useCompareStrategyV2Store } from '@/src/store/compareStrategyV2'
   import ChannelSelectionBlockV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/stages/ChannelSelectionBlockV2.vue'
   import MetricsSelectionBlockV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/stages/MetricsSelectionBlockV2.vue'
   import StrategySelectionBlockV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/stages/StrategySelectionBlockV2.vue'
   import ReportConfigurationBlockV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/stages/ReportConfigurationBlockV2.vue'
+  import { onUnmounted } from 'vue'
 
   const message = useMessage()
+  const router = useRouter()
   const compareStrategyV2Store = useCompareStrategyV2Store()
   const { currentStage, stages, maxColumns, reportCreating } = storeToRefs(compareStrategyV2Store)
-  const { createReport } = compareStrategyV2Store
+  const { createReport, reset } = compareStrategyV2Store
 
   async function handleFinish() {
     try {
       await createReport()
       message.success('Отчёт успешно создан')
+      await router.push({
+        path: '/marketing/analytics',
+      })
     } catch {
       message.error('Не удалось создать отчёт')
     }
   }
+
+  onUnmounted(() => {
+    reset()
+  })
 </script>
 
 <style scoped lang="scss">

@@ -138,7 +138,9 @@ export const useCompareStrategyV2Store = defineStore(
       reportCreating.value = true
 
       try {
-        return await strategyApi.createCompareReport(buildCreateReportPayload())
+        const result = await strategyApi.createCompareReport(buildCreateReportPayload())
+        reset()
+        return result
       } finally {
         reportCreating.value = false
       }

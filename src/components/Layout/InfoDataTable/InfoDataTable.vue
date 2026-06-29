@@ -110,7 +110,7 @@
   import { DateTime } from 'luxon'
   import { onMounted, ref, type PropType } from 'vue'
   import CustomDataTable from '../CustomDataTable/CustomDataTable.vue'
-  import { useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { useInfoDataTableStore } from '@/src/store/infoDataTable.ts'
   import type {
     IDateTimePeriodFilter,
@@ -127,6 +127,7 @@
 
   const emit = defineEmits(['click:action'])
 
+  const route = useRoute()
   const router = useRouter()
 
   const props = defineProps({
@@ -251,13 +252,19 @@
   }
 
   onMounted(async () => {
+    const shouldOpenLastPage = route.query.page === 'last'
+
     infoDataTableStore.setInitTableData(
       props.redirectEntityUrl,
       props.defaultPageSize,
       1,
       props.fetchDataReq
     )
-    infoDataTableStore.fetchPage()
+    await infoDataTableStore.fetchPage()
+
+    if (shouldOpenLastPage && infoDataTableStore.getMaxPage() > 1) {
+      await infoDataTableStore.setPage(infoDataTableStore.getMaxPage())
+    }
   })
 </script>
 
