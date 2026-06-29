@@ -3,13 +3,6 @@
     :redirect-entity-url="'analytics'"
     :fetchDataReq="reportApi.getTableList"
     :default-page-size="10"
-    :actions="[
-      // {
-      //   code: 'addReport',
-      //   size: 'medium',
-      //   title: 'Добавить', // TODO: Наверное удалить
-      // },
-    ]"
     @click:action="handleClickAction"
   />
 </template>

@@ -1,7 +1,7 @@
 import api from '@/src/utils/api'
 import type { Data, IEntity } from '@/src/utils/api/models/infoEntityV2.base'
 import type { ITableFilterValue, ITableList } from '@/src/utils/api/models/infoTableV2.base'
-import type { IReport } from '@/src/utils/api/models/report'
+import type { IReport, IStrategyCompareReport } from '@/src/utils/api/models/report'
 
 class ReportApi {
   async getTableList(
@@ -35,6 +35,13 @@ class ReportApi {
 
   async saveEntity(entity: IEntity['data']) {
     const data = await api.patch<{ result: boolean }>(`/v1/reports/${entity.id}`, entity)
+    return data.data.result
+  }
+
+  async getStrategyReport(id: string) {
+    const data = await api.get<{ result: IStrategyCompareReport }>(
+      `v1/strategies/compare/report/${id}`
+    )
     return data.data.result
   }
 }

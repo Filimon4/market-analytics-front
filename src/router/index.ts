@@ -40,9 +40,9 @@ import UfChannel from '../views/marketing/ufChannels/ufChannel.vue'
 import PerformanceProperty from '../views/marketing/performances/properties/PerformanceProperty.vue'
 import Report from '@/src/views/report/Report.vue'
 import Reports from '@/src/views/report/Reports.vue'
-import CreateReport from '@/src/views/report/CreateReport.vue'
 import CreateComparePerformance from '@/src/views/marketing/performances/CreateComparePerformance.vue'
 import CreateCompareStrategyV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/CreateCompareStrategyV2.vue'
+import ReportStrategy from '@/src/views/report/ReportStrategy.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -127,7 +127,7 @@ const routes: RouteRecordRaw[] = [
             path: 'analytics',
             children: [
               { path: '', component: Reports },
-              { path: 'create', component: CreateReport },
+              { path: 'strategies/:id', component: ReportStrategy },
               { path: ':id', component: Report },
             ],
           },
