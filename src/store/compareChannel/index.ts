@@ -6,6 +6,11 @@ import type {
   SelectListItemId,
 } from '@/src/components/Ui/SelectListModal/SelectListModal.types'
 import channelApi, { type ICreateCompareChannelReportDto } from '@/src/utils/api/channel'
+import type {
+  ICompareReportConfiguration,
+  ICompareStrategy,
+  IPeriod,
+} from '@/src/views/marketing/channels/CreateCompareChannel/types'
 
 export type CompareChannelMetricEntityType = 'metric' | 'uf'
 export type CompareChannelMetricEntityKey = `${CompareChannelMetricEntityType}:${string}`
@@ -15,19 +20,23 @@ export interface ISelectedCompareChannelMetricEntities {
   ufIds: string[]
 }
 
-export type ICompareChannelStrategy = ISelectListItem
 export type ICompareChannel = ISelectListItem
 
 interface ICompareChannelStore {
+  reportConfiguration: Ref<ICompareReportConfiguration>
+  setReportConfiguration: (configuration: ICompareReportConfiguration) => void
+  setReportPeriod: (period: IPeriod | null) => void
+
   currentStage: Ref<string>
   stages: ComputedRef<StageBuilderStage[]>
   maxColumns: Ref<number>
-  selectedStrategy: Ref<ICompareChannelStrategy | null>
+  selectedStrategy: Ref<ICompareStrategy | null>
   selectedChannels: Ref<ICompareChannel[]>
   selectedMetricEntities: Ref<Record<string, ISelectedCompareChannelMetricEntities>>
   reportCreating: Ref<boolean>
 
-  setSelectedStrategy: (strategy: ICompareChannelStrategy | null) => void
+  setSelectedStrategy: (strategy: ICompareStrategy | null) => void
+  removeStrategy: () => void
   setSelectedChannels: (channels: ICompareChannel[]) => void
   removeChannel: (channelId: SelectListItemId) => void
   setSelectedMetricEntityKeys: (
@@ -39,12 +48,29 @@ interface ICompareChannelStore {
   reset: () => void
 }
 
+const defaultReportConfiguration = (): ICompareReportConfiguration => ({
+  period: null,
+})
+
 export const useCompareChannelStore = defineStore(
   'useCompareChannelStore',
   (): ICompareChannelStore => {
+    const reportConfiguration = ref<ICompareReportConfiguration>(defaultReportConfiguration())
+
+    function setReportConfiguration(configuration: ICompareReportConfiguration) {
+      reportConfiguration.value = configuration
+    }
+
+    function setReportPeriod(period: IPeriod | null) {
+      reportConfiguration.value = {
+        ...reportConfiguration.value,
+        period,
+      }
+    }
+
     const currentStage = ref('')
     const maxColumns = ref(4)
-    const selectedStrategy = ref<ICompareChannelStrategy | null>(null)
+    const selectedStrategy = ref<ICompareStrategy | null>(null)
     const selectedChannels = ref<ICompareChannel[]>([])
     const selectedMetricEntities = ref<Record<string, ISelectedCompareChannelMetricEntities>>({})
     const reportCreating = ref(false)
@@ -53,10 +79,23 @@ export const useCompareChannelStore = defineStore(
 
     const stages = computed<StageBuilderStage[]>(() => [
       {
+        code: 'config',
+        title: 'Конфигурация',
+        description: 'Конфигурация для сравнения стратегий',
+        disableBack: true,
+      },
+      {
+        code: 'strategy',
+        title: 'Выбор стратегии',
+        description: 'Выберите одну стратегию',
+        disableBack: true,
+        disableNext: !selectedStrategy.value || !hasEnoughChannels.value,
+      },
+      {
         code: 'channels',
         title: 'Выбор каналов',
         description: 'Выберите одну стратегию и 2 или больше каналов для сравнения',
-        disableBack: true,
+        disableBack: false,
         disableNext: !selectedStrategy.value || !hasEnoughChannels.value,
       },
       {
@@ -67,7 +106,7 @@ export const useCompareChannelStore = defineStore(
       },
     ])
 
-    function setSelectedStrategy(strategy: ICompareChannelStrategy | null) {
+    function setSelectedStrategy(strategy: ICompareStrategy | null) {
       const strategyChanged =
         String(selectedStrategy.value?.id ?? '') !== String(strategy?.id ?? '')
       selectedStrategy.value = strategy
@@ -76,6 +115,10 @@ export const useCompareChannelStore = defineStore(
         selectedChannels.value = []
         selectedMetricEntities.value = {}
       }
+    }
+
+    function removeStrategy() {
+      selectedStrategy.value = null
     }
 
     function setSelectedChannels(channels: ICompareChannel[]) {
@@ -168,6 +211,10 @@ export const useCompareChannelStore = defineStore(
     }
 
     return {
+      reportConfiguration,
+      setReportConfiguration,
+      setReportPeriod,
+
       currentStage,
       stages,
       maxColumns,
@@ -176,6 +223,7 @@ export const useCompareChannelStore = defineStore(
       selectedMetricEntities,
       reportCreating,
       setSelectedStrategy,
+      removeStrategy,
       setSelectedChannels,
       removeChannel,
       setSelectedMetricEntityKeys,

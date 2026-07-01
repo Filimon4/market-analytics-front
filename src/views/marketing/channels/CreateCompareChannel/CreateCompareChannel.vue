@@ -7,6 +7,14 @@
       :disable-next="reportCreating"
       @finish="handleFinish"
     >
+      <template #config>
+        <ReportConfigurationBlock />
+      </template>
+
+      <template #strategy>
+        <StrategySelectionBlock />
+      </template>
+
       <template #channels>
         <div class="channel-stage">
           <div class="block">
@@ -158,6 +166,8 @@
   import SelectionBlock from '@/src/views/marketing/strategies/CreateCompareStrategy/components/SelectionBlock.vue'
   import strategyApi from '@/src/utils/api/strategy'
   import channelApi from '@/src/utils/api/channel'
+  import StrategySelectionBlock from '@/src/views/marketing/channels/CreateCompareChannel/stages/StrategySelectionBlock.vue'
+  import ReportConfigurationBlock from '@/src/views/marketing/channels/CreateCompareChannel/stages/ReportConfigurationBlock.vue'
 
   type ChannelMetricEntities = Awaited<ReturnType<typeof channelApi.getMetricEntities>>
   type MetricEntity = ChannelMetricEntities['metric'][number]
@@ -168,7 +178,6 @@
   const {
     currentStage,
     stages,
-    maxColumns,
     selectedStrategy,
     selectedChannels,
     selectedMetricEntities,
@@ -439,8 +448,7 @@
 
   :deep(.content-columns) {
     display: grid;
-    grid-template-columns: repeat(v-bind('maxColumns'), 1fr);
-    grid-template-rows: 1fr;
+    justify-content: center;
     width: 100%;
   }
 
