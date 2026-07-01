@@ -43,6 +43,7 @@ import Reports from '@/src/views/report/Reports.vue'
 import CreateComparePerformance from '@/src/views/marketing/performances/CreateComparePerformance.vue'
 import CreateCompareStrategyV2 from '@/src/views/marketing/strategies/CreateCompareStrategy/CreateCompareStrategyV2.vue'
 import ReportStrategy from '@/src/views/report/ReportStrategy.vue'
+import CreateCompareChannel from '@/src/views/marketing/channels/CreateCompareChannel/CreateCompareChannel.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -101,6 +102,7 @@ const routes: RouteRecordRaw[] = [
             children: [
               { path: '', component: Channels },
               { path: 'create', component: CreateChannel },
+              { path: 'compare/create', component: CreateCompareChannel },
               {
                 path: ':id',
                 children: [

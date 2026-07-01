@@ -26,7 +26,7 @@
   const props = withDefaults(
     defineProps<{
       title: string
-      actions: IBlockAction[]
+      actions?: IBlockAction[]
       showActions?: boolean
     }>(),
     {

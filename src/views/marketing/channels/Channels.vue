@@ -30,6 +30,7 @@
     if (code == 'addStrategy') {
       router.push('channels/create')
     } else if (code === 'compareChannels') {
+      router.push('/marketing/channels/compare/create')
     }
   }
 </script>

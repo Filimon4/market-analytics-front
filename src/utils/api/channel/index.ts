@@ -3,6 +3,16 @@ import type { IChannel } from '../models/channel'
 import type { IEntity } from '../models/infoEntityV2.base'
 import type { ITableFilterValue, ITableList } from '../models/infoTable.base'
 
+export interface ICreateCompareChannelReportDto {
+  strategyId: number
+  channelIds: number[]
+  channels: {
+    channelId: number
+    metricIds: string[]
+    ufIds: string[]
+  }[]
+}
+
 class ChannelApi {
   async getTableList(
     page: number,
@@ -62,6 +72,12 @@ class ChannelApi {
     const data = await api.get<{
       result: { uf: { id: string; name: string }[]; metric: { id: string; name: string }[] }
     }>(`/v1/channels/${id}/metric-entities`)
+    return data.data.result
+  }
+
+  async createCompareReport(dto: ICreateCompareChannelReportDto) {
+    // TODO: Replace with the final backend endpoint if it differs.
+    const data = await api.post<{ result: unknown }>('/v1/channels/compare/report', dto)
     return data.data.result
   }
 }
