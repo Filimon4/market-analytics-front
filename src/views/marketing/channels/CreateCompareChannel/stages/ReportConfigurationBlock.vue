@@ -29,9 +29,9 @@
 
   type DateRangeValue = [number, number] | null
 
-  const compareStrategyV2Store = useCompareChannelStore()
-  const { reportConfiguration } = storeToRefs(compareStrategyV2Store)
-  const { setReportPeriod } = compareStrategyV2Store
+  const compareChannelStore = useCompareChannelStore()
+  const { reportConfiguration } = storeToRefs(compareChannelStore)
+  const { setReportPeriod } = compareChannelStore
 
   const periodValue = computed<DateRangeValue>(() => {
     if (!reportConfiguration.value.period) return null
