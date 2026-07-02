@@ -28,8 +28,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/market-analytics-front:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/market-analytics-front:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/market-analytics-client:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/market-analytics-client:latest
           build-args: |
             VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
             VITE_API_BASE_URL_API=${{ secrets.VITE_API_BASE_URL_API }}
