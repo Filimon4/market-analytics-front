@@ -2,6 +2,7 @@
   <div v-if="props.loading" class="loading-overlay" />
   <Affix
     v-if="props.loading"
+    :display="'absolute'"
     :top="'50%'"
     :right="'50%'"
     :transform="'translateX(50%)'"

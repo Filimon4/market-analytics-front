@@ -54,7 +54,7 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
-  import { useMessage } from 'naive-ui'
+  import { useMessage, type FormInst } from 'naive-ui'
   import { useUserStore } from '@/src/store/user'
   import authApi from '@/src/utils/api/auth'
   import userApi from '@/src/utils/api/user'
@@ -62,7 +62,7 @@
   const router = useRouter()
   const message = useMessage()
 
-  const formRef = ref(null)
+  const formRef = ref<FormInst | null>(null)
   const loading = ref(false)
 
   const userStore = useUserStore()
@@ -101,7 +101,7 @@
 
         message.success('Успешный вход!')
         router.push('/')
-      } catch (err) {
+      } catch {
         message.error('Ошибка входа. Проверьте данные.')
       } finally {
         loading.value = false

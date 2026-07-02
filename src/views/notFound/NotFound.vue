@@ -8,14 +8,17 @@
     <template #footer>
       <n-space justify="center">
         <n-button type="primary" tag="a" href="/"> Go to Dashboard </n-button>
-        <n-button @click="$router.go(-1)"> Go Back </n-button>
+        <n-button @click="router.back()"> Go Back </n-button>
       </n-space>
     </template>
   </n-result>
 </template>
 
 <script setup lang="ts">
+  import { useRouter } from 'vue-router'
   import { NResult, NButton, NSpace } from 'naive-ui'
+
+  const router = useRouter()
 </script>
 
 <style scoped>
