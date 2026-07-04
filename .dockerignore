@@ -5,6 +5,5 @@ certs
 .gitignore
 .env
 .env.*
-!.env.prod
 *.md
 .DS_Store
