@@ -22,4 +22,4 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Для продакшена используем 80 порт
-EXPOSE 80
+EXPOSE 5173
