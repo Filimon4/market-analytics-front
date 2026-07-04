@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "build:docker": "vue-tsc -b && vite build --config vite.build.config.ts",
+    "build:docker": "vue-tsc -b && vite build --mode prod --config vite.build.config.ts",
     "preview": "vite preview",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
