@@ -47,8 +47,8 @@
       projectStore.panel = null
       projectStore.permissions = null
       projectStore.role = null
-      userStore.isAuth = false
       userStore.tenantId = null
+      userStore.isAuth = false
       userStore.accessToken = null
       userStore.user = null
       window.location.href = '/auth/signin'

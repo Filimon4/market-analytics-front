@@ -68,7 +68,7 @@
       { key: 'first', items: project.panel as TPanelItem[] },
       {
         key: 'second',
-        items: [{ id: 3, name: 'Аккаунт', icon: accountIcon, url: '/account' }] as TPanelItem[],
+        items: [{ id: 3, name: 'Аккаунт', icon: accountIcon, url: '/' }] as TPanelItem[],
       },
     ]
   })

@@ -7,8 +7,8 @@
   >
     <template #footer>
       <n-space justify="center">
-        <n-button type="primary" tag="a" href="/"> Go to Dashboard </n-button>
-        <n-button @click="router.back()"> Go Back </n-button>
+        <n-button type="primary" tag="a" href="/"> Вернутся на главную </n-button>
+        <n-button @click="router.back()"> Назад </n-button>
       </n-space>
     </template>
   </n-result>
