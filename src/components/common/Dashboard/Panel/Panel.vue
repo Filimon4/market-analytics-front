@@ -65,7 +65,7 @@
 
   const panelBlocks = computed(() => {
     return [
-      { key: 'first', items: project.panel as TPanelItem[] },
+      { key: 'first', items: (project.panel || []) as TPanelItem[] },
       {
         key: 'second',
         items: [{ id: 3, name: 'Аккаунт', icon: accountIcon, url: '/' }] as TPanelItem[],

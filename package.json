@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "build:docker": "vue-tsc -b && vite build --mode prod --config vite.build.config.ts",
+    "build:docker:test": "docker build --build-arg VITE_API_BASE_URL=http://127.0.0.1:9894 --build-arg VITE_API_BASE_URL_API=http://127.0.0.1:9894/api -t market-analytics-client:test .",
     "preview": "vite preview",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
