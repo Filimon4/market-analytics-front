@@ -1,0 +1,30 @@
+- generic [ref=f2e15]:
+  - generic [ref=f2e16]:
+    - paragraph [ref=f2e18]: Пользователь
+    - generic [ref=f2e20]:
+      - generic [ref=f2e21]:
+        - generic [ref=f2e22]: Имя
+        - generic [ref=f2e25]:
+          - text: TestPanelUser
+          - generic:
+            - img "edit"
+      - generic [ref=f2e26]:
+        - generic [ref=f2e27]: Почта
+        - generic [ref=f2e30]:
+          - text: testpanel@example.com
+          - generic:
+            - img "edit"
+      - generic [ref=f2e31]:
+        - generic [ref=f2e32]: Дата регистрации
+        - time [ref=f2e36]: 2026-07-12 00:12:17
+    - button "Выйти" [ref=f2e38] [cursor=pointer]
+  - generic [ref=f2e39]:
+    - paragraph [ref=f2e41]: Проект
+    - generic [ref=f2e43]:
+      - generic [ref=f2e44]: Текущий проект
+      - generic [ref=f2e46]: Роль в проекте
+      - generic [ref=f2e48]: Дата входа
+      - generic [ref=f2e50]: Заблокирован
+    - generic [ref=f2e52]:
+      - button "Поменять проект" [ref=f2e53] [cursor=pointer]
+      - button "Добавить новый" [ref=f2e54] [cursor=pointer]

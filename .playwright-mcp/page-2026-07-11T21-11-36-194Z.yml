@@ -1,0 +1,17 @@
+- generic [ref=f1e5]:
+  - heading "Регистрация" [level=2] [ref=f1e6]
+  - generic [ref=f1e7]:
+    - generic [ref=f1e12]:
+      - textbox "Почта" [ref=f1e13]
+      - generic: Почта
+    - generic [ref=f1e19]:
+      - textbox "Имя" [ref=f1e20]
+      - generic: Имя
+    - generic [ref=f1e26]:
+      - textbox "Пароль" [ref=f1e27]
+      - generic: Пароль
+    - button "Зарегестрироваться" [ref=f1e40] [cursor=pointer]
+  - generic [ref=f1e43]:
+    - text: Уже есть аккаунт?
+    - link "Авторизуйтерь" [ref=f1e44] [cursor=pointer]:
+      - /url: /auth/signin

@@ -1,7 +1,10 @@
 <template>
   <div
-    class="panel-item-container panel-item-container--opened"
-    :class="{ 'panel-item-container--active': isActive }"
+    class="panel-item-container"
+    :class="{
+      'panel-item-container--opened': labelVisible,
+      'panel-item-container--active': isActive,
+    }"
   >
     <div
       class="panel-item"
@@ -27,19 +30,23 @@
 <style lang="scss" scoped>
   .panel-item-container {
     width: 100%;
+    border-radius: 10px;
   }
-  .panel-item-container:hover {
-    background: $color-surface-panel-hover;
-  }
+
   .panel-item-container--active {
-    background: $color-surface-panel-active;
+    background: $color-surface-blue-hover;
+
+    .panel-item {
+      color: $color-primary;
+      font-weight: 600;
+    }
   }
+
   .panel-item-container--opened {
     .panel-item {
       justify-content: start;
       gap: 10px;
-      color: $color-white;
-      font-size: 20px;
+      font-size: 15px;
       padding-left: 10px;
     }
   }
@@ -52,8 +59,22 @@
 
     width: 100%;
     height: 40px;
+    border-radius: 10px;
 
+    color: $color-text-subtle;
     cursor: pointer;
-    transition: background 0.15s;
+  }
+
+  .panel-item:hover {
+    background: $color-surface-hover;
+    color: $color-text-primary;
+  }
+
+  .panel-item img {
+    filter: brightness(0) saturate(100%);
+  }
+
+  .panel-item-container--active .panel-item:hover {
+    background: $color-surface-blue-hover;
   }
 </style>

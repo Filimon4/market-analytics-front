@@ -1,0 +1,30 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e56]:
+    - generic [ref=f1e57]:
+      - paragraph [ref=f1e59]: Пользователь
+      - generic [ref=f1e61]:
+        - generic [ref=f1e62]:
+          - generic [ref=f1e63]: Имя
+          - generic [ref=f1e66]:
+            - text: TestPanelUser
+            - img "edit" [ref=f1e68]
+        - generic [ref=f1e69]:
+          - generic [ref=f1e70]: Почта
+          - generic [ref=f1e73]:
+            - text: testpanel@example.com
+            - img "edit" [ref=f1e75]
+        - generic [ref=f1e76]:
+          - generic [ref=f1e77]: Дата регистрации
+          - time [ref=f1e81]: 2026-07-12 00:12:17
+      - button "Выйти" [ref=f1e83] [cursor=pointer]
+    - generic [ref=f1e84]:
+      - paragraph [ref=f1e86]: Проект
+      - generic [ref=f1e88]:
+        - generic [ref=f1e89]: Текущий проект
+        - generic [ref=f1e91]: Роль в проекте
+        - generic [ref=f1e93]: Дата входа
+        - generic [ref=f1e95]: Заблокирован
+      - generic [ref=f1e97]:
+        - button "Поменять проект" [ref=f1e98] [cursor=pointer]
+        - button "Добавить новый" [ref=f1e99] [cursor=pointer]
+  - generic: Успешный вход!

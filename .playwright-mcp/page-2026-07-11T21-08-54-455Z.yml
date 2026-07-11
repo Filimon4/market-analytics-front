@@ -1,0 +1,14 @@
+- generic [ref=e5]:
+  - heading "Авторизация" [level=2] [ref=e6]
+  - generic [ref=e7]:
+    - generic [ref=e12]:
+      - textbox "Почта" [ref=e13]
+      - generic: Почта
+    - generic [ref=e19]:
+      - textbox "Пароль" [ref=e20]
+      - generic: Пароль
+    - button "Войти" [ref=e33] [cursor=pointer]
+  - generic [ref=e36]:
+    - text: У вас нет аккаунта?
+    - link "Зарегистрируйтесь" [ref=e37] [cursor=pointer]:
+      - /url: /auth/signup

@@ -108,16 +108,26 @@
   }
 </script>
 
-<style lang="css">
+<style lang="scss">
   .panels-wrapper {
     display: flex;
+    align-items: stretch;
+    gap: 12px;
     height: 100%;
+    padding: 12px;
+    box-sizing: border-box;
   }
+
   .panel-container {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
     height: 100%;
-    background-color: gray;
+    background-color: $color-surface;
+    border: 1px solid $color-border-light;
+    border-radius: 14px;
+    box-shadow: 0px 2px 10px $color-shadow-default;
+    overflow: hidden;
   }
 
   .panel-content {
@@ -126,17 +136,24 @@
     flex-direction: column;
     align-items: center;
 
-    padding-block: 10px;
+    padding: 10px 8px;
 
     height: 100%;
+    box-sizing: border-box;
   }
 
   .panel-content-block {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     width: 100%;
+  }
+
+  .panel-content-block + .panel-content-block {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid $color-border-light;
   }
 
   .panel-content-opened {
@@ -149,13 +166,33 @@
     align-items: center;
     width: 100%;
     height: 40px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.15s;
+    color: $color-text-subtle;
+    transition:
+      background 0.15s,
+      color 0.15s;
+  }
+
+  .panel-item:hover {
+    background: $color-surface-hover;
+    color: $color-text-primary;
+  }
+
+  .panel-container > .panel-item {
+    width: calc(100% - 16px);
+    margin: 8px auto 0;
+    border-bottom: 1px solid $color-border-light;
+    border-radius: 10px 10px 0 0;
   }
 
   .panel-arrow-close {
     transform: rotate(180deg);
     justify-content: left;
     padding-left: 10px;
+  }
+
+  .panel-item img {
+    filter: brightness(0) saturate(100%);
   }
 </style>
